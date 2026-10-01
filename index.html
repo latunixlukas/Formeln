@@ -164,6 +164,8 @@ details.traps[open]>summary::before{transform:rotate(90deg)}
 .stp .fq.hid{font-family:var(--f-body);font-size:14px;color:var(--warn)}
 .phint{padding:2px 0 0 2px}
 .ptip{margin-left:4px}
+.pg{display:inline-flex;align-items:center;gap:4px;width:fit-content;font:600 12.5px var(--f-body);padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--paper)}
+.frm .fn .pg{margin-top:4px}
 h2.bh{font:800 20px var(--f-display);margin:10px 0 0;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
 @media (max-width:640px){
   .topics{grid-template-columns:minmax(0,1fr)}
@@ -465,7 +467,7 @@ const FX=[
 {id:'rl2',g:'E1',name:'Leitungswiderstand',sub:'Hin- und Rückleiter',eq:'{R_L} = 2 · {ρ} · {l} / {A}',
  note:'l ist die einfache Leitungslänge – die 2 steht für Hin- und Rückleiter.',
  v:{R_L:['Widerstand der ganzen Leitung','Ω'],ρ:['spezifischer Widerstand','Ω·mm²/m'],l:['einfache Leitungslänge','m'],A:['Leiterquerschnitt','mm²']},
- gen(){const ρ=pick([0.0178,0.0179,0.0286]),l=r(5,120,1),A=pick([1.5,2.5,4,6,10]);return{ρ,l,A,R_L:2*ρ*l/A}},
+ gen(){const ρ=pick([0.0178,0.0179,0.028]),l=r(5,120,1),A=pick([1.5,2.5,4,6,10]);return{ρ,l,A,R_L:2*ρ*l/A}},
  s:{R_L:['2 · {ρ} · {l} / {A}',v=>2*v.ρ*v.l/v.A,['{ρ} · {l} / {A}','2 · {ρ} · {A} / {l}','{ρ} · {A} / (2 · {l})']],
     l:['{R_L} · {A} / (2 · {ρ})',v=>v.R_L*v.A/(2*v.ρ),['{R_L} · {A} / {ρ}','2 · {ρ} · {A} / {R_L}','{R_L} · {ρ} / (2 · {A})']],
     A:['2 · {ρ} · {l} / {R_L}',v=>2*v.ρ*v.l/v.R_L,['{R_L} · {l} / (2 · {ρ})','{ρ} · {l} / {R_L}','{R_L} / (2 · {ρ} · {l})']],
@@ -485,7 +487,7 @@ const FX=[
 /* E2 */
 {id:'rla',g:'E2',name:'Leiterwiderstand',eq:'{R} = {ρ} · {l} / {A}',
  v:{R:['Widerstand','Ω'],ρ:['spezifischer Widerstand','Ω·mm²/m'],l:['Drahtlänge','m'],A:['Querschnitt','mm²']},
- gen(){const ρ=pick([0.49,0.49,0.0178,0.0286]),k=ρ>0.1,l=k?r(1,40,2):r(10,300,0),A=k?pick([0.1,0.2,0.25,0.28,0.5]):pick([0.5,0.75,1.5,2.5]);return{ρ,l,A,R:ρ*l/A}},
+ gen(){const ρ=pick([0.49,0.49,0.0179,0.028]),k=ρ>0.1,l=k?r(1,40,2):r(10,300,0),A=k?pick([0.1,0.2,0.25,0.28,0.5]):pick([0.5,0.75,1.5,2.5]);return{ρ,l,A,R:ρ*l/A}},
  s:{R:['{ρ} · {l} / {A}',v=>v.ρ*v.l/v.A,['{ρ} · {A} / {l}','{l} · {A} / {ρ}']],
     l:['{R} · {A} / {ρ}',v=>v.R*v.A/v.ρ,['{R} · {ρ} / {A}','{ρ} · {A} / {R}','{R} / ({ρ} · {A})']],
     A:['{ρ} · {l} / {R}',v=>v.ρ*v.l/v.R,['{R} · {l} / {ρ}','{R} · {ρ} / {l}']],
@@ -596,7 +598,7 @@ const FX=[
 {id:'waerme',g:'E5',name:'Wärmemenge',eq:'{Q} = {m} · {c} · {Δϑ}',
  note:'Wasser: c = 4,18 kJ/(kg·K), 1 l ≈ 1 kg.',
  v:{Q:['Wärmemenge','kJ'],m:['Masse','kg'],c:['spezifische Wärmekapazität','kJ/(kg·K)'],Δϑ:['Temperaturänderung','K']},
- gen(){const m=r(5,200,0),c=pick([4.18,4.18,4.19,0.46,0.9]),d=r(5,80,0);return{m,c,Δϑ:d,Q:m*c*d}},
+ gen(){const m=r(5,200,0),c=pick([4.18,4.18,4.19,0.51,0.9]),d=r(5,80,0);return{m,c,Δϑ:d,Q:m*c*d}},
  s:{Q:['{m} · {c} · {Δϑ}',v=>v.m*v.c*v.Δϑ,['{m} · {c} / {Δϑ}','{m} + {c} · {Δϑ}']],
     Δϑ:['{Q} / ({m} · {c})',v=>v.Q/(v.m*v.c),['{Q} · {m} / {c}','{m} · {c} / {Q}']],
     m:['{Q} / ({c} · {Δϑ})',v=>v.Q/(v.c*v.Δϑ),['{Q} · {c} / {Δϑ}','{c} · {Δϑ} / {Q}']]}},
@@ -794,7 +796,7 @@ const FX=[
     d:['({S} − {S_neu}) / {t}',v=>(v.S-v.S_neu)/v.t,['{S} − {S_neu} / {t}','({S_neu} − {S}) / {t}']],t:['({S} − {S_neu}) / {d}',v=>(v.S-v.S_neu)/v.d,['{S} − {S_neu} / {d}','({S} + {S_neu}) / {d}']]}},
 {id:'masse',g:'F1',name:'Masse über die Dichte',eq:'{m} = {V} · {ρ}',note:'V in dm³ und ρ in kg/dm³ → m in kg. 1 cm² · 1 m = 0,1 dm³.',
  v:{m:['Masse','kg'],V:['Volumen','dm³'],ρ:['Dichte','kg/dm³']},
- gen(){const ρ=pick([2.7,7.85,0.83,1]),V=r(0.5,20,2);return{ρ,V,m:V*ρ}},
+ gen(){const ρ=pick([2.7,7.9,0.83,1]),V=r(0.5,20,2);return{ρ,V,m:V*ρ}},
  s:{m:['{V} · {ρ}',v=>v.V*v.ρ,['{V} / {ρ}','{ρ} / {V}']],V:['{m} / {ρ}',v=>v.m/v.ρ,['{m} · {ρ}','{ρ} / {m}']],ρ:['{m} / {V}',v=>v.m/v.V,['{V} / {m}','{m} · {V}']]}},
 /* F2 */
 {id:'kreisS',g:'F2',name:'Kreisquerschnitt',eq:'{S} = π · {d}² / 4',
@@ -974,9 +976,9 @@ const FX=[
  s:{P_zu:['{P_ab} / ({η_1} · {η_2})',v=>v.P_ab/(v.η_1*v.η_2),['{P_ab} · {η_1} · {η_2}','{P_ab} / ({η_1} + {η_2})']],P_ab:['{P_zu} · {η_1} · {η_2}',v=>v.P_zu*v.η_1*v.η_2,['{P_zu} / ({η_1} · {η_2})','{η_1} · {η_2} / {P_zu}']],
     η_2:['{P_ab} / ({P_zu} · {η_1})',v=>v.P_ab/(v.P_zu*v.η_1),['{P_zu} / ({P_ab} · {η_1})','{P_ab} · {η_1} / {P_zu}']]}},
 /* W1 */
-{id:'waerme2',g:'W1',name:'Wärmemenge',eq:'{Q} = {m} · {c} · {ΔT}',note:'1 l Wasser ≈ 1 kg. Wasser 4,18 · Stahl 0,46 · Kupfer 0,39 · Benzin 2,02 kJ/(kg·K).',
+{id:'waerme2',g:'W1',name:'Wärmemenge',eq:'{Q} = {m} · {c} · {ΔT}',note:'1 l Wasser ≈ 1 kg. Wasser 4,18 · Stahl 0,51 · Kupfer 0,39 · Benzin 2,02 kJ/(kg·K).',
  v:{Q:['Wärmemenge','kJ'],m:['Masse','kg'],c:['spezifische Wärmekapazität','kJ/(kg·K)'],ΔT:['Temperaturänderung','K']},
- gen(){const m=r(0.5,6500,1),c=pick([4.18,4.18,0.46,0.39,2.02]),ΔT=r(5,500,0);return{m,c,ΔT,Q:m*c*ΔT}},
+ gen(){const m=r(0.5,6500,1),c=pick([4.18,4.18,0.51,0.39,2.02]),ΔT=r(5,500,0);return{m,c,ΔT,Q:m*c*ΔT}},
  s:{Q:['{m} · {c} · {ΔT}',v=>v.m*v.c*v.ΔT,['{m} · {c} / {ΔT}','{m} + {c} · {ΔT}']],m:['{Q} / ({c} · {ΔT})',v=>v.Q/(v.c*v.ΔT),['{Q} · {c} / {ΔT}','{c} · {ΔT} / {Q}']],
     c:['{Q} / ({m} · {ΔT})',v=>v.Q/(v.m*v.ΔT),['{Q} · {m} / {ΔT}','{m} · {ΔT} / {Q}']],ΔT:['{Q} / ({m} · {c})',v=>v.Q/(v.m*v.c),['{Q} · {m} / {c}','{m} · {c} / {Q}']]}},
 {id:'tzeit',g:'W1',name:'Erhitzungszeit',eq:'{t} = {Q} / ({η} · {P})',note:'Q in kJ und P in kW → t in s. Danach in min und s zerlegen.',
@@ -1272,7 +1274,7 @@ C1:[()=>{const M={Magnesium:-2.36,Zink:-0.76,Eisen:-0.44,Nickel:-0.25,Zinn:-0.14
   text:`Normalpotenziale: Mg −2,36 V · Zn −0,76 V · Fe −0,44 V · Ni −0,25 V · Sn −0,14 V · Cu +0,34 V. Zwei Metalle berühren sich in einem Elektrolyt.`,
   parts:[P_(`Spannung zwischen ${a} und ${b}`,'V',U,[`edler: ${e} (${F(M[e])} V), unedler: ${u} (${F(M[u])} V)`,`<i>U</i> = ${F(M[e])} V − (${F(M[u])} V) = ${F(U)} V`,`Pluspol: ${e} · Minuspol (löst sich auf): ${u}`]),
    P_(`Spannung zwischen ${u} und ${c}`,'V',U2,[`edler: ${e2}, unedler: ${u2}`,`<i>U</i> = ${F(M[e2])} V − (${F(M[u2])} V) = ${F(U2)} V`])]}}],
-F1:[()=>{const l=pick([4,5,6]),Scm=pick([4.79,5.69,6.91,3.89]),ρ=pick([2.7,7.85]),F_=pick([24000,30000,36000,45000]),d=pick([13,17,21]),t=5;
+F1:[()=>{const l=pick([4,5,6]),Scm=pick([4.79,5.69,6.91,3.89]),ρ=pick([2.7,7.9]),F_=pick([24000,30000,36000,45000]),d=pick([13,17,21]),t=5;
   const S=Scm*100,V=S/100*l*10/100,m=V*ρ,σ=F_/S,Sn=S-d*t,σn=F_/Sn;
   return{t:'Winkelprofil mit Bohrung',ref:'🔁 W1 · wie 2023 H A3 / 2019 H A2 / 2009 H A5',
   text:`Ein <b>${l} m</b> langes Winkelprofil (Schenkeldicke <b>5 mm</b>) hat den Querschnitt <b>S = ${F(Scm)} cm²</b> und die Dichte <b>ρ = ${F(ρ)} kg/dm³</b>. Zugkraft <b>F = ${F(F_)} N</b>. Später wird ein Loch mit <b>d = ${d} mm</b> gebohrt.`,
@@ -1580,8 +1582,20 @@ const HINTS={
 'Gas wird verdichtet und erwärmt':['<i>T</i> = <i>ϑ</i> + 273,15.','<i>T</i> = <i>ϑ</i> + 273,15.','<i>p</i><sub>1</sub> · <i>V</i><sub>1</sub> / <i>T</i><sub>1</sub> = <i>p</i><sub>2</sub> · <i>V</i><sub>2</sub> / <i>T</i><sub>2</sub> nach <i>p</i><sub>2</sub> umstellen.'],
 'Differentialzylinder':['<i>A</i><sub>1</sub> = <i>D</i>² · π / 4.','<i>Q</i> in cm³/min (l · 1000), dann <i>v</i> = <i>Q</i> / <i>A</i><sub>1</sub>.','Einfahren: Ringfläche (<i>D</i>² − <i>d</i>²) · π / 4, dann <i>v</i> = <i>Q</i> / <i>A</i><sub>2</sub>.','<i>v</i><sub>1</sub> / <i>v</i><sub>2</sub> = <i>A</i><sub>2</sub> / <i>A</i><sub>1</sub>.'],
 };
-const hintFor=t=>HINTS[t]||HINTS[Object.keys(HINTS).find(k=>t.endsWith(k))]||[];
+const hintFor=t=>HINTS[t]||HINTS[Object.keys(HINTS).find(k=>t.toLowerCase().endsWith(k.toLowerCase()))]||[];
 
+
+/* ---------- Seiten in deiner IHK-Formelsammlung 2026 (Bestellnr. 200/02-26) ---------- */
+const PG={ohm:'58',pui:'60',pur:'60',pir:'60',rl2:'59 (ρ: S. 29)',uk:'59',du:'59',rla:'59 (ρ: S. 29)',kreis:'39',lrho:'59 + 39',reihe:'60',par2:'60',parn:'60',arbeit:'60',
+ teiler:'60',ptc:'59',dreh:'60',eta:'52',etag:'52',hub:'51',stern:'60',dreieck:'60',waerme:'55 (c: S. 29/30)',umfang:'45',getriebe:'50',quelle:'58',ri:'58',arbeitws:'60',
+ mittel:'61',spann:'61',std:'61',o3:'61',u3:'61',o2:'61',wp:'61',kl:'61',kb:'61',galv:'31',sig:'56',szul:'56',serf:'56',masse:'43 (Dichte: S. 29)',kreisS:'39',rohr:'40',
+ scherf:'57',schneid:'57',bogen:'39',niet:'57 + 39',hebel:'47',moment:'47',kolben:'53',hang:'47',normal:'47',reib:'48 (µ: S. 30)',rutsch:'36',steig:'36',
+ vst:'44',acc:'45',sat:'44',brems:'44',bremst:'44',reak:'44',ekin:'51',epot:'50',fall:'44',feder:'51',omega:'45',vwr:'45',mpw:'52',flieh:'49',kurve:'49 (µ: S. 30)',
+ wfs:'50',pwt:'50',pfv:'50',pzu:'52',waerme2:'55 (c: S. 29/30)',tzeit:'55',verd:'56',heiz:'56 (H_i: S. 30)',bedarf:'56 (H_i: S. 30)',etaw:'52',dlt:'55 (α: S. 29)',dvt:'55',dvf:'55',
+ boyle:'55',gas:'55',kelvin:'55',druck:'53',ueber:'53',qav:'54',konti:'54',ring:'40'};
+const pgChip=f=>PG[f.id]?`<span class="pg" title="Seite in deiner IHK-Formelsammlung 2026">📕 S. ${PG[f.id]}</span>`:'';
+const GPG={E1:'59, ρ-Tabelle S. 29',E2:'59, 29, 39',E3:'60',E4:'59 (NTC-Kennlinie unten)',E5:'60, 52, 51',E6:'58, 60',S1:'61',S2:'61',S3:'nach S. 61',S4:'nach S. 61',S5:'nach S. 61',S6:'61',
+ F1:'56, 43',F2:'39–40',F3:'57',F4:'',F5:'47, 53',F6:'47–48, 36',K1:'44–45',K2:'44, 50–51',K3:'45, 49, 52',K4:'50–52',W1:'55–56',W2:'56, 52, Heizwerte S. 30',W3:'55',W4:'55',W5:'53–54',C1:'31'};
 /* ---------- Zustand ---------- */
 for(const f of FX)f.x=XS[f.id];
 const st={lv:store.get('lv',2),guided:store.get('guided',true),sel:new Set(store.get('sel',['E1','E3','E4','S1','S2']).filter(g=>GMAP[g])),cur:null,done:false,streak:0};
@@ -1651,7 +1665,7 @@ function renderEasy(){
   const {f,target:t,v}=st.cur,c=$('#card'),steps=umSteps(f,t),keys=Object.keys(f.v).filter(k=>k!==t);let shown=st.guided?steps.length-1:0;
   const ops=['+','−','·','/','(',')','²','√','π'];if(/sin|cos|tan/.test(f.eq))ops.push('sin','cos','tan','arcsin','arccos','arctan');
   c.innerHTML=head(f.g,`${f.name} · Leicht · ${mode()}`)+
-   `<p class="task">Stelle nach <b>${sym(f,t)}</b> um und <b>tippe die Formel ein</b>.</p><div class="fx">${tex(f,f.eq)}</div>${legend(f)}
+   `${pgChip(f)}<p class="task">Stelle nach <b>${sym(f,t)}</b> um und <b>tippe die Formel ein</b>.</p><div class="fx">${tex(f,f.eq)}</div>${legend(f)}
     <div id="guide"></div>
     <form class="ans" id="frm" autocomplete="off">
       <div class="inp big"><label for="fin">${sym(f,t)} =</label><input id="fin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="hier tippen oder Knöpfe nutzen"></div>
@@ -1691,7 +1705,7 @@ function renderMid(){
   const steps=umSteps(f,t).concat([{txt:'Zahlen mit Einheiten einsetzen.',eq:`${sym(f,t)} = ${num(f,f.s[t][0],v)}`}]);
   let shown=st.guided?steps.length:0;
   c.innerHTML=head(f.g,`${f.name} · Mittel · ${mode()}`)+
-   `<p class="task">Berechne <b>${sym(f,t)}</b> (${f.v[t][0]}).</p><div class="fx">${tex(f,f.eq)}</div>
+   `${pgChip(f)}<p class="task">Berechne <b>${sym(f,t)}</b> (${f.v[t][0]}).</p><div class="fx">${tex(f,f.eq)}</div>
     <div class="given">${gk.map(k=>`<div><span class="n">${f.v[k][0]}</span><span class="v">${sym(f,k)} = ${FG(v[k])}${unit(f,k)}</span></div>`).join('')}</div>
     <div id="guide"></div>
     <form class="ans" id="frm" autocomplete="off"><div class="inp big"><label for="a0">${sym(f,t)} =</label><input id="a0" inputmode="decimal" autocomplete="off" placeholder="Ergebnis"><span class="u">${f.v[t][1]}</span></div>
@@ -1714,7 +1728,7 @@ function renderMid(){
 /* ---------- Schwer: Rechenketten ---------- */
 function renderHard(){
   const {g,t}=st.cur,c=$('#card'),H=hintFor(t.t);
-  c.innerHTML=head(g,`${t.ref} · Schwer · ${mode()}`)+`<p class="task"><b>${t.t}</b></p><div>${t.text}</div>
+  c.innerHTML=head(g,`${t.ref} · Schwer · ${mode()}`)+`${GPG[g]?`<span class="pg">📕 Formelsammlung S. ${GPG[g]}</span>`:''}<p class="task"><b>${t.t}</b></p><div>${t.text}</div>
    <form class="ans" id="frm" autocomplete="off">${t.parts.map((p,i)=>`<div class="part"><div class="inp"><label for="a${i}">${String.fromCharCode(97+i)}) ${p.q} =</label><input id="a${i}" inputmode="decimal" autocomplete="off"><span class="u">${p.u}</span>${st.guided?'':`<button type="button" class="mini ptip" data-i="${i}">💡 Tipp</button>`}</div><div class="phint" id="h${i}"${st.guided?'':' hidden'}>${H[i]?`<span class="ex">${H[i]}</span>`:''}</div><div id="s${i}"></div></div>`).join('')}
    ${bottomRow()}</form><div id="fb"></div>`;
   c.querySelectorAll('.ptip').forEach(b=>b.onclick=()=>{$('#h'+b.dataset.i).hidden=false;b.hidden=true});
@@ -1731,14 +1745,14 @@ function renderHard(){
     else{if(first)record(false,g,null);$('#fb').innerHTML=`<div class="fb bad"><strong>${n} von ${t.parts.length} richtig.</strong> Die roten Felder kannst du nochmal versuchen – oder 💡 Tipp bzw. „Lösung zeigen“.</div>`}};
 }
 function renderTraps(g){const G=GMAP[g],el=$('#traps');const op=el.open;el.hidden=false;el.style.setProperty('--bc',`var(--b-${G.b})`);
-  el.innerHTML=`<summary>Fallen und Merksätze · ${G.e} ${G.id} ${G.sn}</summary><h4>${G.name}</h4><p>${G.d}${G.pts?` <span class="note">· ${G.n} Prüfungsaufgaben, ${G.pts} Punkte</span>`:''}</p><ul>${G.t.map(x=>`<li>${x}</li>`).join('')}</ul>`;el.open=op}
+  el.innerHTML=`<summary>Fallen und Merksätze · ${G.e} ${G.id} ${G.sn}</summary><h4>${G.name}</h4>${GPG[g]?`<p><span class="pg">📕 Formelsammlung S. ${GPG[g]}</span></p>`:''}<p>${G.d}${G.pts?` <span class="note">· ${G.n} Prüfungsaufgaben, ${G.pts} Punkte</span>`:''}</p><ul>${G.t.map(x=>`<li>${x}</li>`).join('')}</ul>`;el.open=op}
 
 /* ---------- Formelblatt ---------- */
 function buildSheet(){
-  $('#sheetBody').innerHTML=`<p class="note">Alle Formeln mit jeder Umstellung, nach Blöcken und Themen sortiert.</p>`+
+  $('#sheetBody').innerHTML=`<p class="note">Alle Formeln mit jeder Umstellung, nach Blöcken und Themen sortiert. 📕 = Seite in deiner IHK-Formelsammlung 2026 (Prüfungsjahr 2026, Bestellnr. 200/02-26). Wo keine Seite steht, ist sie noch nicht erfasst.</p>`+
    BLOCKS.map(B=>`<h2 class="bh">${B.e} ${B.name} <span class="note">${B.avg}</span></h2>`+GROUPS.filter(G=>G.b===B.id).map(G=>{const fs=FX.filter(f=>f.g===G.id);return `<section class="sgroup"><h3><span class="tag" style="--bc:var(--b-${G.b})">${G.id}</span>${G.e} ${G.name}${G.pts?`<span class="pt">${G.pts} Punkte · ${G.n} Aufgaben</span>`:''}</h3><p>${G.d}</p>
     ${fs.map(f=>{const rhs=f.eq.split(' = ')[1],tg=Object.keys(f.s).filter(k=>f.s[k][0]!==rhs);
-      return `<div class="frm"><div class="fn">${f.name}${f.sub?`<small>${f.sub}</small>`:''}</div><div class="fl"><span class="main">${tex(f,f.eq)}</span>${tg.map(k=>`<span>${sym(f,k)} = ${tex(f,f.s[k][0])}</span>`).join('')}</div></div>`}).join('')}</section>`}).join('')).join('');
+      return `<div class="frm"><div class="fn">${f.name}${f.sub?`<small>${f.sub}</small>`:''}${pgChip(f)}</div><div class="fl"><span class="main">${tex(f,f.eq)}</span>${tg.map(k=>`<span>${sym(f,k)} = ${tex(f,f.s[k][0])}</span>`).join('')}</div></div>`}).join('')}</section>`}).join('')).join('');
 }
 
 /* ---------- Fortschritt ---------- */
