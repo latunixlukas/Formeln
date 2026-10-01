@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NTG Formeltrainer</title>
+<meta name="description" content="Formeln umstellen für die NTG-Prüfung Industriemeister Elektrotechnik – leicht, mittel, schwer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+<style>
+/* Layout: Millimeterpapier-Grund, oben Steuerleiste (Stufe + Themen), darunter die Aufgabenkarte wie ein Prüfungsblatt. Kupfer = E-Technik, Blau = Statistik. */
+:root{
+  --paper:#f2f3ee; --grid:rgba(60,90,80,.07); --card:#ffffff; --ink:#1c2530; --muted:#5b6571; --line:#d8dbd2;
+  --cu:#b0521c; --cu-soft:#f6e6da; --st:#2a5ea8; --st-soft:#e1eaf7;
+  --ok:#2c7a4b; --ok-soft:#e1f1e7; --bad:#b3261e; --bad-soft:#f8e2df;
+  --btn:#1c2530; --btn-fg:#f7f7f2;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11161b; --grid:rgba(160,190,200,.05); --card:#1a2128; --ink:#e7eaed; --muted:#9aa4ae; --line:#2d3640;
+  --cu:#e48a52; --cu-soft:#3a271c; --st:#7eaaea; --st-soft:#1d2b40;
+  --ok:#62c48b; --ok-soft:#183324; --bad:#f2847a; --bad-soft:#3b1f1d;
+  --btn:#e7eaed; --btn-fg:#11161b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11161b; --grid:rgba(160,190,200,.05); --card:#1a2128; --ink:#e7eaed; --muted:#9aa4ae; --line:#2d3640;
+  --cu:#e48a52; --cu-soft:#3a271c; --st:#7eaaea; --st-soft:#1d2b40;
+  --ok:#62c48b; --ok-soft:#183324; --bad:#f2847a; --bad-soft:#3b1f1d;
+  --btn:#e7eaed; --btn-fg:#11161b; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background-color:var(--paper);color:var(--ink);font:15px/1.55 var(--f-body);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:20px 20px}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:20px 60px;display:grid;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font:800 clamp(26px,5vw,38px)/1 var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 small{display:block;font:500 13px/1.4 var(--f-body);color:var(--muted);letter-spacing:.02em;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:baseline;gap:6px;padding:6px 11px;border:1px solid var(--line);background:var(--card);border-radius:999px;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill b{font:800 16px/1 var(--f-display)}
+nav{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+nav button{all:unset;cursor:pointer;padding:9px 14px;font:600 14px var(--f-body);color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+nav button[aria-selected="true"]{color:var(--ink);border-color:var(--ink)}
+nav button:focus-visible{outline:2px solid var(--st);outline-offset:2px}
+.lbl{font:600 11px/1 var(--f-body);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 8px}
+.panel{display:grid;gap:16px}
+.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.lv{all:unset;cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;display:grid;gap:2px;min-width:0}
+.lv strong{font:800 17px/1.1 var(--f-display)}
+.lv span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.lv[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.lv:focus-visible,.topic:focus-visible,.btn:focus-visible,.opt:focus-visible{outline:2px solid var(--st);outline-offset:2px}
+.topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tcol{display:grid;gap:6px;align-content:start;min-width:0}
+.tcol h3{margin:0;font:800 15px var(--f-display);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tcol h3 .q{display:flex;gap:6px}
+.mini{all:unset;cursor:pointer;font:500 12px var(--f-body);color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.topic{all:unset;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 10px;border:1px solid var(--line);background:var(--card);border-radius:8px;font-size:13.5px;min-width:0}
+.topic .code{font:800 12px/1 var(--f-display);padding:4px 6px;border-radius:5px;background:var(--paper);color:var(--muted)}
+.topic .nm{min-width:0;overflow-wrap:anywhere}
+.topic .pt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.topic[aria-pressed="true"][data-b="E"]{border-color:var(--cu);background:var(--cu-soft)}
+.topic[aria-pressed="true"][data-b="E"] .code{background:var(--cu);color:var(--card)}
+.topic[aria-pressed="true"][data-b="S"]{border-color:var(--st);background:var(--st-soft)}
+.topic[aria-pressed="true"][data-b="S"] .code{background:var(--st);color:var(--card)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:14px;min-width:0}
+.card .head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.tag{font:600 12px/1.3 var(--f-body);padding:4px 8px;border-radius:6px;letter-spacing:.02em;min-width:0;overflow-wrap:anywhere}
+.data{font-family:var(--f-math);font-size:17px;margin-top:6px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.tag.E{background:var(--cu-soft);color:var(--cu)} .tag.S{background:var(--st-soft);color:var(--st)}
+.task{font-size:16px;margin:0}
+.fx{font-family:var(--f-math);font-size:clamp(20px,4.4vw,27px);line-height:1.5;padding:12px 16px;background:var(--paper);border-radius:10px;overflow-x:auto;white-space:nowrap}
+.fx i,.fl i,.opt i,.steps i,.legend i,.sheet i{font-family:var(--f-math);font-style:italic}
+.sy sub,.fx sub{font-style:normal;font-size:.62em}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legend span{white-space:nowrap}
+.given{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.given div{border:1px dashed var(--line);border-radius:8px;padding:7px 10px;font-variant-numeric:tabular-nums;min-width:0}
+.given div .n{display:block;font-size:12px;color:var(--muted)}
+.given div .v{font-family:var(--f-math);font-size:18px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.opt{all:unset;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:var(--f-math);font-size:19px;background:var(--card);overflow-x:auto;white-space:nowrap;min-width:0}
+.opt:hover{border-color:var(--ink)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)} .opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.ans{display:grid;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.inp{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.inp label{font-size:14px;min-width:0}
+.inp input{font:500 17px var(--f-body);font-variant-numeric:tabular-nums;width:9.5em;max-width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.inp input:focus{outline:2px solid var(--st);outline-offset:1px}
+.inp input.ok{border-color:var(--ok);background:var(--ok-soft)} .inp input.bad{border-color:var(--bad);background:var(--bad-soft)}
+.inp .u{color:var(--muted);font-size:14px}
+.part{display:grid;gap:6px;padding:10px 0;border-top:1px solid var(--line)}
+.part:first-child{border-top:0;padding-top:0}
+.btn{all:unset;cursor:pointer;padding:9px 16px;border-radius:8px;font:600 14px var(--f-body);background:var(--btn);color:var(--btn-fg)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn[hidden]{display:none!important}
+.fb{border-radius:10px;padding:12px 14px;display:grid;gap:6px}
+.fb.ok{background:var(--ok-soft)} .fb.bad{background:var(--bad-soft)} .fb.info{background:var(--paper)}
+.fb strong{font:800 16px var(--f-display)}
+.steps{display:grid;gap:4px;font-size:15px;font-variant-numeric:tabular-nums;overflow-x:auto}
+.steps div{white-space:nowrap}
+.note{font-size:13.5px;color:var(--muted)}
+.traps{display:grid;gap:10px;padding:16px 18px;border-left:4px solid var(--line);background:var(--card);border-radius:0 12px 12px 0}
+.traps.E{border-color:var(--cu)} .traps.S{border-color:var(--st)}
+.traps h4{margin:0;font:800 16px var(--f-display)}
+.traps p{margin:0;font-size:14px;max-width:70ch}
+.traps ul{margin:0;padding-left:18px;font-size:14px;display:grid;gap:4px;max-width:72ch}
+.sheet{display:grid;gap:16px}
+.sgroup{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px;min-width:0}
+.sgroup h3{margin:0;font:800 19px var(--f-display);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.sgroup h3 .pt{font:500 13px var(--f-body);color:var(--muted)}
+.sgroup p{margin:0;font-size:14px;color:var(--muted);max-width:75ch}
+.frm{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr);gap:4px 16px;padding:10px 0;border-top:1px solid var(--line)}
+.frm .fn{font-weight:600;font-size:14px}
+.frm .fn small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.frm .fl{font-family:var(--f-math);font-size:18px;display:flex;flex-wrap:wrap;gap:4px 22px;min-width:0}
+.frm .fl span{white-space:nowrap}
+.frm .fl .main{font-weight:600}
+.prog{display:grid;gap:8px}
+.pr{display:grid;grid-template-columns:3.2em minmax(0,1fr) 7.5em;gap:10px;align-items:center;font-size:13.5px;font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .g{background:var(--ok)} .bar .r{background:var(--bad)}
+.set{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.set input{font:500 15px var(--f-body);padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+@media (max-width:640px){
+  .topics{grid-template-columns:minmax(0,1fr)}
+  .opts{grid-template-columns:minmax(0,1fr)}
+  .lv span{display:none}
+  .lv{text-align:center;padding:10px 6px}
+  .frm{grid-template-columns:minmax(0,1fr)}
+  .card{padding:16px}
+}
+@media (prefers-reduced-motion:no-preference){.fb{animation:pop .18s ease-out}@keyframes pop{from{transform:translateY(3px)}to{transform:none}}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>NTG Formeltrainer<small>Industriemeister Elektrotechnik · IHK Dortmund · Formeln umstellen, bis sie sitzen</small></h1>
+    <div class="chips">
+      <span class="pill" id="pCount"><b>–</b> Tage bis zur Prüfung</span>
+      <span class="pill">heute <b id="pToday">0/0</b></span>
+      <span class="pill">Serie <b id="pStreak">0</b></span>
+    </div>
+  </header>
+
+  <nav role="tablist">
+    <button role="tab" id="tab-train" aria-selected="true" data-tab="train">Training</button>
+    <button role="tab" id="tab-sheet" aria-selected="false" data-tab="sheet">Formelblatt</button>
+    <button role="tab" id="tab-prog" aria-selected="false" data-tab="prog">Fortschritt</button>
+  </nav>
+
+  <section id="v-train" class="panel">
+    <div>
+      <p class="lbl">Stufe</p>
+      <div class="levels" id="levels">
+        <button class="lv" data-lv="1" aria-pressed="false"><strong>Leicht</strong><span>Formel nach einer Größe umstellen – richtige Form auswählen</span></button>
+        <button class="lv" data-lv="2" aria-pressed="true"><strong>Mittel</strong><span>Umstellen und mit Zahlen ausrechnen</span></button>
+        <button class="lv" data-lv="3" aria-pressed="false"><strong>Schwer</strong><span>Rechenketten wie in der Prüfung, mehrere Schritte</span></button>
+      </div>
+    </div>
+    <div>
+      <p class="lbl">Themen</p>
+      <div class="topics">
+        <div class="tcol" id="colE"><h3><span>Teil A · Elektrotechnik</span><span class="q"><button class="mini" data-all="E">alle</button><button class="mini" data-none="E">keine</button></span></h3></div>
+        <div class="tcol" id="colS"><h3><span>Teil B · Statistik</span><span class="q"><button class="mini" data-all="S">alle</button><button class="mini" data-none="S">keine</button></span></h3></div>
+      </div>
+    </div>
+    <div class="presets">
+      <span class="note">Schnellwahl:</span>
+      <button class="btn ghost" id="preTop">Top 5 nach Punkten (E3 · S1 · S2 · E4 · E1)</button>
+      <button class="btn ghost" id="preAll">Alles</button>
+    </div>
+
+    <article class="card" id="card" aria-live="polite"></article>
+    <aside class="traps" id="traps"></aside>
+  </section>
+
+  <section id="v-sheet" class="sheet" hidden></section>
+
+  <section id="v-prog" class="panel" hidden>
+    <div class="card">
+      <p class="lbl">Prüfungstermin</p>
+      <div class="set">
+        <label for="examDate">Datum der NTG-Prüfung</label>
+        <input type="date" id="examDate">
+        <span class="note">Vorbelegt mit Anfang November 2026 – trag den genauen Tag ein.</span>
+      </div>
+    </div>
+    <div class="card">
+      <p class="lbl">Richtig / falsch je Thema</p>
+      <div class="prog" id="progList"></div>
+      <div class="row"><button class="btn ghost" id="reset">Fortschritt zurücksetzen</button><span class="note" id="resetNote"></span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+/* ---------- Hilfen ---------- */
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem('ntg_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+             set(k,v){try{localStorage.setItem('ntg_'+k,JSON.stringify(v))}catch(e){}}};
+const r=(a,b,d=0)=>{const f=10**d;return Math.round((a+Math.random()*(b-a))*f)/f};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const sig=(x,p=5)=>Number(Number(x).toPrecision(p));
+const F=(x,p=4)=>isFinite(x)?sig(x,p).toLocaleString('de-DE',{maximumFractionDigits:8}):'–';
+const FG=x=>F(x,5);
+const SQ3='√3';
+
+/* ---------- Themen (aus dem Sonderskript) ---------- */
+const GROUPS=[
+ {id:'E1',b:'E',e:'🔌',name:'Leiterwiderstand, Spannungsfall, Klemmenspannung',pts:75,n:5,
+  d:'Der meistgeprüfte Einzeltyp der letzten zehn Jahre – kam dreimal in identischer Schrittfolge (2018 H, 2022 F, 2024 F).',
+  t:['Die doppelte Länge: bei Anschluss- und Verlängerungsleitungen ist l die doppelte Leitungslänge (Hin- UND Rückleiter).','ρ kommt aus der Formelsammlung: Cu 0,0178 oder 0,0179 Ω·mm²/m – beides wird gewertet.','Die tatsächliche Leistung ist U<sub>K</sub> · I, nicht die Typenschildleistung.','3-%-Prüfung: 0,03 · 230 V = 6,9 V – Entscheidungssatz hinschreiben, sonst keine Punkte.']},
+ {id:'E2',b:'E',e:'🧵',name:'Drahtlänge aus dem Widerstand (ρ rückwärts)',pts:33,n:2,
+  d:'Kleine Gruppe, sicherer Punktelieferant – hängt auch als Teilaufgabe an großen Netzaufgaben.',
+  t:['d ist der Durchmesser: A = d² · π / 4, nicht d² · π.','ρ in Ω·mm²/m und A in mm² → l kommt in Metern heraus.','Konstantan = 0,49 Ω·mm²/m.']},
+ {id:'E3',b:'E',e:'🕸️',name:'Widerstandsnetz – Reihe, Parallel, gemischt',pts:219,n:14,
+  d:'Der größte Einzelblock der ganzen Prüfung: 14 Aufgaben, 219 Punkte, in 21 von 36 Klausuren.',
+  t:['n gleiche Widerstände von parallel auf Reihe → Leistung fällt auf 1/n² (bei drei auf ein Neuntel).','Kurzschluss eines Widerstands: R<sub>ges</sub> sinkt → I steigt → P STEIGT.','Unterbrechung: in Reihe fällt der ganze Zweig aus, parallel laufen die anderen weiter.','R<sub>ges</sub> einer Parallelschaltung ist immer kleiner als der kleinste Einzelwiderstand – schnelle Probe.']},
+ {id:'E4',b:'E',e:'🌡️',name:'NTC / PTC – Spannungsteiler mit Kennlinie',pts:107,n:9,
+  d:'Der neue Standardtyp: die vier jüngsten Klausuren hatten ihn alle. Kennlinie ablesen statt rechnen.',
+  t:['NTC = Heißleiter: R sinkt bei Wärme. PTC = Kaltleiter: R steigt bei Wärme. Alle Metalle sind PTC.','Hoher Einschaltstrom von Lampen: kalter Glühdraht = kleiner Widerstand = großer Strom.','Begründung als ganze Kette: ϑ steigt → R<sub>NTC</sub> sinkt → Teiler verschiebt sich → U<sub>AUS</sub> sinkt.','Die R-Achse der Kennlinie ist logarithmisch.']},
+ {id:'E5',b:'E',e:'⚙️',name:'Drehstrom, Motor, Wirkungsgrad',pts:88,n:6,
+  d:'Die Brücke zwischen E-Technik und Mechanik. √3 · U · I · cos φ ist die eine Formel dafür.',
+  t:['Stern: U<sub>Str</sub> = U / √3, I<sub>Str</sub> = I. Dreieck: U<sub>Str</sub> = U, I<sub>Str</sub> = I / √3.','Wirkungsgradkette von hinten: P<sub>zu</sub> = P<sub>ab</sub> / η – geteilt, nicht multipliziert.','„Motorverluste 16 %“ heißt η = 0,84.','Drehzahl in 1/s umrechnen (÷ 60), bevor du v = d · π · n rechnest.']},
+ {id:'E6',b:'E',e:'🔋',name:'Spannungsquelle, Innenwiderstand, Arbeit und Energiekosten',pts:24,n:2,
+  d:'Der einfachste Block. W = P · t und Kosten = W · Preis sind geschenkte Punkte.',
+  t:['Einheiten: Watt ÷ 1000 → kW, Sekunden ÷ 3600 → h.','Innenwiderstand über Kreuz: R<sub>i</sub> = (U<sub>1</sub> − U<sub>2</sub>) / (I<sub>2</sub> − I<sub>1</sub>), damit R<sub>i</sub> positiv wird.','Zweiter Widerstand einer Parallelschaltung: R<sub>2</sub> = R<sub>1</sub> · R<sub>ges</sub> / (R<sub>1</sub> − R<sub>ges</sub>).']},
+ {id:'S1',b:'S',e:'📋',name:'Urliste auswerten – Mittelwert, Spannweite, Median, Modalwert',pts:100,n:8,
+  d:'Der billigste Punkt der ganzen Prüfung. Der Mittelwert kam in 25 von 36 Klausuren.',
+  t:['Quote: Summe aller Tage / (Mitarbeiter · Arbeitstage) · 100 % – nicht pro Kopf rechnen.','Modalwert = der Messwert, nicht seine Anzahl.','„Nachvollziehbar“: Summe, n, dann der Quotient hinschreiben.','Einheiten mitschleppen: „R = 5 Tage“.']},
+ {id:'S2',b:'S',e:'📐',name:'Standardabweichung und Streubereiche (±1s / ±2s / ±3s)',pts:96,n:7,
+  d:'Die Standardabweichung kam 17×, die Streubereiche 13×. DIHK-Hinweis 2022: „vgl. IHK-Formelsammlung S. 60“.',
+  t:['Bei einer Stichprobe immer n − 1 im Nenner.','Wendepunkte der Gaußkurve liegen bei x̄ ± 1s, nicht ±3s.','68,26 % = x̄ ± 1s · 95,45 % = x̄ ± 2s · 99,73 % = x̄ ± 3s.','Beurteilungssatz: 6s mit der Toleranz T vergleichen.']},
+ {id:'S3',b:'S',e:'📈',name:'Wahrscheinlichkeitsnetz und Summenlinie',pts:67,n:5,
+  d:'Die Anlage wird gestellt: zwei Punkte eintragen, Gerade ziehen. Kam zuletzt Herbst 2024.',
+  t:['Feste Skala: 0,135 % = −3s · 2,28 % = −2s · 15,87 % = −1s · 50 % = x̄ · 84,13 % = +1s · 97,72 % = +2s · 99,87 % = +3s.','Die rechte Achse ist 100 − F<sub>i</sub>: „5 % zu viel“ → OGW bei 95 %.','s ist eine Differenz: s = x̄ − x(15,87 %).','Lineal mitnehmen.']},
+ {id:'S4',b:'S',e:'📉',name:'Qualitätsregelkarte und Urwertkarte',pts:53,n:4,
+  d:'Darunter der dreifache Wiedergänger. Die Beurteilung ist Vokabellernen: Run, Trend, Eingriffsgrenze.',
+  t:['RUN = 7 Werte in Folge auf einer Seite der Mittellinie. TREND = 7 Werte in Folge in eine Richtung.','Warngrenze = beobachten, Eingriffsgrenze = eingreifen.','Median bei n = 5: sortieren, dann der dritte Wert.','„Die Ursache ist festzustellen und zu beseitigen.“ – wörtlich hinschreiben.']},
+ {id:'S5',b:'S',e:'🎯',name:'Fähigkeitskennwerte Cm, Cmk, Cp, Cpk',pts:40,n:3,
+  d:'Seit 2013 nicht mehr gekommen – als Letztes lernen, aber die zwei Formeln sitzen in fünf Minuten.',
+  t:['6s im Nenner bei Cp, 3s bei Cpk.','Bei Cpk immer beide Seiten rechnen und das Minimum nehmen.','Cpk = Cp nur, wenn x̄ exakt in der Toleranzmitte liegt.']},
+ {id:'S6',b:'S',e:'📊',name:'Klassierung und Histogramm',pts:10,n:1,
+  d:'Eine Aufgabe, 10 Punkte – die Klassenformeln sind winzig.',
+  t:['Klassenbreite auf einen glatten Wert aufrunden (0,042 → 0,05).','Die Summe der Klassenhäufigkeiten muss n ergeben.','Histogramm: Säulen ohne Lücke.']},
+];
+const GMAP=Object.fromEntries(GROUPS.map(g=>[g.id,g]));
+
+/* ---------- Formeln ----------
+   eq: Formel mit {Größe}. s: {Größe:[umgestellte Form, Rechnung, [falsche Formen]]}  */
+const XQ=u=>['Mittelwert',u,'<i>x̄</i>'];
+const OG=u=>['oberer Grenzwert',u,'OGW'], UG=u=>['unterer Grenzwert',u,'UGW'];
+const FX=[
+/* E1 */
+{id:'ohm',g:'E1',name:'Ohmsches Gesetz',eq:'{U} = {R} · {I}',
+ v:{U:['Spannung','V'],R:['Widerstand','Ω'],I:['Stromstärke','A']},
+ gen(){const R=r(5,250,1),I=r(0.2,12,2);return{R,I,U:R*I}},
+ s:{U:['{R} · {I}',v=>v.R*v.I,['{R} / {I}','{I} / {R}']],
+    R:['{U} / {I}',v=>v.U/v.I,['{U} · {I}','{I} / {U}']],
+    I:['{U} / {R}',v=>v.U/v.R,['{R} / {U}','{U} · {R}']]}},
+{id:'pui',g:'E1',name:'Elektrische Leistung',eq:'{P} = {U} · {I}',
+ v:{P:['Leistung','W'],U:['Spannung','V'],I:['Stromstärke','A']},
+ gen(){const U=pick([12,24,230,230,400]),I=r(0.3,16,2);return{U,I,P:U*I}},
+ s:{P:['{U} · {I}',v=>v.U*v.I,['{U} / {I}','{I} / {U}']],
+    U:['{P} / {I}',v=>v.P/v.I,['{P} · {I}','{I} / {P}']],
+    I:['{P} / {U}',v=>v.P/v.U,['{U} / {P}','{P} · {U}']]}},
+{id:'pur',g:'E1',name:'Leistung aus U und R',eq:'{P} = {U}² / {R}',
+ v:{P:['Leistung','W'],U:['Spannung','V'],R:['Widerstand','Ω']},
+ gen(){const U=pick([12,24,230,230]),R=U>100?r(15,120,1):r(1,30,1);return{U,R,P:U*U/R}},
+ s:{P:['{U}² / {R}',v=>v.U**2/v.R,['{U} / {R}²','{R} / {U}²']],
+    U:['√({P} · {R})',v=>Math.sqrt(v.P*v.R),['√({P} / {R})','{P} · {R}²','{P} / {R}']],
+    R:['{U}² / {P}',v=>v.U**2/v.P,['{P} / {U}²','{U}² · {P}','√({U} / {P})']]}},
+{id:'pir',g:'E1',name:'Leistung aus I und R',eq:'{P} = {I}² · {R}',
+ v:{P:['Leistung','W'],I:['Stromstärke','A'],R:['Widerstand','Ω']},
+ gen(){const I=r(0.1,10,2),R=r(2,200,1);return{I,R,P:I*I*R}},
+ s:{P:['{I}² · {R}',v=>v.I**2*v.R,['{I} · {R}²','{I}² / {R}']],
+    I:['√({P} / {R})',v=>Math.sqrt(v.P/v.R),['√({P} · {R})','{P} / {R}²','({P} / {R})²']],
+    R:['{P} / {I}²',v=>v.P/v.I**2,['{I}² / {P}','{P} · {I}²','√{P} / {I}']]}},
+{id:'rl2',g:'E1',name:'Leitungswiderstand',sub:'Hin- und Rückleiter',eq:'{R_L} = 2 · {ρ} · {l} / {A}',
+ note:'l ist die einfache Leitungslänge – die 2 steht für Hin- und Rückleiter.',
+ v:{R_L:['Widerstand der ganzen Leitung','Ω'],ρ:['spezifischer Widerstand','Ω·mm²/m'],l:['einfache Leitungslänge','m'],A:['Leiterquerschnitt','mm²']},
+ gen(){const ρ=pick([0.0178,0.0179,0.0286]),l=r(5,120,1),A=pick([1.5,2.5,4,6,10]);return{ρ,l,A,R_L:2*ρ*l/A}},
+ s:{R_L:['2 · {ρ} · {l} / {A}',v=>2*v.ρ*v.l/v.A,['{ρ} · {l} / {A}','2 · {ρ} · {A} / {l}','{ρ} · {A} / (2 · {l})']],
+    l:['{R_L} · {A} / (2 · {ρ})',v=>v.R_L*v.A/(2*v.ρ),['{R_L} · {A} / {ρ}','2 · {ρ} · {A} / {R_L}','{R_L} · {ρ} / (2 · {A})']],
+    A:['2 · {ρ} · {l} / {R_L}',v=>2*v.ρ*v.l/v.R_L,['{R_L} · {l} / (2 · {ρ})','{ρ} · {l} / {R_L}','{R_L} / (2 · {ρ} · {l})']],
+    ρ:['{R_L} · {A} / (2 · {l})',v=>v.R_L*v.A/(2*v.l),['{R_L} · {l} / (2 · {A})','2 · {R_L} · {A} / {l}','{R_L} · {A} / {l}']]}},
+{id:'uk',g:'E1',name:'Klemmenspannung',eq:'{U_K} = {U} − {I} · {R_L}',
+ v:{U_K:['Klemmenspannung am Verbraucher','V'],U:['Netzspannung','V'],I:['Stromstärke','A'],R_L:['Leitungswiderstand','Ω']},
+ gen(){const U=230,I=r(2,16,2),R_L=r(0.1,1.5,3);return{U,I,R_L,U_K:U-I*R_L}},
+ s:{U_K:['{U} − {I} · {R_L}',v=>v.U-v.I*v.R_L,['({U} − {I}) · {R_L}','{U} + {I} · {R_L}']],
+    R_L:['({U} − {U_K}) / {I}',v=>(v.U-v.U_K)/v.I,['{U} − {U_K} / {I}','({U} + {U_K}) / {I}','{I} / ({U} − {U_K})']],
+    I:['({U} − {U_K}) / {R_L}',v=>(v.U-v.U_K)/v.R_L,['{R_L} / ({U} − {U_K})','{U} / {R_L} − {U_K}','({U} + {U_K}) / {R_L}']]}},
+{id:'du',g:'E1',name:'Relativer Spannungsfall',sub:'3-%-Prüfung',eq:'{Δu} = {U_L} / {U} · 100 %',
+ v:{Δu:['relativer Spannungsfall','%'],U_L:['Spannungsfall auf der Leitung','V'],U:['Bemessungsspannung','V']},
+ gen(){const U=pick([230,400]),U_L=r(1,15,2);return{U,U_L,Δu:U_L/U*100}},
+ s:{Δu:['{U_L} / {U} · 100 %',v=>v.U_L/v.U*100,['{U} / {U_L} · 100 %','{U_L} · {U} / 100 %']],
+    U_L:['{Δu} · {U} / 100 %',v=>v.Δu*v.U/100,['{Δu} / {U} · 100 %','{U} / {Δu} · 100 %']],
+    U:['{U_L} · 100 % / {Δu}',v=>v.U_L*100/v.Δu,['{U_L} · {Δu} / 100 %','{Δu} · 100 % / {U_L}']]}},
+/* E2 */
+{id:'rla',g:'E2',name:'Leiterwiderstand',eq:'{R} = {ρ} · {l} / {A}',
+ v:{R:['Widerstand','Ω'],ρ:['spezifischer Widerstand','Ω·mm²/m'],l:['Drahtlänge','m'],A:['Querschnitt','mm²']},
+ gen(){const ρ=pick([0.49,0.49,0.0178,0.0286]),k=ρ>0.1,l=k?r(1,40,2):r(10,300,0),A=k?pick([0.1,0.2,0.25,0.28,0.5]):pick([0.5,0.75,1.5,2.5]);return{ρ,l,A,R:ρ*l/A}},
+ s:{R:['{ρ} · {l} / {A}',v=>v.ρ*v.l/v.A,['{ρ} · {A} / {l}','{l} · {A} / {ρ}']],
+    l:['{R} · {A} / {ρ}',v=>v.R*v.A/v.ρ,['{R} · {ρ} / {A}','{ρ} · {A} / {R}','{R} / ({ρ} · {A})']],
+    A:['{ρ} · {l} / {R}',v=>v.ρ*v.l/v.R,['{R} · {l} / {ρ}','{R} · {ρ} / {l}']],
+    ρ:['{R} · {A} / {l}',v=>v.R*v.A/v.l,['{R} · {l} / {A}','{l} · {A} / {R}']]}},
+{id:'kreis',g:'E2',name:'Querschnitt aus dem Durchmesser',eq:'{A} = {d}² · π / 4',
+ note:'d ist der Durchmesser, nicht der Radius.',
+ v:{A:['Querschnitt','mm²'],d:['Durchmesser','mm']},
+ gen(){const d=pick([0.2,0.25,0.3,0.4,0.5,0.6,0.8,1,1.38,1.78]);return{d,A:d*d*Math.PI/4}},
+ s:{A:['{d}² · π / 4',v=>v.d**2*Math.PI/4,['{d}² · π','{d} · π / 4','{d}² · π / 2']],
+    d:['√(4 · {A} / π)',v=>Math.sqrt(4*v.A/Math.PI),['√({A} · π / 4)','4 · {A} / π','√({A} / π)']]}},
+{id:'lrho',g:'E2',name:'Drahtlänge in einem Schritt',sub:'R = ρ·l/A mit A = d²·π/4',eq:'{l} = {R} · {d}² · π / (4 · {ρ})',
+ v:{l:['Drahtlänge','m'],R:['Widerstand','Ω'],d:['Durchmesser','mm'],ρ:['spezifischer Widerstand','Ω·mm²/m']},
+ gen(){const ρ=0.49,d=pick([0.25,0.3,0.4,0.5,0.6]),l=r(1,25,2);return{ρ,d,l,R:l*4*ρ/(d*d*Math.PI)}},
+ s:{l:['{R} · {d}² · π / (4 · {ρ})',v=>v.R*v.d**2*Math.PI/(4*v.ρ),['{R} · {d}² · π / {ρ}','4 · {ρ} · {R} / ({d}² · π)']],
+    R:['4 · {ρ} · {l} / ({d}² · π)',v=>4*v.ρ*v.l/(v.d**2*Math.PI),['{ρ} · {l} / ({d}² · π)','{l} · {d}² · π / (4 · {ρ})']],
+    d:['√(4 · {ρ} · {l} / ({R} · π))',v=>Math.sqrt(4*v.ρ*v.l/(v.R*Math.PI)),['4 · {ρ} · {l} / ({R} · π)','√({R} · π / (4 · {ρ} · {l}))']]}},
+/* E3 */
+{id:'reihe',g:'E3',name:'Reihenschaltung',eq:'{R_ges} = {R_1} + {R_2} + {R_3}',
+ note:'In Reihe ist der Strom überall gleich.',
+ v:{R_ges:['Gesamtwiderstand','Ω'],R_1:['Widerstand 1','Ω'],R_2:['Widerstand 2','Ω'],R_3:['Widerstand 3','Ω']},
+ gen(){const a=r(5,300,0),b=r(5,300,0),c=r(5,300,0);return{R_1:a,R_2:b,R_3:c,R_ges:a+b+c}},
+ s:{R_ges:['{R_1} + {R_2} + {R_3}',v=>v.R_1+v.R_2+v.R_3,['1 / (1/{R_1} + 1/{R_2} + 1/{R_3})','{R_1} · {R_2} · {R_3}']],
+    R_3:['{R_ges} − {R_1} − {R_2}',v=>v.R_ges-v.R_1-v.R_2,['{R_ges} − {R_1} + {R_2}','{R_ges} + {R_1} + {R_2}','{R_1} + {R_2} − {R_ges}']]}},
+{id:'par2',g:'E3',name:'Zwei Widerstände parallel',eq:'{R_ges} = {R_1} · {R_2} / ({R_1} + {R_2})',
+ note:'Parallel ist die Spannung überall gleich. R_ges ist immer kleiner als der kleinste Einzelwiderstand.',
+ v:{R_ges:['Ersatzwiderstand','Ω'],R_1:['Widerstand 1','Ω'],R_2:['Widerstand 2','Ω']},
+ gen(){const a=r(20,500,0),b=r(0.3*a,2*a,0);return{R_1:a,R_2:b,R_ges:a*b/(a+b)}},
+ s:{R_ges:['{R_1} · {R_2} / ({R_1} + {R_2})',v=>v.R_1*v.R_2/(v.R_1+v.R_2),['{R_1} + {R_2}','({R_1} + {R_2}) / ({R_1} · {R_2})']],
+    R_2:['{R_1} · {R_ges} / ({R_1} − {R_ges})',v=>v.R_ges*v.R_1/(v.R_1-v.R_ges),['{R_1} − {R_ges}','{R_1} · {R_ges} / ({R_1} + {R_ges})','({R_1} − {R_ges}) / ({R_1} · {R_ges})']]}},
+{id:'parn',g:'E3',name:'n gleiche Widerstände parallel',eq:'{R_ges} = {R} / {n}',
+ v:{R_ges:['Ersatzwiderstand','Ω'],R:['Einzelwiderstand','Ω'],n:['Anzahl','']},
+ gen(){const n=pick([2,3,4,5]),R=r(10,300,1);return{n,R,R_ges:R/n}},
+ s:{R_ges:['{R} / {n}',v=>v.R/v.n,['{n} · {R}','{n} / {R}']],
+    R:['{n} · {R_ges}',v=>v.n*v.R_ges,['{R_ges} / {n}','{n} / {R_ges}']],
+    n:['{R} / {R_ges}',v=>v.R/v.R_ges,['{R_ges} / {R}','{R} · {R_ges}']]}},
+{id:'arbeit',g:'E3',name:'Elektrische Arbeit',eq:'{W} = {P} · {t}',
+ v:{W:['Arbeit','kWh'],P:['Leistung','kW'],t:['Zeit','h']},
+ gen(){const P=r(0.1,9,3),t=r(0.5,12,1);return{P,t,W:P*t}},
+ s:{W:['{P} · {t}',v=>v.P*v.t,['{P} / {t}','{t} / {P}']],
+    P:['{W} / {t}',v=>v.W/v.t,['{W} · {t}','{t} / {W}']],
+    t:['{W} / {P}',v=>v.W/v.P,['{W} · {P}','{P} / {W}']]}},
+{id:'kosten',g:'E3',name:'Energiekosten',eq:'{K} = {W} · {k}',
+ v:{K:['Kosten','€'],W:['Arbeit','kWh'],k:['Preis je kWh','€/kWh']},
+ gen(){const W=r(0.5,50,2),k=pick([0.27,0.3,0.35,0.4]);return{W,k,K:W*k}},
+ s:{K:['{W} · {k}',v=>v.W*v.k,['{W} / {k}','{k} / {W}']],
+    W:['{K} / {k}',v=>v.K/v.k,['{K} · {k}','{k} / {K}']],
+    k:['{K} / {W}',v=>v.K/v.W,['{K} · {W}','{W} / {K}']]}},
+{id:'zaehler',g:'E3',name:'Leistung aus dem Stromzähler',eq:'{P} = {z} / ({c_Z} · {t})',
+ note:'t in Stunden: 6 min = 0,1 h.',
+ v:{P:['Leistung','kW'],z:['gezählte Umdrehungen',''],c_Z:['Zählerkonstante','U/kWh'],t:['Messzeit','h']},
+ gen(){const c=pick([75,96,120,150,600]),t=pick([0.1,0.2,0.25,0.5]),z=r(5,60,0);return{c_Z:c,t,z,P:z/(c*t)}},
+ s:{P:['{z} / ({c_Z} · {t})',v=>v.z/(v.c_Z*v.t),['{z} · {c_Z} / {t}','{c_Z} / ({z} · {t})']],
+    z:['{P} · {c_Z} · {t}',v=>v.P*v.c_Z*v.t,['{P} / ({c_Z} · {t})','{c_Z} · {t} / {P}']],
+    t:['{z} / ({c_Z} · {P})',v=>v.z/(v.c_Z*v.P),['{z} · {P} / {c_Z}','{c_Z} · {P} / {z}']]}},
+/* E4 */
+{id:'teiler',g:'E4',name:'Spannungsteiler',sub:'unbelastet',eq:'{U_2} = {U} · {R_2} / ({R_1} + {R_2})',
+ v:{U_2:['Teilspannung an R₂ (U_AUS)','V'],U:['Gesamtspannung (U_EIN)','V'],R_1:['Widerstand R₁','Ω'],R_2:['Widerstand R₂','Ω']},
+ gen(){const U=pick([12,24,24,200]),R_1=pick([100,220,470,1000,1100,3000,4700]),R_2=pick([100,200,300,600,1000,2000,3000,10000]);return{U,R_1,R_2,U_2:U*R_2/(R_1+R_2)}},
+ s:{U_2:['{U} · {R_2} / ({R_1} + {R_2})',v=>v.U*v.R_2/(v.R_1+v.R_2),['{U} · {R_1} / ({R_1} + {R_2})','{U} · {R_2} / {R_1}']],
+    R_2:['{R_1} · {U_2} / ({U} − {U_2})',v=>v.R_1*v.U_2/(v.U-v.U_2),['{R_1} · ({U} − {U_2}) / {U_2}','{R_1} · {U_2} / {U}','{U_2} / ({U} · {R_1})']],
+    R_1:['{R_2} · ({U} − {U_2}) / {U_2}',v=>v.R_2*(v.U-v.U_2)/v.U_2,['{R_2} · {U_2} / ({U} − {U_2})','{R_2} · {U} / {U_2}']],
+    U:['{U_2} · ({R_1} + {R_2}) / {R_2}',v=>v.U_2*(v.R_1+v.R_2)/v.R_2,['{U_2} · {R_2} / ({R_1} + {R_2})','{U_2} · ({R_1} + {R_2}) / {R_1}']]}},
+{id:'ptc',g:'E4',name:'Widerstand bei Erwärmung',sub:'Metall / PTC',eq:'{R_ϑ} = {R_20} · (1 + {α} · {Δϑ})',
+ v:{R_ϑ:['Warmwiderstand','Ω'],R_20:['Widerstand bei 20 °C','Ω'],α:['Temperaturkoeffizient','1/K'],Δϑ:['Temperaturänderung','K']},
+ gen(){const R_20=r(5,120,2),α=pick([0.0039,0.0039,0.004,0.0041]),Δϑ=pick([30,40,50,60,70,80,100]);return{R_20,α,Δϑ,R_ϑ:R_20*(1+α*Δϑ)}},
+ s:{R_ϑ:['{R_20} · (1 + {α} · {Δϑ})',v=>v.R_20*(1+v.α*v.Δϑ),['{R_20} · {α} · {Δϑ}','{R_20} + {α} · {Δϑ}']],
+    R_20:['{R_ϑ} / (1 + {α} · {Δϑ})',v=>v.R_ϑ/(1+v.α*v.Δϑ),['{R_ϑ} · (1 + {α} · {Δϑ})','{R_ϑ} / ({α} · {Δϑ})','{R_ϑ} − {α} · {Δϑ}']],
+    Δϑ:['({R_ϑ} / {R_20} − 1) / {α}',v=>(v.R_ϑ/v.R_20-1)/v.α,['({R_ϑ} − {R_20}) / {α}','{R_ϑ} / ({R_20} · {α})','({R_20} / {R_ϑ} − 1) / {α}']],
+    α:['({R_ϑ} / {R_20} − 1) / {Δϑ}',v=>(v.R_ϑ/v.R_20-1)/v.Δϑ,['({R_ϑ} − {R_20}) / {Δϑ}','{R_ϑ} / ({R_20} · {Δϑ})']]}},
+/* E5 */
+{id:'dreh',g:'E5',name:'Drehstrom-Wirkleistung',eq:'{P} = √3 · {U} · {I} · {cosφ}',
+ v:{P:['Wirkleistung','W'],U:['Außenleiterspannung','V'],I:['Außenleiterstrom','A'],cosφ:['Leistungsfaktor','','cos <i>φ</i>']},
+ gen(){const U=400,I=r(0.5,30,2),c=pick([0.77,0.8,0.82,0.85,0.86,0.89,0.9,1]);return{U,I,cosφ:c,P:Math.sqrt(3)*U*I*c}},
+ s:{P:['√3 · {U} · {I} · {cosφ}',v=>Math.sqrt(3)*v.U*v.I*v.cosφ,['3 · {U} · {I} · {cosφ}','{U} · {I} · {cosφ} / √3']],
+    I:['{P} / (√3 · {U} · {cosφ})',v=>v.P/(Math.sqrt(3)*v.U*v.cosφ),['{P} · √3 / ({U} · {cosφ})','{P} / ({U} · {cosφ})','√3 · {P} · {U} · {cosφ}']],
+    cosφ:['{P} / (√3 · {U} · {I})',v=>v.P/(Math.sqrt(3)*v.U*v.I),['√3 · {U} · {I} / {P}','{P} / ({U} · {I})']]}},
+{id:'eta',g:'E5',name:'Wirkungsgrad',eq:'{η} = {P_ab} / {P_zu}',
+ note:'Verluste in % zuerst in η umrechnen: 16 % Verlust → η = 0,84.',
+ v:{η:['Wirkungsgrad',''],P_ab:['abgegebene Leistung','W'],P_zu:['zugeführte Leistung','W']},
+ gen(){const P_zu=r(200,8000,0),η=r(0.6,0.95,2);return{P_zu,η,P_ab:P_zu*η}},
+ s:{η:['{P_ab} / {P_zu}',v=>v.P_ab/v.P_zu,['{P_zu} / {P_ab}','{P_ab} · {P_zu}']],
+    P_zu:['{P_ab} / {η}',v=>v.P_ab/v.η,['{P_ab} · {η}','{η} / {P_ab}']],
+    P_ab:['{η} · {P_zu}',v=>v.η*v.P_zu,['{P_zu} / {η}','{η} / {P_zu}']]}},
+{id:'etag',g:'E5',name:'Gesamtwirkungsgrad',eq:'{η_ges} = {η_1} · {η_2}',
+ v:{η_ges:['Gesamtwirkungsgrad',''],η_1:['Wirkungsgrad 1 (z. B. Motor)',''],η_2:['Wirkungsgrad 2 (z. B. Getriebe)','']},
+ gen(){const a=r(0.75,0.95,2),b=r(0.7,0.95,2);return{η_1:a,η_2:b,η_ges:a*b}},
+ s:{η_ges:['{η_1} · {η_2}',v=>v.η_1*v.η_2,['{η_1} + {η_2}','{η_1} / {η_2}']],
+    η_2:['{η_ges} / {η_1}',v=>v.η_ges/v.η_1,['{η_ges} · {η_1}','{η_1} / {η_ges}','{η_ges} − {η_1}']]}},
+{id:'hub',g:'E5',name:'Hubleistung',eq:'{P} = {m} · {g} · {h} / {t}',
+ v:{P:['Hubleistung','W'],m:['Masse','kg'],g:['Erdbeschleunigung','m/s²'],h:['Hubhöhe','m'],t:['Zeit','s']},
+ gen(){const m=r(50,1500,0),h=r(1,20,1),t=r(5,60,0);return{m,g:9.81,h,t,P:m*9.81*h/t}},
+ s:{P:['{m} · {g} · {h} / {t}',v=>v.m*v.g*v.h/v.t,['{m} · {g} · {h} · {t}','{m} · {h} / ({g} · {t})']],
+    m:['{P} · {t} / ({g} · {h})',v=>v.P*v.t/(v.g*v.h),['{P} / ({g} · {h} · {t})','{g} · {h} / ({P} · {t})']],
+    h:['{P} · {t} / ({m} · {g})',v=>v.P*v.t/(v.m*v.g),['{P} / ({m} · {g} · {t})','{m} · {g} · {t} / {P}']],
+    t:['{m} · {g} · {h} / {P}',v=>v.m*v.g*v.h/v.P,['{P} / ({m} · {g} · {h})','{P} · {m} · {g} · {h}']]}},
+{id:'stern',g:'E5',name:'Sternschaltung',sub:'Strangspannung',eq:'{U_Str} = {U} / √3',
+ note:'In Stern ist I_Str = I.',
+ v:{U_Str:['Strangspannung','V'],U:['Außenleiterspannung','V']},
+ gen(){const U=pick([400,400,230,690]);return{U,U_Str:U/Math.sqrt(3)}},
+ s:{U_Str:['{U} / √3',v=>v.U/Math.sqrt(3),['{U} · √3','{U} / 3']],
+    U:['√3 · {U_Str}',v=>Math.sqrt(3)*v.U_Str,['{U_Str} / √3','3 · {U_Str}']]}},
+{id:'dreieck',g:'E5',name:'Dreieckschaltung',sub:'Strangstrom',eq:'{I_Str} = {I} / √3',
+ note:'In Dreieck ist U_Str = U.',
+ v:{I_Str:['Strangstrom','A'],I:['Außenleiterstrom','A']},
+ gen(){const I=r(2,40,1);return{I,I_Str:I/Math.sqrt(3)}},
+ s:{I_Str:['{I} / √3',v=>v.I/Math.sqrt(3),['{I} · √3','{I} / 3']],
+    I:['√3 · {I_Str}',v=>Math.sqrt(3)*v.I_Str,['{I_Str} / √3','3 · {I_Str}']]}},
+{id:'waerme',g:'E5',name:'Wärmemenge',eq:'{Q} = {m} · {c} · {Δϑ}',
+ note:'Wasser: c = 4,18 kJ/(kg·K), 1 l ≈ 1 kg.',
+ v:{Q:['Wärmemenge','kJ'],m:['Masse','kg'],c:['spezifische Wärmekapazität','kJ/(kg·K)'],Δϑ:['Temperaturänderung','K']},
+ gen(){const m=r(5,200,0),c=pick([4.18,4.18,4.19,0.46,0.9]),d=r(5,80,0);return{m,c,Δϑ:d,Q:m*c*d}},
+ s:{Q:['{m} · {c} · {Δϑ}',v=>v.m*v.c*v.Δϑ,['{m} · {c} / {Δϑ}','{m} + {c} · {Δϑ}']],
+    Δϑ:['{Q} / ({m} · {c})',v=>v.Q/(v.m*v.c),['{Q} · {m} / {c}','{m} · {c} / {Q}']],
+    m:['{Q} / ({c} · {Δϑ})',v=>v.Q/(v.c*v.Δϑ),['{Q} · {c} / {Δϑ}','{c} · {Δϑ} / {Q}']]}},
+{id:'umfang',g:'E5',name:'Umfangsgeschwindigkeit',eq:'{v} = {d} · π · {n}',
+ note:'n in 1/s: 1.450 min⁻¹ ÷ 60 = 24,17 s⁻¹.',
+ v:{v:['Geschwindigkeit','m/s'],d:['Durchmesser','m'],n:['Drehzahl','1/s']},
+ gen(){const d=r(0.1,1,2),n=r(0.2,25,2);return{d,n,v:d*Math.PI*n}},
+ s:{v:['{d} · π · {n}',v=>v.d*Math.PI*v.n,['{d} · π / {n}','{d}² · π · {n}']],
+    n:['{v} / ({d} · π)',v=>v.v/(v.d*Math.PI),['{v} · {d} · π','{d} · π / {v}']],
+    d:['{v} / (π · {n})',v=>v.v/(Math.PI*v.n),['{v} · π · {n}','π · {n} / {v}']]}},
+{id:'getriebe',g:'E5',name:'Getriebeübersetzung',eq:'{n_ab} = {n_an} / {i}',
+ v:{n_ab:['Abtriebsdrehzahl','1/min'],n_an:['Antriebsdrehzahl','1/min'],i:['Übersetzung','']},
+ gen(){const n=pick([960,1400,1450,2800,2900]),i=pick([5,10,20,25,50]);return{n_an:n,i,n_ab:n/i}},
+ s:{n_ab:['{n_an} / {i}',v=>v.n_an/v.i,['{n_an} · {i}','{i} / {n_an}']],
+    n_an:['{n_ab} · {i}',v=>v.n_ab*v.i,['{n_ab} / {i}','{i} / {n_ab}']],
+    i:['{n_an} / {n_ab}',v=>v.n_an/v.n_ab,['{n_ab} / {n_an}','{n_an} · {n_ab}']]}},
+/* E6 */
+{id:'quelle',g:'E6',name:'Klemmenspannung einer Quelle',eq:'{U_K} = {U_0} − {I} · {R_i}',
+ v:{U_K:['Klemmenspannung','V'],U_0:['Leerlaufspannung','V'],I:['Laststrom','A'],R_i:['Innenwiderstand','Ω']},
+ gen(){const U_0=pick([12,12.6,13.5,24,48]),R_i=r(0.02,0.5,3),I=r(1,20,1);return{U_0,R_i,I,U_K:U_0-I*R_i}},
+ s:{U_K:['{U_0} − {I} · {R_i}',v=>v.U_0-v.I*v.R_i,['({U_0} − {I}) · {R_i}','{U_0} + {I} · {R_i}']],
+    U_0:['{U_K} + {I} · {R_i}',v=>v.U_K+v.I*v.R_i,['{U_K} − {I} · {R_i}','({U_K} + {I}) · {R_i}']],
+    R_i:['({U_0} − {U_K}) / {I}',v=>(v.U_0-v.U_K)/v.I,['({U_K} − {U_0}) / {I}','{I} / ({U_0} − {U_K})','{U_0} − {U_K} / {I}']],
+    I:['({U_0} − {U_K}) / {R_i}',v=>(v.U_0-v.U_K)/v.R_i,['{R_i} / ({U_0} − {U_K})','({U_0} + {U_K}) / {R_i}']]}},
+{id:'ri',g:'E6',name:'Innenwiderstand aus zwei Lastpunkten',eq:'{R_i} = ({U_1} − {U_2}) / ({I_2} − {I_1})',
+ v:{R_i:['Innenwiderstand','Ω'],U_1:['Spannung bei kleiner Last','V'],U_2:['Spannung bei großer Last','V'],I_1:['kleiner Strom','A'],I_2:['großer Strom','A']},
+ gen(){const U_1=r(11,14,1),I_1=r(0.5,4,1),I_2=I_1+r(1,8,1),R_i=r(0.05,0.5,2);return{U_1,I_1,I_2,R_i,U_2:U_1-R_i*(I_2-I_1)}},
+ s:{R_i:['({U_1} − {U_2}) / ({I_2} − {I_1})',v=>(v.U_1-v.U_2)/(v.I_2-v.I_1),['({U_1} − {U_2}) / ({I_1} − {I_2})','({I_2} − {I_1}) / ({U_1} − {U_2})']],
+    U_2:['{U_1} − {R_i} · ({I_2} − {I_1})',v=>v.U_1-v.R_i*(v.I_2-v.I_1),['{U_1} + {R_i} · ({I_2} − {I_1})','{R_i} · ({I_2} − {I_1}) − {U_1}']],
+    I_2:['{I_1} + ({U_1} − {U_2}) / {R_i}',v=>v.I_1+(v.U_1-v.U_2)/v.R_i,['{I_1} − ({U_1} − {U_2}) / {R_i}','({U_1} − {U_2}) / {R_i}']]}},
+{id:'arbeitws',g:'E6',name:'Arbeit aus U, I und t',eq:'{W} = {U} · {I} · {t}',
+ v:{W:['Arbeit','Wh'],U:['Spannung','V'],I:['Stromstärke','A'],t:['Zeit','h']},
+ gen(){const U=pick([12,24,230]),I=r(0.5,10,1),t=pick([0.1,0.25,0.5,1,2,8]);return{U,I,t,W:U*I*t}},
+ s:{W:['{U} · {I} · {t}',v=>v.U*v.I*v.t,['{U} · {I} / {t}','{U} / ({I} · {t})']],
+    t:['{W} / ({U} · {I})',v=>v.W/(v.U*v.I),['{W} · {U} · {I}','{U} · {I} / {W}']],
+    I:['{W} / ({U} · {t})',v=>v.W/(v.U*v.t),['{W} · {t} / {U}','{U} · {t} / {W}']]}},
+/* S1 */
+{id:'mittel',g:'S1',name:'Arithmetischer Mittelwert',eq:'{xq} = {Sx} / {n}',
+ v:{xq:XQ(''),Sx:['Summe aller Werte','','Σ<i>x</i><sub>i</sub>'],n:['Anzahl der Werte','']},
+ gen(){const n=r(5,40,0),Sx=r(n,n*250,1);return{n,Sx,xq:Sx/n}},
+ s:{xq:['{Sx} / {n}',v=>v.Sx/v.n,['{n} / {Sx}','{Sx} · {n}']],
+    Sx:['{xq} · {n}',v=>v.xq*v.n,['{xq} / {n}','{n} / {xq}']],
+    n:['{Sx} / {xq}',v=>v.Sx/v.xq,['{xq} / {Sx}','{Sx} · {xq}']]}},
+{id:'quote',g:'S1',name:'Quote in %',sub:'z. B. Krankenstand, Home-Office',eq:'{Q} = {S} / ({N} · {T}) · 100 %',
+ v:{Q:['Quote','%'],S:['Summe aller Tage','Tage'],N:['Anzahl Mitarbeiter',''],T:['Arbeitstage je Person','Tage']},
+ gen(){const N=r(10,60,0),T=pick([200,210,220]),S=r(N,N*40,0);return{N,T,S,Q:S/(N*T)*100}},
+ s:{Q:['{S} / ({N} · {T}) · 100 %',v=>v.S/(v.N*v.T)*100,['{S} · {N} / {T} · 100 %','{S} / {T} · 100 %']],
+    S:['{Q} · {N} · {T} / 100 %',v=>v.Q*v.N*v.T/100,['{Q} · {T} / ({N} · 100 %)','{Q} / ({N} · {T}) · 100 %']],
+    N:['{S} · 100 % / ({Q} · {T})',v=>v.S*100/(v.Q*v.T),['{Q} · {T} / ({S} · 100 %)','{S} · {T} / ({Q} · 100 %)']],
+    T:['{S} · 100 % / ({Q} · {N})',v=>v.S*100/(v.Q*v.N),['{Q} · {N} / ({S} · 100 %)','{S} · {N} / ({Q} · 100 %)']]}},
+{id:'quote2',g:'S1',name:'Quote über den Mittelwert',sub:'Kurzweg',eq:'{Q} = {xq} / {T} · 100 %',
+ v:{Q:['Quote','%'],xq:XQ('Tage'),T:['Arbeitstage je Person','Tage']},
+ gen(){const T=pick([200,210,220]),xq=r(1,60,2);return{T,xq,Q:xq/T*100}},
+ s:{Q:['{xq} / {T} · 100 %',v=>v.xq/v.T*100,['{T} / {xq} · 100 %','{xq} · {T} / 100 %']],
+    xq:['{Q} · {T} / 100 %',v=>v.Q*v.T/100,['{Q} / {T} · 100 %','{T} / {Q} · 100 %']]}},
+{id:'spann',g:'S1',name:'Spannweite',eq:'{R} = {x_max} − {x_min}',
+ v:{R:['Spannweite','mm'],x_max:['größter Wert','mm'],x_min:['kleinster Wert','mm']},
+ gen(){const x_min=r(1,200,2),R=r(0.1,50,2);return{x_min,R,x_max:x_min+R}},
+ s:{R:['{x_max} − {x_min}',v=>v.x_max-v.x_min,['{x_max} + {x_min}','({x_max} − {x_min}) / 2']],
+    x_min:['{x_max} − {R}',v=>v.x_max-v.R,['{R} − {x_max}','{x_max} + {R}']],
+    x_max:['{x_min} + {R}',v=>v.x_min+v.R,['{R} − {x_min}','{x_min} − {R}']]}},
+{id:'relh',g:'S1',name:'Relative Häufigkeit',eq:'{h} = {n_i} / {n} · 100 %',
+ v:{h:['relative Häufigkeit','%'],n_i:['absolute Häufigkeit',''],n:['Stichprobenumfang','']},
+ gen(){const n=pick([20,25,32,36,50,100]),n_i=r(1,n/2,0);return{n,n_i,h:n_i/n*100}},
+ s:{h:['{n_i} / {n} · 100 %',v=>v.n_i/v.n*100,['{n} / {n_i} · 100 %','{n_i} · {n} / 100 %']],
+    n_i:['{h} · {n} / 100 %',v=>v.h*v.n/100,['{h} / {n} · 100 %','{n} / {h} · 100 %']],
+    n:['{n_i} · 100 % / {h}',v=>v.n_i*100/v.h,['{n_i} · {h} / 100 %','{h} · 100 % / {n_i}']]}},
+/* S2 */
+{id:'std',g:'S2',name:'Standardabweichung',sub:'Stichprobe',eq:'{s} = √({SQ} / ({n} − 1))',
+ note:'Bei einer Stichprobe immer n − 1. Der Taschenrechner (σ<sub>n−1</sub> bzw. s<sub>x</sub>) liefert dasselbe.',
+ v:{s:['Standardabweichung',''],SQ:['Summe der Abweichungsquadrate','','Σ(<i>x</i><sub>i</sub> − <i>x̄</i>)²'],n:['Anzahl der Werte','']},
+ gen(){const n=r(5,30,0),s=r(0.1,20,2);return{n,s,SQ:s*s*(n-1)}},
+ s:{s:['√({SQ} / ({n} − 1))',v=>Math.sqrt(v.SQ/(v.n-1)),['√({SQ} / {n})','{SQ} / ({n} − 1)']],
+    SQ:['{s}² · ({n} − 1)',v=>v.s**2*(v.n-1),['{s} · ({n} − 1)','{s}² / ({n} − 1)','{s}² · {n}']],
+    n:['{SQ} / {s}² + 1',v=>v.SQ/v.s**2+1,['{SQ} / {s}²','{SQ} / {s} + 1','{s}² / {SQ} + 1']]}},
+{id:'o3',g:'S2',name:'Oberer Grenzwert 99,73 %',eq:'{x_o} = {xq} + 3 · {s}',
+ v:{x_o:['oberer Streugrenzwert','mm'],xq:XQ('mm'),s:['Standardabweichung','mm']},
+ gen(){const xq=r(5,120,2),s=r(0.05,2,2);return{xq,s,x_o:xq+3*s}},
+ s:{x_o:['{xq} + 3 · {s}',v=>v.xq+3*v.s,['{xq} + {s}','3 · ({xq} + {s})']],
+    xq:['{x_o} − 3 · {s}',v=>v.x_o-3*v.s,['{x_o} + 3 · {s}','({x_o} − {s}) / 3']],
+    s:['({x_o} − {xq}) / 3',v=>(v.x_o-v.xq)/3,['{x_o} − {xq} / 3','({x_o} + {xq}) / 3','3 · ({x_o} − {xq})']]}},
+{id:'u3',g:'S2',name:'Unterer Grenzwert 99,73 %',eq:'{x_u} = {xq} − 3 · {s}',
+ v:{x_u:['unterer Streugrenzwert','mm'],xq:XQ('mm'),s:['Standardabweichung','mm']},
+ gen(){const xq=r(5,120,2),s=r(0.05,2,2);return{xq,s,x_u:xq-3*s}},
+ s:{x_u:['{xq} − 3 · {s}',v=>v.xq-3*v.s,['3 · {s} − {xq}','{xq} − {s}']],
+    xq:['{x_u} + 3 · {s}',v=>v.x_u+3*v.s,['{x_u} − 3 · {s}','3 · {s} − {x_u}']],
+    s:['({xq} − {x_u}) / 3',v=>(v.xq-v.x_u)/3,['({x_u} − {xq}) / 3','{xq} − {x_u} / 3','3 · ({xq} − {x_u})']]}},
+{id:'o2',g:'S2',name:'Grenze 95,45 %',eq:'{x_o} = {xq} + 2 · {s}',
+ v:{x_o:['obere Grenze','kg'],xq:XQ('kg'),s:['Standardabweichung','kg']},
+ gen(){const xq=r(50,100,1),s=r(3,20,1);return{xq,s,x_o:xq+2*s}},
+ s:{x_o:['{xq} + 2 · {s}',v=>v.xq+2*v.s,['{xq} + 3 · {s}','2 · ({xq} + {s})']],
+    s:['({x_o} − {xq}) / 2',v=>(v.x_o-v.xq)/2,['{x_o} − {xq} / 2','({x_o} + {xq}) / 2']]}},
+{id:'wp',g:'S2',name:'Wendepunkt der Gaußkurve',sub:'68,26 %',eq:'{x_WP} = {xq} + {s}',
+ note:'Die Wendepunkte liegen bei x̄ ± 1s – nicht bei ±3s.',
+ v:{x_WP:['oberer Wendepunkt',''],xq:XQ(''),s:['Standardabweichung','']},
+ gen(){const xq=r(1,100,2),s=r(0.05,5,2);return{xq,s,x_WP:xq+s}},
+ s:{x_WP:['{xq} + {s}',v=>v.xq+v.s,['{xq} + 3 · {s}','{xq} · {s}']],
+    s:['{x_WP} − {xq}',v=>v.x_WP-v.xq,['{xq} − {x_WP}','({x_WP} − {xq}) / 3']]}},
+/* S3 */
+{id:'netzs',g:'S3',name:'s aus dem Wahrscheinlichkeitsnetz',sub:'unten, 15,87 %',eq:'{s} = {xq} − {x_15}',
+ v:{s:['Standardabweichung','ml'],xq:['Wert bei 50 % (Mittelwert)','ml','<i>x̄</i>'],x_15:['Wert bei 15,87 %','ml','<i>x</i><sub>15,87 %</sub>']},
+ gen(){const xq=r(5,20,2),s=r(0.05,0.6,2);return{xq,s,x_15:xq-s}},
+ s:{s:['{xq} − {x_15}',v=>v.xq-v.x_15,['{x_15} − {xq}','({xq} − {x_15}) / 3']],
+    x_15:['{xq} − {s}',v=>v.xq-v.s,['{xq} + {s}','{s} − {xq}']],
+    xq:['{x_15} + {s}',v=>v.x_15+v.s,['{x_15} − {s}','{s} − {x_15}']]}},
+{id:'netzs2',g:'S3',name:'s aus dem Wahrscheinlichkeitsnetz',sub:'oben, 84,13 %',eq:'{s} = {x_84} − {xq}',
+ v:{s:['Standardabweichung','µm'],xq:['Wert bei 50 % (Mittelwert)','µm','<i>x̄</i>'],x_84:['Wert bei 84,13 %','µm','<i>x</i><sub>84,13 %</sub>']},
+ gen(){const xq=r(1,10,2),s=r(0.1,2,2);return{xq,s,x_84:xq+s}},
+ s:{s:['{x_84} − {xq}',v=>v.x_84-v.xq,['{xq} − {x_84}','({x_84} − {xq}) / 3']],
+    x_84:['{xq} + {s}',v=>v.xq+v.s,['{xq} − {s}','{s} − {xq}']]}},
+{id:'aussch',g:'S3',name:'Ausschuss hochrechnen',eq:'{A} = {N} · {p} / 100 %',
+ v:{A:['Anzahl fehlerhafter Teile','Stück'],N:['Gesamtmenge','Stück'],p:['Ausschussanteil','%']},
+ gen(){const N=pick([1000,5000,15000,20000,180000]),p=r(0.5,10,1);return{N,p,A:N*p/100}},
+ s:{A:['{N} · {p} / 100 %',v=>v.N*v.p/100,['{N} / {p} · 100 %','{p} / {N} · 100 %']],
+    N:['{A} · 100 % / {p}',v=>v.A*100/v.p,['{A} · {p} / 100 %','{p} · 100 % / {A}']],
+    p:['{A} / {N} · 100 %',v=>v.A/v.N*100,['{N} / {A} · 100 %','{A} · {N} / 100 %']]}},
+/* S4 */
+{id:'mitte',g:'S4',name:'Toleranzmitte',sub:'Zielwert für die Maschinenverstellung',eq:'{C} = ({OGW} + {UGW}) / 2',
+ v:{C:['Toleranzmitte','mm'],OGW:OG('mm'),UGW:UG('mm')},
+ gen(){const U=r(9.9,50,3),T=r(0.005,0.4,3);return{UGW:U,OGW:U+T,C:U+T/2}},
+ s:{C:['({OGW} + {UGW}) / 2',v=>(v.OGW+v.UGW)/2,['({OGW} − {UGW}) / 2','{OGW} + {UGW} / 2']],
+    OGW:['2 · {C} − {UGW}',v=>2*v.C-v.UGW,['{C} − {UGW}','2 · ({C} − {UGW})','({C} + {UGW}) / 2']],
+    UGW:['2 · {C} − {OGW}',v=>2*v.C-v.OGW,['{C} − {OGW}','2 · ({C} − {OGW})','({C} + {OGW}) / 2']]}},
+{id:'tol',g:'S4',name:'Toleranz',eq:'{T} = {OGW} − {UGW}',
+ v:{T:['Toleranz','mm'],OGW:OG('mm'),UGW:UG('mm')},
+ gen(){const U=r(9.9,50,3),T=r(0.005,0.4,3);return{UGW:U,OGW:U+T,T}},
+ s:{T:['{OGW} − {UGW}',v=>v.OGW-v.UGW,['{OGW} + {UGW}','({OGW} − {UGW}) / 2']],
+    UGW:['{OGW} − {T}',v=>v.OGW-v.T,['{T} − {OGW}','{OGW} + {T}']],
+    OGW:['{UGW} + {T}',v=>v.UGW+v.T,['{UGW} − {T}','{T} − {UGW}']]}},
+{id:'phat',g:'S4',name:'Ausschussanteil der Stichprobe',eq:'{p} = {x} / {n} · 100 %',
+ v:{p:['Ausschussanteil','%'],x:['fehlerhafte Teile',''],n:['Stichprobenumfang','']},
+ gen(){const n=pick([50,80,100,125,200]),x=r(1,12,0);return{n,x,p:x/n*100}},
+ s:{p:['{x} / {n} · 100 %',v=>v.x/v.n*100,['{n} / {x} · 100 %','{x} · {n} / 100 %']],
+    x:['{p} · {n} / 100 %',v=>v.p*v.n/100,['{p} / {n} · 100 %','{n} / {p} · 100 %']],
+    n:['{x} · 100 % / {p}',v=>v.x*100/v.p,['{x} · {p} / 100 %','{p} · 100 % / {x}']]}},
+/* S5 */
+{id:'cp',g:'S5',name:'Prozessfähigkeit',sub:'auch Cm',eq:'{C_p} = {T} / (6 · {s})',
+ v:{C_p:['Fähigkeitskennwert',''],T:['Toleranz','mm'],s:['Standardabweichung','mm']},
+ gen(){const s=r(0.001,0.05,4),C_p=r(0.8,2.5,2);return{s,C_p,T:6*s*C_p}},
+ s:{C_p:['{T} / (6 · {s})',v=>v.T/(6*v.s),['{T} / (3 · {s})','6 · {s} / {T}']],
+    T:['6 · {s} · {C_p}',v=>6*v.s*v.C_p,['{C_p} / (6 · {s})','3 · {s} · {C_p}']],
+    s:['{T} / (6 · {C_p})',v=>v.T/(6*v.C_p),['6 · {C_p} / {T}','{T} · {C_p} / 6','{T} / (3 · {C_p})']]}},
+{id:'cpko',g:'S5',name:'Kritische Fähigkeit oben',sub:'auch Cmk',eq:'{C_pk} = ({OGW} − {xq}) / (3 · {s})',
+ note:'Cpk ist das Minimum aus oberer und unterer Seite.',
+ v:{C_pk:['kritischer Fähigkeitskennwert',''],OGW:OG('mm'),xq:XQ('mm'),s:['Standardabweichung','mm']},
+ gen(){const s=r(0.01,0.3,3),C=r(0.8,2.5,2),xq=r(5,50,2);return{s,xq,C_pk:C,OGW:xq+3*s*C}},
+ s:{C_pk:['({OGW} − {xq}) / (3 · {s})',v=>(v.OGW-v.xq)/(3*v.s),['({OGW} − {xq}) / (6 · {s})','({xq} − {OGW}) / (3 · {s})']],
+    xq:['{OGW} − 3 · {s} · {C_pk}',v=>v.OGW-3*v.s*v.C_pk,['{OGW} + 3 · {s} · {C_pk}','{OGW} − {C_pk} / (3 · {s})']],
+    s:['({OGW} − {xq}) / (3 · {C_pk})',v=>(v.OGW-v.xq)/(3*v.C_pk),['3 · {C_pk} / ({OGW} − {xq})','({OGW} − {xq}) · 3 · {C_pk}']],
+    OGW:['{xq} + 3 · {s} · {C_pk}',v=>v.xq+3*v.s*v.C_pk,['{xq} − 3 · {s} · {C_pk}','{xq} + 6 · {s} · {C_pk}']]}},
+{id:'cpku',g:'S5',name:'Kritische Fähigkeit unten',sub:'auch Cmk',eq:'{C_pk} = ({xq} − {UGW}) / (3 · {s})',
+ v:{C_pk:['kritischer Fähigkeitskennwert',''],UGW:UG('mm'),xq:XQ('mm'),s:['Standardabweichung','mm']},
+ gen(){const s=r(0.01,0.3,3),C=r(0.8,2.5,2),xq=r(5,50,2);return{s,xq,C_pk:C,UGW:xq-3*s*C}},
+ s:{C_pk:['({xq} − {UGW}) / (3 · {s})',v=>(v.xq-v.UGW)/(3*v.s),['({UGW} − {xq}) / (3 · {s})','({xq} − {UGW}) / (6 · {s})']],
+    UGW:['{xq} − 3 · {s} · {C_pk}',v=>v.xq-3*v.s*v.C_pk,['{xq} + 3 · {s} · {C_pk}','3 · {s} · {C_pk} − {xq}']],
+    s:['({xq} − {UGW}) / (3 · {C_pk})',v=>(v.xq-v.UGW)/(3*v.C_pk),['3 · {C_pk} / ({xq} − {UGW})','({xq} − {UGW}) / (6 · {C_pk})']]}},
+/* S6 */
+{id:'kl',g:'S6',name:'Klassenanzahl',eq:'{k} = √{n}',
+ v:{k:['Klassenanzahl',''],n:['Anzahl der Werte','']},
+ gen(){const k=pick([4,5,6,7,8,9,10]);return{k,n:k*k}},
+ s:{k:['√{n}',v=>Math.sqrt(v.n),['{n} / 2','{n}²']],
+    n:['{k}²',v=>v.k**2,['√{k}','2 · {k}']]}},
+{id:'kb',g:'S6',name:'Klassenbreite',eq:'{w} = {R} / {k}',
+ note:'Danach auf einen glatten Wert aufrunden.',
+ v:{w:['Klassenbreite','mm'],R:['Spannweite','mm'],k:['Klassenanzahl','']},
+ gen(){const k=pick([5,6,7,8]),R=r(0.1,5,2);return{k,R,w:R/k}},
+ s:{w:['{R} / {k}',v=>v.R/v.k,['{k} / {R}','{R} · {k}']],
+    R:['{w} · {k}',v=>v.w*v.k,['{w} / {k}','{k} / {w}']],
+    k:['{R} / {w}',v=>v.R/v.w,['{w} / {R}','{R} · {w}']]}},
+];
+
+/* ---------- Darstellung von Formeln ---------- */
+function sym(f,k){const d=f.v[k]&&f.v[k][2];if(d)return d;const m=k.match(/^([^_]+)(?:_(.+))?$/);return `<i>${m[1]}</i>`+(m[2]?`<sub>${m[2]}</sub>`:'')}
+const tex=(f,t)=>t.replace(/\{([^}]+)\}/g,(_,k)=>`<span class="sy">${sym(f,k)}</span>`);
+const unit=(f,k)=>f.v[k][1]?' '+f.v[k][1]:'';
+const num=(f,t,v)=>t.replace(/\{([^}]+)\}/g,(_,k)=>FG(v[k])+unit(f,k));
+const parseNum=s=>{s=String(s).trim().replace(/[−–]/g,'-').replace(/\s/g,'').replace(/[^\d,.\-+eE]/g,'');
+  if(/,/.test(s)){s=s.replace(/\./g,'').replace(',','.')}return s===''?NaN:Number(s)};
+const near=(a,t,tol)=>isFinite(a)&&(tol!=null?Math.abs(a-t)<=tol:Math.abs(a-t)<=Math.max(Math.abs(t)*0.02,1e-9));
+
+/* ---------- Schwere Aufgaben (Rechenketten) ---------- */
+const P_=(q,u,a,steps,tol)=>({q,u,a,steps,tol});
+const SCH={
+E1:[()=>{const P=pick([1500,2000,2200,2500,3000]),U=230,l=r(10,40,1),A=pick([1.5,2.5]),ρ=0.0178;
+  const RV=U*U/P,RL=2*ρ*l/A,I=U/(RV+RL),UL=I*RL,UK=U-UL,Pt=UK*I;
+  return{t:'Verbraucher an langer Anschlussleitung',ref:'wie 2022 F A6 / 2024 F A6',
+  text:`Ein Verbraucher hat das Typenschild <b>${F(P)} W / 230 V</b>. Er hängt an einer Kupferleitung mit der Länge <b>l = ${F(l)} m</b> und <b>A = ${F(A)} mm²</b> (ρ = 0,0178 Ω·mm²/m).`,
+  parts:[P_('Widerstand des Verbrauchers <i>R</i><sub>V</sub>','Ω',RV,[`<i>R</i><sub>V</sub> = <i>U</i>² / <i>P</i> = (230 V)² / ${F(P)} W = ${F(RV)} Ω`]),
+   P_('Leitungswiderstand <i>R</i><sub>L</sub> (Hin + Rück)','Ω',RL,[`<i>R</i><sub>L</sub> = 2 · <i>ρ</i> · <i>l</i> / <i>A</i> = 2 · 0,0178 Ω·mm²/m · ${F(l)} m / ${F(A)} mm² = ${F(RL)} Ω`]),
+   P_('tatsächlicher Strom <i>I</i>','A',I,[`<i>R</i><sub>ges</sub> = <i>R</i><sub>V</sub> + <i>R</i><sub>L</sub> = ${F(RV+RL)} Ω`,`<i>I</i> = <i>U</i> / <i>R</i><sub>ges</sub> = 230 V / ${F(RV+RL)} Ω = ${F(I)} A`]),
+   P_('Klemmenspannung <i>U</i><sub>K</sub>','V',UK,[`<i>U</i><sub>L</sub> = <i>I</i> · <i>R</i><sub>L</sub> = ${F(I)} A · ${F(RL)} Ω = ${F(UL)} V`,`<i>U</i><sub>K</sub> = <i>U</i> − <i>U</i><sub>L</sub> = 230 V − ${F(UL)} V = ${F(UK)} V`,`3-%-Prüfung: ${F(UL)} V ${UL<6.9?'<':'>'} 6,9 V → Spannungsfall ${UL<6.9?'liegt in der Toleranz':'ist zu groß'}.`]),
+   P_('tatsächliche Leistung <i>P</i>','W',Pt,[`<i>P</i> = <i>U</i><sub>K</sub> · <i>I</i> = ${F(UK)} V · ${F(I)} A = ${F(Pt)} W`])]}},
+ ()=>{const P=pick([500,750,1000,1500,2000]),U=230,rl=r(0.4,1.6,1);
+  const RL=U*U/P,R=RL+2*rl,I=U/R,PL=I*I*RL;
+  return{t:'Lampe an Verlängerungsleitung',ref:'wie 2016 F A2',
+  text:`Eine Halogenlampe hat direkt an der Steckdose <b>230 V / ${F(P)} W</b>. Über eine Verlängerungsleitung haben Hin- und Rückleitung je <b>${F(rl)} Ω</b>.`,
+  parts:[P_('Widerstand der Lampe <i>R</i><sub>La</sub>','Ω',RL,[`<i>R</i><sub>La</sub> = <i>U</i>² / <i>P</i> = (230 V)² / ${F(P)} W = ${F(RL)} Ω`]),
+   P_('Strom <i>I</i> mit Leitung','A',I,[`<i>R</i> = <i>R</i><sub>La</sub> + 2 · <i>R</i><sub>Ltg</sub> = ${F(RL)} Ω + 2 · ${F(rl)} Ω = ${F(R)} Ω`,`<i>I</i> = 230 V / ${F(R)} Ω = ${F(I)} A`]),
+   P_('Leistung der Lampe jetzt','W',PL,[`<i>P</i> = <i>I</i>² · <i>R</i><sub>La</sub> = (${F(I)} A)² · ${F(RL)} Ω = ${F(PL)} W`,'Begründung: Spannungsfall auf Hin- und Rückleitung → kleinere Spannung an der Lampe → kleinere Leistung.'])]}}],
+E2:[()=>{const R=pick([10,15,22,33,47]),P=pick([20,40,60,100]),d=pick([0.4,0.5,0.6,0.8]),ρ=0.49;
+  const I=Math.sqrt(P/R),A=d*d*Math.PI/4,l=R*A/ρ,Umax=0.1*R*1.1;
+  return{t:'Sonderwiderstand aus Konstantan',ref:'wie 2023 F A6',
+  text:`Ein Widerstand <b>${R} Ω / ${P} W</b> wird aus Konstantandraht (ρ = 0,49 Ω·mm²/m) mit <b>d = ${F(d)} mm</b> gewickelt. Prüfung mit 100 mA, Toleranz ±10 %.`,
+  parts:[P_('maximaler Strom <i>I</i>','A',I,[`<i>P</i> = <i>I</i>² · <i>R</i> → <i>I</i> = √(<i>P</i> / <i>R</i>) = √(${P} W / ${R} Ω) = ${F(I)} A`]),
+   P_('Querschnitt <i>A</i>','mm²',A,[`<i>A</i> = <i>d</i>² · π / 4 = (${F(d)} mm)² · π / 4 = ${F(A)} mm²`]),
+   P_('Drahtlänge <i>l</i>','m',l,[`<i>l</i> = <i>R</i> · <i>A</i> / <i>ρ</i> = ${R} Ω · ${F(A)} mm² / 0,49 Ω·mm²/m = ${F(l)} m`]),
+   P_('maximale Prüfspannung <i>U</i><sub>max</sub>','V',Umax,[`<i>R</i><sub>max</sub> = 1,1 · ${R} Ω = ${F(1.1*R)} Ω`,`<i>U</i><sub>max</sub> = 0,1 A · ${F(1.1*R)} Ω = ${F(Umax)} V`])]}},
+ ()=>{const P=pick([800,1000,1200,1500,2000]),A=pick([0.2,0.25,0.3,0.5]),ρ=0.49;const R=230*230/P,l=R*A/ρ;
+  return{t:'Heizdraht im Heißwasserbereiter',ref:'wie 2011 F A3',
+  text:`Ein Heißwasserbereiter hat <b>230 V / ${F(P)} W</b>. Der Heizdraht ist aus Konstantan (0,49 Ω·mm²/m) mit <b>A = ${F(A)} mm²</b>.`,
+  parts:[P_('Widerstand des Heizdrahts','Ω',R,[`<i>R</i> = <i>U</i>² / <i>P</i> = (230 V)² / ${F(P)} W = ${F(R)} Ω`]),
+   P_('Länge des Heizdrahts','m',l,[`<i>l</i> = <i>R</i> · <i>A</i> / <i>ρ</i> = ${F(R)} Ω · ${F(A)} mm² / 0,49 Ω·mm²/m = ${F(l)} m`])]}}],
+E3:[()=>{const R1=r(40,150,0),R2=r(60,220,0),U=230,t=pick([1.5,2,2.5,3]),k=0.4;
+  const P1=U*U/R1,P2=U*U/R2,Pr=U*U/(R1+R2),Pp=P1+P2,K=P1*t/1000*k;
+  return{t:'Heizung mit zwei Heizwiderständen',ref:'wie 2024 H A6',
+  text:`Zwei Heizwiderstände <b>R₁ = ${R1} Ω</b> und <b>R₂ = ${R2} Ω</b> an <b>230 V</b>. Strompreis 0,40 €/kWh.`,
+  parts:[P_('Leistung nur R₁','W',P1,[`<i>P</i><sub>1</sub> = <i>U</i>² / <i>R</i><sub>1</sub> = (230 V)² / ${R1} Ω = ${F(P1)} W`]),
+   P_('Leistung R₁ und R₂ in Reihe','W',Pr,[`<i>R</i> = ${R1} Ω + ${R2} Ω = ${R1+R2} Ω`,`<i>P</i> = (230 V)² / ${R1+R2} Ω = ${F(Pr)} W`]),
+   P_('Leistung R₁ und R₂ parallel (höchste Stufe)','W',Pp,[`<i>R</i><sub>ges</sub> = ${R1} · ${R2} / (${R1} + ${R2}) Ω = ${F(R1*R2/(R1+R2))} Ω`,`<i>P</i> = (230 V)² / ${F(R1*R2/(R1+R2))} Ω = ${F(Pp)} W  (= <i>P</i><sub>1</sub> + <i>P</i><sub>2</sub>)`]),
+   P_(`Kosten für ${F(t)} h nur mit R₁`,'€',K,[`<i>W</i> = <i>P</i><sub>1</sub> · <i>t</i> = ${F(P1)} W · ${F(t)} h = ${F(P1*t/1000)} kWh`,`<i>K</i> = ${F(P1*t/1000)} kWh · 0,40 €/kWh = ${F(K)} €`])]}},
+ ()=>{const c=pick([75,96,120]),tm=pick([6,10,12]),z=r(8,30,0),U=230;
+  const W=z/c,P=W/(tm/60)*1000,R=U*U/P,Re=3*R,Pr=U*U/(3*Re);
+  return{t:'Ofen am Stromzähler',ref:'wie 2020 F A5',
+  text:`Der Zähler (<b>${c} U/kWh</b>) dreht sich in <b>${tm} min</b> genau <b>${z}-mal</b>. Im Ofen (230 V) sind drei gleiche Heizwiderstände parallel geschaltet.`,
+  parts:[P_('Leistung des Ofens','W',P,[`<i>W</i> = ${z} U / ${c} U/kWh = ${F(W)} kWh = ${F(W*1000)} Wh`,`<i>P</i> = <i>W</i> / <i>t</i> = ${F(W*1000)} Wh / ${F(tm/60)} h = ${F(P)} W`]),
+   P_('Widerstand des Ofens','Ω',R,[`<i>R</i> = <i>U</i>² / <i>P</i> = (230 V)² / ${F(P)} W = ${F(R)} Ω`]),
+   P_('Widerstand eines Heizwiderstands','Ω',Re,[`drei gleiche parallel: <i>R</i> = <i>R</i><sub>1</sub> / 3 → <i>R</i><sub>1</sub> = 3 · <i>R</i> = ${F(Re)} Ω`]),
+   P_('Leistung, wenn alle drei in Reihe','W',Pr,[`<i>R</i><sub>ges</sub> = 3 · ${F(Re)} Ω = ${F(3*Re)} Ω`,`<i>P</i> = (230 V)² / ${F(3*Re)} Ω = ${F(Pr)} W  (ein Neuntel!)`])]}},
+ ()=>{const U=pick([24,100,200]),R1=r(50,300,0),R2=r(20,200,0),R3=r(100,400,0),R4=r(50,200,0);
+  const R24=R2+R4,Rp=R3*R24/(R3+R24),R=R1+Rp,I=U/R,U3=U-I*R1,P3=U3*U3/R3;
+  return{t:'Gemischte Schaltung',ref:'wie 2016 H A2',
+  text:`An <b>U = ${U} V</b> liegt R₁ = ${R1} Ω in Reihe zu einer Parallelschaltung aus R₃ = ${R3} Ω und der Reihenschaltung R₂ + R₄ (R₂ = ${R2} Ω, R₄ = ${R4} Ω).`,
+  parts:[P_('Gesamtwiderstand','Ω',R,[`<i>R</i><sub>24</sub> = ${R2} Ω + ${R4} Ω = ${R24} Ω`,`<i>R</i><sub>234</sub> = ${R3} · ${R24} / (${R3} + ${R24}) Ω = ${F(Rp)} Ω`,`<i>R</i> = <i>R</i><sub>1</sub> + <i>R</i><sub>234</sub> = ${F(R)} Ω`]),
+   P_('Gesamtstrom','A',I,[`<i>I</i> = ${U} V / ${F(R)} Ω = ${F(I)} A`]),
+   P_('Spannung an R₃','V',U3,[`<i>U</i><sub>1</sub> = <i>I</i> · <i>R</i><sub>1</sub> = ${F(I*R1)} V`,`<i>U</i><sub>3</sub> = <i>U</i> − <i>U</i><sub>1</sub> = ${F(U3)} V`]),
+   P_('Leistung an R₃','W',P3,[`<i>P</i><sub>3</sub> = <i>U</i><sub>3</sub>² / <i>R</i><sub>3</sub> = (${F(U3)} V)² / ${R3} Ω = ${F(P3)} W`])]}}],
+E4:[()=>{const U=24,R1=pick([1000,2200,3000,4700]),R2=pick([200,300,600,1000,1500]);
+  const U2=Math.round(U*R2/(R1+R2)*100)/100,UR1=U-U2,R2c=R1*U2/UR1,I=U/(R1+R2c),P1=I*I*R1;
+  return{t:'NTC im Spannungsteiler – rückwärts',ref:'wie 2023 F A5',
+  text:`Ein NTC R₂ liegt in Reihe mit <b>R₁ = ${F(R1)} Ω</b> an <b>U<sub>EIN</sub> = 24 V</b>. Gemessen wird <b>U<sub>AUS</sub> = ${F(U2)} V</b> über dem NTC.`,
+  parts:[P_('Widerstand des NTC R₂','Ω',R2c,[`<i>U</i><sub>R1</sub> = <i>U</i><sub>EIN</sub> − <i>U</i><sub>AUS</sub> = 24 V − ${F(U2)} V = ${F(UR1)} V`,`<i>R</i><sub>2</sub> = <i>R</i><sub>1</sub> · <i>U</i><sub>AUS</sub> / <i>U</i><sub>R1</sub> = ${F(R1)} Ω · ${F(U2)} V / ${F(UR1)} V = ${F(R2c)} Ω`,'→ Temperatur dann in der Kennlinie ablesen.']),
+   P_('Strom','A',I,[`<i>I</i> = <i>U</i><sub>EIN</sub> / (<i>R</i><sub>1</sub> + <i>R</i><sub>2</sub>) = 24 V / ${F(R1+R2c)} Ω = ${F(I)} A`]),
+   P_('Leistung an R₁','W',P1,[`<i>P</i><sub>R1</sub> = <i>I</i>² · <i>R</i><sub>1</sub> = (${F(I)} A)² · ${F(R1)} Ω = ${F(P1)} W`])]}},
+ ()=>{const l=r(50,150,0),d=pick([0.2,0.3,0.4]),T=pick([70,80,90,100]),U=24,ρ=0.0179,α=0.0039;
+  const A=d*d*Math.PI/4,R20=ρ*l/A,RT=R20*(1+α*(T-20)),I20=U/R20,IT=U/RT,dI=I20-IT;
+  return{t:'Kupferspule wird warm',ref:'wie 2023 H A5',
+  text:`Eine Spule an <b>24 V DC</b> aus <b>${l} m</b> Kupferdraht (<b>d = ${F(d)} mm</b>, ρ = 0,0179 Ω·mm²/m, α = 0,0039 1/K) erwärmt sich von 20 °C auf <b>${T} °C</b>.`,
+  parts:[P_('Widerstand bei 20 °C','Ω',R20,[`<i>A</i> = (${F(d)} mm)² · π / 4 = ${F(A)} mm²`,`<i>R</i><sub>20</sub> = <i>ρ</i> · <i>l</i> / <i>A</i> = 0,0179 · ${l} / ${F(A)} Ω = ${F(R20)} Ω`]),
+   P_(`Widerstand bei ${T} °C`,'Ω',RT,[`<i>R</i><sub>ϑ</sub> = <i>R</i><sub>20</sub> · (1 + <i>α</i> · Δ<i>ϑ</i>) = ${F(R20)} Ω · (1 + 0,0039 · ${T-20}) = ${F(RT)} Ω`]),
+   P_('Stromänderung ΔI','A',dI,[`<i>I</i><sub>20</sub> = 24 V / ${F(R20)} Ω = ${F(I20)} A`,`<i>I</i><sub>warm</sub> = 24 V / ${F(RT)} Ω = ${F(IT)} A`,`Δ<i>I</i> = ${F(dI)} A – Kupfer ist ein Kaltleiter (PTC).`],Math.max(dI*0.05,0.005))]}},
+ ()=>{const U=200,R1=pick([400,520,600]),P=pick([1.2,1.5,2.4]),UL=24;const I=P/UL,UR1=I*R1,UR2=U-UR1-UL,R2=UR2/I,RL=UL/I;
+  return{t:'Ventilspule mit NTC und Vorwiderstand',ref:'wie 2024 F A5',
+  text:`Reihenschaltung aus R₁ = <b>${R1} Ω</b>, einem NTC R₂ und einer Spule (<b>${F(P)} W bei 24 V</b>) an <b>200 V</b>. Die Spule soll genau 24 V bekommen.`,
+  parts:[P_('Gesamtstrom','A',I,[`<i>I</i> = <i>P</i><sub>L</sub> / <i>U</i><sub>L</sub> = ${F(P)} W / 24 V = ${F(I)} A`]),
+   P_('Spannung an R₁','V',UR1,[`<i>U</i><sub>R1</sub> = <i>I</i> · <i>R</i><sub>1</sub> = ${F(I)} A · ${R1} Ω = ${F(UR1)} V`]),
+   P_('Widerstand des NTC','Ω',R2,[`<i>U</i><sub>R2</sub> = 200 V − ${F(UR1)} V − 24 V = ${F(UR2)} V`,`<i>R</i><sub>2</sub> = <i>U</i><sub>R2</sub> / <i>I</i> = ${F(R2)} Ω → Temperatur in der Kennlinie ablesen`]),
+   P_('Widerstand der Spule','Ω',RL,[`<i>R</i><sub>L</sub> = 24 V / ${F(I)} A = ${F(RL)} Ω`])]}}],
+E5:[()=>{const m=r(100,1200,0),h=r(3,12,1),t=r(10,40,0),η=pick([0.8,0.85,0.88]),c=pick([0.85,0.89,0.9]);
+  const Pab=m*9.81*h/t,Pzu=Pab/η,I=Pzu/(Math.sqrt(3)*400*c);
+  return{t:'Kran hebt eine Last',ref:'wie 2015 H A5 / 2021 H A6',
+  text:`Ein Kran hebt <b>${m} kg</b> in <b>${t} s</b> um <b>${F(h)} m</b>. Wirkungsgrad <b>η = ${F(η)}</b>, Drehstrommotor an 400 V mit <b>cos φ = ${F(c)}</b>.`,
+  parts:[P_('Hubleistung <i>P</i><sub>ab</sub>','W',Pab,[`<i>P</i> = <i>m</i> · <i>g</i> · <i>h</i> / <i>t</i> = ${m} kg · 9,81 m/s² · ${F(h)} m / ${t} s = ${F(Pab)} W`]),
+   P_('aufgenommene Leistung <i>P</i><sub>zu</sub>','W',Pzu,[`<i>P</i><sub>zu</sub> = <i>P</i><sub>ab</sub> / <i>η</i> = ${F(Pab)} W / ${F(η)} = ${F(Pzu)} W`]),
+   P_('Stromaufnahme','A',I,[`<i>I</i> = <i>P</i> / (√3 · <i>U</i> · cos <i>φ</i>) = ${F(Pzu)} W / (√3 · 400 V · ${F(c)}) = ${F(I)} A`])]}},
+ ()=>{const R=pick([40,50,60,80,100]),U=400;const US=U/Math.sqrt(3),IS=US/R,PY=3*US*IS,PD=3*U*U/R;
+  return{t:'Stern oder Dreieck',ref:'wie 2021 H A3',
+  text:`Drei gleiche Heizelemente mit je <b>R = ${R} Ω</b> am 400-V-Drehstromnetz (cos φ = 1).`,
+  parts:[P_('Strangspannung in Stern','V',US,[`<i>U</i><sub>Str</sub> = <i>U</i> / √3 = 400 V / √3 = ${F(US)} V`]),
+   P_('Strangstrom in Stern','A',IS,[`<i>I</i><sub>Str</sub> = <i>U</i><sub>Str</sub> / <i>R</i> = ${F(US)} V / ${R} Ω = ${F(IS)} A`]),
+   P_('Gesamtleistung in Stern','W',PY,[`<i>P</i> = 3 · <i>U</i><sub>Str</sub> · <i>I</i><sub>Str</sub> = ${F(PY)} W  (= √3 · <i>U</i> · <i>I</i>)`]),
+   P_('Gesamtleistung in Dreieck','W',PD,[`<i>U</i><sub>Str</sub> = 400 V → <i>P</i> = 3 · (400 V)² / ${R} Ω = ${F(PD)} W`,'Dreieck bringt das Dreifache der Sternleistung.'])]}},
+ ()=>{const P=pick([3000,4000,5500]),η=pick([0.8,0.85]),n=pick([1400,1450]),i=pick([25,40,50]),d=pick([0.2,0.3,0.4]),I=pick([6.5,8,11]),c=pick([0.77,0.8,0.85]);
+  const Pab=P*η,nr=n/i,v=d*Math.PI*nr/60,Fb=Pab/v,Pzu=Math.sqrt(3)*400*I*c,ηg=Pab/Pzu;
+  return{t:'Förderband mit Getriebe',ref:'wie 2022 H A3',
+  text:`Motor: <b>${P} W</b> abgegeben, <b>${n} min⁻¹</b>, 400 V, <b>${F(I)} A</b>, <b>cos φ = ${F(c)}</b>. Getriebe: <b>i = ${i}</b>, <b>η = ${F(η)}</b>. Antriebsrolle <b>d = ${F(d)} m</b>.`,
+  parts:[P_('Leistung am Getriebeausgang','W',Pab,[`<i>P</i><sub>ab</sub> = ${P} W · ${F(η)} = ${F(Pab)} W`]),
+   P_('Bandgeschwindigkeit <i>v</i>','m/s',v,[`<i>n</i><sub>Rolle</sub> = ${n} / ${i} = ${F(nr)} min⁻¹ = ${F(nr/60)} s⁻¹`,`<i>v</i> = <i>d</i> · π · <i>n</i> = ${F(d)} m · π · ${F(nr/60)} s⁻¹ = ${F(v)} m/s`]),
+   P_('Kraft am Band','N',Fb,[`<i>F</i> = <i>P</i> / <i>v</i> = ${F(Pab)} W / ${F(v)} m/s = ${F(Fb)} N`]),
+   P_('Gesamtwirkungsgrad (als Dezimalzahl)','',ηg,[`<i>P</i><sub>zu</sub> = √3 · 400 V · ${F(I)} A · ${F(c)} = ${F(Pzu)} W`,`<i>η</i><sub>ges</sub> = ${F(Pab)} W / ${F(Pzu)} W = ${F(ηg)}`])]}},
+ ()=>{const P=pick([2000,2667,3000,4500]),tm=pick([30,60,90]),V=pick([50,80,100,120]);const Q=P*tm*60/1000,dT=Q/(V*4.18);
+  return{t:'Warmwasserspeicher',ref:'wie 2021 H A3c',
+  text:`Ein Speicher mit <b>${V} l</b> Wasser wird <b>${tm} min</b> lang mit <b>${F(P)} W</b> beheizt (c = 4,18 kJ/(kg·K), keine Verluste).`,
+  parts:[P_('zugeführte Wärme <i>Q</i>','kJ',Q,[`<i>W</i> = <i>P</i> · <i>t</i> = ${F(P)} W · ${tm*60} s = ${F(Q*1000)} Ws = ${F(Q)} kJ`]),
+   P_('Temperaturerhöhung Δϑ','K',dT,[`Δ<i>ϑ</i> = <i>Q</i> / (<i>m</i> · <i>c</i>) = ${F(Q)} kJ / (${V} kg · 4,18 kJ/(kg·K)) = ${F(dT)} K`])]}}],
+E6:[()=>{const U1=r(12.5,13.5,1),I1=r(1,3,0),I2=I1+r(2,6,0),Ri=pick([0.1,0.15,0.2,0.25]);const U2=Math.round((U1-Ri*(I2-I1))*100)/100,Ric=(U1-U2)/(I2-I1),U0=U1+I1*Ric,RH=U2/I2;
+  return{t:'Akku mit zwei Lastpunkten',ref:'wie 2022 H A5',
+  text:`Mit Lüfter: <b>${F(U1)} V bei ${F(I1)} A</b>. Mit Lüfter und Hupe: <b>${F(U2)} V bei ${F(I2)} A</b>.`,
+  parts:[P_('Innenwiderstand <i>R</i><sub>i</sub>','Ω',Ric,[`<i>R</i><sub>i</sub> = (<i>U</i><sub>1</sub> − <i>U</i><sub>2</sub>) / (<i>I</i><sub>2</sub> − <i>I</i><sub>1</sub>) = (${F(U1)} − ${F(U2)}) V / (${F(I2)} − ${F(I1)}) A = ${F(Ric)} Ω`]),
+   P_('Leerlaufspannung <i>U</i><sub>0</sub>','V',U0,[`<i>U</i><sub>0</sub> = <i>U</i><sub>1</sub> + <i>I</i><sub>1</sub> · <i>R</i><sub>i</sub> = ${F(U1)} V + ${F(I1)} A · ${F(Ric)} Ω = ${F(U0)} V`]),
+   P_('Arbeit in 10 min bei Gesamtlast','Wh',U2*I2/6,[`<i>W</i> = <i>U</i> · <i>I</i> · <i>t</i> = ${F(U2)} V · ${F(I2)} A · 1/6 h = ${F(U2*I2/6)} Wh`]),
+   P_('Ersatzwiderstand der Gesamtlast','Ω',RH,[`<i>R</i><sub>ges</sub> = ${F(U2)} V / ${F(I2)} A = ${F(RH)} Ω`])]}},
+ ()=>{const n=pick([3,4,5]),P=pick([60,100,150]),P2=pick([40,60]),Ph=pick([2,2.5,3]),t=pick([3,4.5,6]),k=pick([0.27,0.3,0.35]);
+  const Pg=n*P+P2,I=Pg/230,tt=1000/Pg,K=Ph*t*k;
+  return{t:'Werkstattbeleuchtung und Heizlüfter',ref:'wie 2007 F A4',
+  text:`<b>${n} Strahler à ${P} W</b> und eine <b>${P2}-W-Leuchte</b> an 230 V. Ein Heizlüfter hat <b>${F(Ph)} kW</b>, Strompreis <b>${F(k)} €/kWh</b>.`,
+  parts:[P_('Strom in der Zuleitung','A',I,[`<i>P</i><sub>ges</sub> = ${n} · ${P} W + ${P2} W = ${Pg} W`,`<i>I</i> = ${Pg} W / 230 V = ${F(I)} A`]),
+   P_('Brenndauer mit 1 kWh','h',tt,[`<i>t</i> = <i>W</i> / <i>P</i> = 1 kWh / ${F(Pg/1000)} kW = ${F(tt)} h`]),
+   P_(`Kosten Heizlüfter für ${F(t)} h`,'€',K,[`<i>W</i> = ${F(Ph)} kW · ${F(t)} h = ${F(Ph*t)} kWh`,`<i>K</i> = ${F(Ph*t)} kWh · ${F(k)} €/kWh = ${F(K)} €`])]}}],
+S1:[()=>{const sc=pick([1,10]),h=[r(1,3,0),r(4,7,0),r(7,11,0),r(7,11,0),r(4,7,0),r(1,3,0)];const xs=[1,2,3,4,5,6].map(x=>x*sc);
+  const n=h.reduce((a,b)=>a+b,0),S=xs.reduce((a,x,i)=>a+x*h[i],0),xq=S/n,Q=S/(n*200)*100;
+  const lab=sc===1?'Krankheitstage':'Home-Office-Tage';
+  return{t:`${lab} auswerten`,ref:'wie 2022 F A7 / 2024 F A7',
+  text:`${lab} von Mitarbeitern als Häufigkeitstabelle (Soll: 200 Arbeitstage):<div class="data"><div>Tage: ${xs.join(' · ')}</div><div>Anzahl: ${h.join(' · ')}</div></div>`,
+  parts:[P_('Anzahl Mitarbeiter <i>n</i>','',n,[`<i>n</i> = ${h.join(' + ')} = ${n}`],0.01),
+   P_('arithmetischer Mittelwert','Tage',xq,[`Σ = ${xs.map((x,i)=>h[i]+'·'+x).join(' + ')} = ${S} Tage`,`<i>x̄</i> = ${S} / ${n} = ${F(xq)} Tage`]),
+   P_('Quote','%',Q,[`<i>Q</i> = ${S} Tage / (${n} · 200 Tage) · 100 % = ${F(Q)} %`,`Kurzweg: ${F(xq)} / 200 · 100 % = ${F(Q)} %`]),
+   P_('Spannweite','Tage',xs[5]-xs[0],[`<i>R</i> = ${xs[5]} − ${xs[0]} = ${xs[5]-xs[0]} Tage`],0.01)]}},
+ ()=>{let h,x,xq;do{h=[r(1,5,0),r(3,8,0),r(4,10,0),0,r(1,4,0),r(0,2,0)];x=r(2,7,0);h[3]=x;
+   const n=h.reduce((a,b)=>a+b,0),S=h.reduce((a,c,i)=>a+c*(i+1),0);xq=S/n}while(Math.abs(xq-4)<0.35);
+  const xr=Math.round(xq*1000)/1000,ho=h.map((c,i)=>i===3?'?':c),Sk=h.reduce((a,c,i)=>i===3?a:a+c*(i+1),0),nk=h.reduce((a,c,i)=>i===3?a:a+c,0);
+  const xc=(Sk-xr*nk)/(xr-4),n=nk+x;
+  return{t:'Fehlende Häufigkeit aus dem Mittelwert',ref:'wie 2020 H A7a',
+  text:`Notenverteilung einer Schulung, der Mittelwert ist <b>x̄ = ${F(xr,6)}</b>. Die Anzahl bei Note 4 fehlt.<div class="data"><div>Note: 1 · 2 · 3 · 4 · 5 · 6</div><div>Anzahl: ${ho.join(' · ')}</div></div>`,
+  parts:[P_('Anzahl mit Note 4','',x,[`${F(xr,6)} = (${Sk} + 4<i>x</i>) / (${nk} + <i>x</i>)`,`${F(xr,6)} · (${nk} + <i>x</i>) = ${Sk} + 4<i>x</i>`,`<i>x</i> = (${Sk} − ${F(xr*nk,6)}) / (${F(xr,6)} − 4) = ${F(xc)} ≈ ${x}`],0.5),
+   P_('Anzahl Teilnehmer insgesamt','',n,[`<i>n</i> = ${nk} + ${x} = ${n}`],0.5)]}},
+ ()=>{let a,mode;do{const N=pick([9,10,11,12]);const base=r(70,90,0)/10;a=Array.from({length:N},()=>Math.round((base+r(-3,3,0)/10)*10)/10);
+   const c={};a.forEach(x=>c[x]=(c[x]||0)+1);const mx=Math.max(...Object.values(c));const ms=Object.keys(c).filter(k=>c[k]===mx);mode=ms.length===1?Number(ms[0]):null}while(mode===null);
+  const s=[...a].sort((x,y)=>x-y),N=s.length,med=N%2?s[(N-1)/2]:(s[N/2-1]+s[N/2])/2,xq=a.reduce((p,q)=>p+q,0)/N;
+  return{t:'Urliste: Modalwert, Median, Mittelwert',ref:'wie 2019 F A7',
+  text:`Außendurchmesser in mm aus einer Stichprobe:<div class="data"><div>${a.map(x=>F(x)).join(' · ')}</div></div>`,
+  parts:[P_('Modalwert <i>D</i>','mm',mode,[`häufigster Wert: <i>D</i> = ${F(mode)} mm`],0.001),
+   P_('Median <i>x̃</i>','mm',med,[`sortiert: ${s.map(x=>F(x)).join(' · ')}`,N%2?`n = ${N} ungerade → mittlerer Wert = ${F(med)} mm`:`n = ${N} gerade → Mittel aus ${F(s[N/2-1])} und ${F(s[N/2])} = ${F(med)} mm`],0.001),
+   P_('arithmetischer Mittelwert','mm',xq,[`<i>x̄</i> = ${F(a.reduce((p,q)=>p+q,0))} mm / ${N} = ${F(xq,5)} mm`],0.002)]}}],
+S2:[()=>{const N=pick([6,8,10]),b=r(30,40,0)/10,a=Array.from({length:N},()=>Math.round((b+r(-6,6,0)/10)*10)/10);
+  const xq=a.reduce((p,q)=>p+q,0)/N,SQ=a.reduce((p,x)=>p+(x-xq)**2,0),s=Math.sqrt(SQ/(N-1));
+  return{t:'Messreihe: s und Streugrenzen',ref:'wie 2023 F A7 / 2021 H A7',
+  text:`Kühltemperaturen in °C:<div class="data"><div>${a.map(x=>F(x)).join(' · ')}</div></div>Toleranz 0 °C bis 5 °C.`,
+  parts:[P_('Mittelwert','°C',xq,[`<i>x̄</i> = ${F(a.reduce((p,q)=>p+q,0))} / ${N} = ${F(xq,5)} °C`]),
+   P_('Standardabweichung <i>s</i>','°C',s,[`Σ(<i>x</i><sub>i</sub> − <i>x̄</i>)² = ${F(SQ)}`,`<i>s</i> = √(${F(SQ)} / ${N-1}) = ${F(s)} °C`]),
+   P_('oberer Grenzwert <i>x̄</i> + 3s','°C',xq+3*s,[`${F(xq,5)} + 3 · ${F(s)} = ${F(xq+3*s)} °C`]),
+   P_('unterer Grenzwert <i>x̄</i> − 3s','°C',xq-3*s,[`${F(xq,5)} − 3 · ${F(s)} = ${F(xq-3*s)} °C`,`Bewertung: ${xq+3*s<=5&&xq-3*s>=0?'beide Grenzen liegen in 0 … 5 °C → Toleranz wird eingehalten.':'mindestens eine Grenze liegt außerhalb 0 … 5 °C → Toleranz wird nicht eingehalten.'}`])]}},
+ ()=>{const N=20,T=3,xq=r(19.8,20.3,2),s=r(0.6,1.4,2);
+  return{t:'Wuchtgewichte: Lage und Streuung beurteilen',ref:'wie 2016 H A7',
+  text:`Sollmasse <b>20 g ± ${T} g</b> (99,73 % müssen drin liegen). Aus der Stichprobe: <b>x̄ = ${F(xq)} g</b>, <b>s = ${F(s)} g</b>.`,
+  parts:[P_('<i>x̄</i> + 3s','g',xq+3*s,[`${F(xq)} g + 3 · ${F(s)} g = ${F(xq+3*s)} g`]),
+   P_('<i>x̄</i> − 3s','g',xq-3*s,[`${F(xq)} g − 3 · ${F(s)} g = ${F(xq-3*s)} g`]),
+   P_('6s-Bereich','g',6*s,[`6s = ${F(6*s)} g, Toleranz T = 6 g`,6*s>6?`6s > T → Streuung zu groß, s muss auf ≤ 1 g sinken.`:'6s ≤ T → Streuung passt.']),
+   P_('oberer Wendepunkt der Gaußkurve','g',xq+s,[`<i>WP</i> = <i>x̄</i> + <i>s</i> = ${F(xq+s)} g  (nicht ±3s!)`])]}}],
+S3:[()=>{const xq=r(9.9,10.3,2),s=r(0.1,0.3,2),pu=pick([1,2,3]),po=pick([3,4,5]),N=pick([15000,50000,180000]);const x15=Math.round((xq-s)*100)/100,sc=xq-x15;
+  return{t:'Wahrscheinlichkeitsnetz auswerten',ref:'wie 2024 H A7 / 2014 H A7',
+  text:`Aus der Verteilungsgeraden liest du ab: bei <b>50 %</b> → <b>${F(xq)} ml</b>, bei <b>15,87 %</b> → <b>${F(x15)} ml</b>. ${pu} % der Ampullen sind zu leer, ${po} % zu voll. Tagesproduktion <b>${F(N)}</b>.`,
+  parts:[P_('Standardabweichung <i>s</i>','ml',sc,[`<i>s</i> = <i>x̄</i> − <i>x</i>(15,87 %) = ${F(xq)} − ${F(x15)} = ${F(sc)} ml`]),
+   P_('untere Grenze für 95,45 %','ml',xq-2*sc,[`95,45 % ≙ <i>x̄</i> ± 2s → ${F(xq)} − 2 · ${F(sc)} = ${F(xq-2*sc)} ml`]),
+   P_('obere Grenze für 95,45 %','ml',xq+2*sc,[`${F(xq)} + 2 · ${F(sc)} = ${F(xq+2*sc)} ml`]),
+   P_('Ampullen außerhalb der Sollvorgabe','Stück',N*(pu+po)/100,[`<i>p</i><sub>ges</sub> = ${pu} % + ${po} % = ${pu+po} %`,`Anzahl = ${F(N)} · ${pu+po} % / 100 % = ${F(N*(pu+po)/100)}`])]}}],
+S4:[()=>{const b=r(2360,2390,0)/1000,a=Array.from({length:5},()=>Math.round((b+r(-15,15,0)/1000)*1000)/1000);const s=[...a].sort((x,y)=>x-y),med=s[2],R=s[4]-s[0],xq=a.reduce((p,q)=>p+q,0)/5;
+  return{t:'Stichprobe für die Regelkarte',ref:'wie 2010 H A7',
+  text:`Stichprobe (n = 5), Stromaufnahme in mA:<div class="data"><div>${a.map(x=>F(x)).join(' · ')}</div></div>`,
+  parts:[P_('Median <i>x̃</i>','mA',med,[`sortiert: ${s.map(x=>F(x)).join(' · ')} → der dritte Wert: ${F(med)} mA`],0.0005),
+   P_('Spannweite <i>R</i>','mA',R,[`<i>R</i> = ${F(s[4])} − ${F(s[0])} = ${F(R)} mA`],0.0005),
+   P_('Mittelwert <i>x̄</i>','mA',xq,[`<i>x̄</i> = ${F(a.reduce((p,q)=>p+q,0),5)} / 5 = ${F(xq,5)} mA`],0.0005)]}},
+ ()=>{const Nm=10,o=pick([0.005,0.01,0.02]),u=pick([0.008,0.01,0.015]),xq=Math.round((Nm+o-r(1,4,0)/1000)*1000)/1000;const OGW=Nm+o,UGW=Nm-u,C=(OGW+UGW)/2;
+  return{t:'Urwertkarte: Maschine richtig einstellen',ref:'wie 2016 F A7',
+  text:`Gleitlager <b>Ø 10 (+${F(o)} / −${F(u)}) mm</b>. Die Stichproben liegen im Mittel bei <b>x̄ = ${F(xq,6)} mm</b>.`,
+  parts:[P_('OGW','mm',OGW,[`OGW = 10 + ${F(o)} = ${F(OGW,6)} mm`],0.0001),
+   P_('UGW','mm',UGW,[`UGW = 10 − ${F(u)} = ${F(UGW,6)} mm`],0.0001),
+   P_('Toleranzmitte <i>C</i>','mm',C,[`<i>C</i> = (OGW + UGW) / 2 = (${F(OGW,6)} + ${F(UGW,6)}) / 2 = ${F(C,6)} mm`],0.0001),
+   P_('Verstellung um (negativ = nach unten)','mm',C-xq,[`Δ = <i>C</i> − <i>x̄</i> = ${F(C,6)} − ${F(xq,6)} = ${F(C-xq,4)} mm`,'Empfehlung: Prozesslage auf Toleranzmitte verstellen, bisherige Teile aussortieren.'],0.0001)]}}],
+S5:[()=>{const T2=pick([0.01,0.02,0.05,1]),N=pick([10,20,6]),s=T2/pick([4,5,6,8]),off=r(-0.6,0.6,2)*s*2;const OGW=N+T2,UGW=N-T2,xq=N+off,T=OGW-UGW;
+  const Cp=T/(6*s),Co=(OGW-xq)/(3*s),Cu=(xq-UGW)/(3*s),Ck=Math.min(Co,Cu);
+  return{t:'Cp und Cpk bestimmen',ref:'wie 2012 F A7 / 2013 F A7',
+  text:`Toleranz <b>${F(N)} ± ${F(T2)} mm</b>. Gemessen: <b>x̄ = ${F(xq,6)} mm</b>, <b>s = ${F(s,4)} mm</b>. Gefordert: 1,33.`,
+  parts:[P_('<i>C</i><sub>p</sub>','',Cp,[`<i>T</i> = ${F(OGW,6)} − ${F(UGW,6)} = ${F(T)} mm`,`<i>C</i><sub>p</sub> = <i>T</i> / (6s) = ${F(T)} / (6 · ${F(s,4)}) = ${F(Cp)}`]),
+   P_('<i>C</i><sub>pk</sub> (Minimum beider Seiten)','',Ck,[`oben: (${F(OGW,6)} − ${F(xq,6)}) / (3 · ${F(s,4)}) = ${F(Co)}`,`unten: (${F(xq,6)} − ${F(UGW,6)}) / (3 · ${F(s,4)}) = ${F(Cu)}`,`<i>C</i><sub>pk</sub> = ${F(Ck)} → ${Ck>=1.33?'Forderung erfüllt':'Forderung nicht erfüllt'}`])]}},
+ ()=>{const s=r(0.5,2,2),mu=r(10,50,1),C=pick([1.33,1.67]);const T=6*s*C;
+  return{t:'Toleranz aus der Forderung',ref:'wie 2008 F A7',
+  text:`Prozess mit <b>µ = ${F(mu)} Ω</b> und <b>σ = ${F(s)} Ω</b>. Gefordert: <b>Cp ≥ ${F(C)}</b> und <b>Cpk ≥ ${F(C)}</b>.`,
+  parts:[P_('kleinste Toleranz <i>T</i>','Ω',T,[`<i>T</i> = ${F(C)} · 6 · ${F(s)} Ω = ${F(T)} Ω`]),
+   P_('OGW','Ω',mu+T/2,[`Cpk = Cp → µ liegt in der Toleranzmitte`,`OGW = µ + T/2 = ${F(mu)} + ${F(T/2)} = ${F(mu+T/2)} Ω`]),
+   P_('UGW','Ω',mu-T/2,[`UGW = µ − T/2 = ${F(mu)} − ${F(T/2)} = ${F(mu-T/2)} Ω`])]}}],
+S6:[()=>{const k=pick([5,6,7]),n=k*k,xmin=r(860,880,0)/100,R=r(15,35,0)/100,xmax=Math.round((xmin+R)*100)/100;const Rc=xmax-xmin,w=Rc/k;
+  return{t:'Klassen bilden',ref:'wie 2007 F A8',
+  text:`<b>${n}</b> Durchmesser wurden gemessen. Kleinster Wert <b>${F(xmin)} mm</b>, größter Wert <b>${F(xmax)} mm</b>.`,
+  parts:[P_('Klassenanzahl <i>k</i>','',k,[`<i>k</i> = √<i>n</i> = √${n} = ${k}`],0.01),
+   P_('Spannweite <i>R</i>','mm',Rc,[`<i>R</i> = ${F(xmax)} − ${F(xmin)} = ${F(Rc)} mm`],0.0005),
+   P_('Klassenbreite <i>w</i> (ungerundet)','mm',w,[`<i>w</i> = <i>R</i> / <i>k</i> = ${F(Rc)} / ${k} = ${F(w)} mm → auf glatten Wert aufrunden, z. B. ${F(Math.ceil(w*100)/100)} mm`])]}}],
+};
+
+/* ---------- Zustand ---------- */
+const st={lv:store.get('lv',2),sel:new Set(store.get('sel',['E1','E3','E4','S1','S2'])),cur:null,done:false,streak:0};
+let stats=store.get('stats',{}),fst=store.get('fst',{});
+let day=store.get('day',{d:'',r:0,w:0});
+const today=new Date().toISOString().slice(0,10);
+if(day.d!==today)day={d:today,r:0,w:0};
+
+function record(ok,g,fid){
+  stats[g]=stats[g]||{r:0,w:0};stats[g][ok?'r':'w']++;
+  if(fid){fst[fid]=fst[fid]||{r:0,w:0};fst[fid][ok?'r':'w']++}
+  day[ok?'r':'w']++;st.streak=ok?st.streak+1:0;
+  store.set('stats',stats);store.set('fst',fst);store.set('day',day);updHead();
+}
+function updHead(){
+  $('#pToday').textContent=`${day.r}/${day.r+day.w}`;$('#pStreak').textContent=st.streak;
+  const ed=store.get('exam','2026-11-03'),diff=Math.ceil((new Date(ed+'T08:00:00')-new Date())/864e5);
+  $('#pCount').innerHTML=diff>=0?`<b>${diff}</b> Tage bis zur Prüfung`:'<b>✓</b> Prüfung vorbei';
+}
+
+/* ---------- Auswahl-UI ---------- */
+function buildTopics(){
+  for(const b of ['E','S']){const col=$('#col'+b);col.querySelectorAll('.topic').forEach(x=>x.remove());
+    GROUPS.filter(g=>g.b===b).forEach(g=>{const el=document.createElement('button');el.className='topic';el.dataset.b=b;el.dataset.g=g.id;
+      el.setAttribute('aria-pressed',st.sel.has(g.id));
+      el.innerHTML=`<span class="code">${g.id}</span><span class="nm">${g.e} ${g.name}</span><span class="pt">${g.pts} P</span>`;
+      el.onclick=()=>{st.sel.has(g.id)?st.sel.delete(g.id):st.sel.add(g.id);selChanged()};col.appendChild(el)})}
+}
+function selChanged(){store.set('sel',[...st.sel]);document.querySelectorAll('.topic').forEach(t=>t.setAttribute('aria-pressed',st.sel.has(t.dataset.g)));next()}
+document.querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.all).forEach(g=>st.sel.add(g.id));selChanged()});
+document.querySelectorAll('[data-none]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.none).forEach(g=>st.sel.delete(g.id));selChanged()});
+$('#preTop').onclick=()=>{st.sel=new Set(['E3','S1','S2','E4','E1']);selChanged()};
+$('#preAll').onclick=()=>{st.sel=new Set(GROUPS.map(g=>g.id));selChanged()};
+document.querySelectorAll('.lv').forEach(b=>b.onclick=()=>{st.lv=+b.dataset.lv;store.set('lv',st.lv);
+  document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x===b));next()});
+document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',+x.dataset.lv===st.lv));
+
+/* ---------- Aufgaben ---------- */
+const weight=id=>{const s=fst[id]||{r:0,w:0};return Math.max(0.4,1+s.w*0.8-s.r*0.25)};
+function wpick(items,wf){const ws=items.map(wf),sum=ws.reduce((a,b)=>a+b,0);let x=Math.random()*sum;for(let i=0;i<items.length;i++){x-=ws[i];if(x<=0)return items[i]}return items[items.length-1]}
+
+function next(){
+  const card=$('#card');st.done=false;
+  const groups=[...st.sel];
+  if(!groups.length){card.innerHTML=`<p class="task">Wähl oben mindestens ein Thema aus.</p>`;$('#traps').hidden=true;return}
+  if(st.lv===3){
+    const g=wpick(groups.filter(x=>SCH[x]),x=>{const s=stats[x]||{r:0,w:0};return Math.max(0.5,1+s.w*0.3-s.r*0.1)});
+    const gen=pick(SCH[g]);const t=gen();st.cur={kind:3,g,t};renderHard();
+  }else{
+    const pool=FX.filter(f=>st.sel.has(f.g));const f=wpick(pool,x=>weight(x.id));
+    const target=pick(Object.keys(f.s));
+    const raw=f.gen();const v={};for(const k in raw)v[k]=sig(raw[k]);
+    v[target]=f.s[target][1](v);
+    st.cur={kind:st.lv,g:f.g,f,target,v};st.lv===1?renderEasy():renderMid();
+  }
+  renderTraps(st.cur.g);
+}
+const head=(g,extra='')=>{const G=GMAP[g];return `<div class="head"><span class="tag ${G.b}">${G.e} ${G.id} · ${G.name}</span><span class="note">${extra}</span></div>`};
+const legend=(f,skip)=>`<div class="legend">${Object.keys(f.v).map(k=>`<span>${sym(f,k)} = ${f.v[k][0]}${f.v[k][1]?' in '+f.v[k][1]:''}</span>`).join('')}</div>`;
+
+function renderEasy(){
+  const {f,target,v}=st.cur,c=$('#card');
+  const opts=shuffle([{t:f.s[target][0],ok:true},...f.s[target][2].slice(0,3).map(t=>({t,ok:false}))]);
+  c.innerHTML=head(f.g,f.name)+
+   `<p class="task">Stelle nach <b>${sym(f,target)}</b> um.</p><div class="fx">${tex(f,f.eq)}</div>${legend(f)}
+    <div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${sym(f,target)} = ${tex(f,o.t)}</button>`).join('')}</div>
+    <div id="fb"></div><div class="row"><button class="btn" id="nx" hidden>Nächste Formel ↵</button></div>`;
+  c.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(st.done)return;st.done=true;const o=opts[+b.dataset.i];
+    c.querySelectorAll('.opt').forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('ok')});if(!o.ok)b.classList.add('bad');
+    record(o.ok,f.g,f.id);
+    const probe=`${sym(f,target)} = ${num(f,f.s[target][0],v)} = ${F(v[target])}${unit(f,target)}`;
+    $('#fb').innerHTML=`<div class="fb ${o.ok?'ok':'bad'}"><strong>${o.ok?'Richtig.':'Nicht ganz.'}</strong>
+      <div class="steps"><div>${sym(f,target)} = ${tex(f,f.s[target][0])}</div><div class="note">Probe mit Zahlen: ${probe}</div></div>${f.note?`<div class="note">${f.note}</div>`:''}</div>`;
+    const nx=$('#nx');nx.hidden=false;nx.onclick=next;nx.focus()});
+}
+function renderMid(){
+  const {f,target,v}=st.cur,c=$('#card');const gk=Object.keys(f.v).filter(k=>k!==target);
+  c.innerHTML=head(f.g,f.name)+
+   `<p class="task">Berechne <b>${sym(f,target)}</b> (${f.v[target][0]}).</p><div class="fx">${tex(f,f.eq)}</div>
+    <div class="given">${gk.map(k=>`<div><span class="n">${f.v[k][0]}</span><span class="v">${sym(f,k)} = ${FG(v[k])}${unit(f,k)}</span></div>`).join('')}</div>
+    <form class="ans" id="frm"><div class="inp"><label for="a0">${sym(f,target)} =</label><input id="a0" inputmode="decimal" autocomplete="off" placeholder="Ergebnis"><span class="u">${f.v[target][1]}</span></div>
+    <div class="row"><button class="btn" type="submit" id="chk">Prüfen ↵</button><button class="btn ghost" type="button" id="tip">Tipp: umgestellte Formel</button><button class="btn ghost" type="button" id="skip">Überspringen</button></div></form>
+    <div id="fb"></div>`;
+  const inp=$('#a0');setTimeout(()=>inp.focus({preventScroll:true}),0);
+  $('#tip').onclick=()=>{$('#fb').innerHTML=`<div class="fb info"><div class="steps"><div>${sym(f,target)} = ${tex(f,f.s[target][0])}</div></div></div>`};
+  $('#skip').onclick=next;
+  $('#frm').onsubmit=e=>{e.preventDefault();if(st.done){next();return}
+    const a=parseNum(inp.value);if(!isFinite(a)){inp.focus();return}
+    st.done=true;const t=v[target],ok=near(a,t);inp.classList.add(ok?'ok':'bad');inp.readOnly=true;record(ok,f.g,f.id);
+    $('#fb').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><strong>${ok?'Richtig.':'Leider falsch.'}</strong><div class="steps">
+      <div>umgestellt: ${sym(f,target)} = ${tex(f,f.s[target][0])}</div>
+      <div>eingesetzt: ${sym(f,target)} = ${num(f,f.s[target][0],v)}</div>
+      <div>Ergebnis: <b>${sym(f,target)} = ${F(t)}${unit(f,target)}</b></div></div>${f.note?`<div class="note">${f.note}</div>`:''}</div>`;
+    $('#chk').textContent='Nächste Aufgabe ↵';$('#tip').hidden=true;$('#skip').hidden=true;$('#chk').focus()};
+}
+function renderHard(){
+  const {g,t}=st.cur,c=$('#card');
+  c.innerHTML=head(g,t.ref)+`<p class="task"><b>${t.t}</b></p><div>${t.text}</div>
+   <form class="ans" id="frm">${t.parts.map((p,i)=>`<div class="part"><div class="inp"><label for="a${i}">${String.fromCharCode(97+i)}) ${p.q} =</label><input id="a${i}" inputmode="decimal" autocomplete="off"><span class="u">${p.u}</span></div><div id="s${i}"></div></div>`).join('')}
+   <div class="row"><button class="btn" type="submit" id="chk">Alle prüfen ↵</button><button class="btn ghost" type="button" id="tip">Formeln zum Thema</button><button class="btn ghost" type="button" id="skip">Neue Aufgabe</button></div></form><div id="fb"></div>`;
+  setTimeout(()=>$('#a0').focus({preventScroll:true}),0);
+  $('#skip').onclick=next;
+  $('#tip').onclick=()=>{const fs=FX.filter(f=>f.g===g);$('#fb').innerHTML=`<div class="fb info"><div class="steps">${fs.map(f=>`<div>${tex(f,f.eq)}</div>`).join('')}</div></div>`};
+  $('#frm').onsubmit=e=>{e.preventDefault();if(st.done){next();return}
+    st.done=true;let n=0;
+    t.parts.forEach((p,i)=>{const el=$('#a'+i),a=parseNum(el.value),ok=near(a,p.a,p.tol);if(ok)n++;el.classList.add(ok?'ok':'bad');el.readOnly=true;
+      $('#s'+i).innerHTML=`<div class="fb ${ok?'ok':'bad'}"><div class="steps">${p.steps.map(s=>`<div>${s}</div>`).join('')}<div>→ <b>${F(p.a)}${p.u?' '+p.u:''}</b></div></div></div>`});
+    const all=n===t.parts.length;record(all,g,null);
+    $('#fb').innerHTML=`<div class="fb ${all?'ok':'info'}"><strong>${n} von ${t.parts.length} richtig.</strong>${all?'':'<span class="note">Folgefehler zählen in der Prüfung nicht doppelt – rechne mit deinem Zwischenergebnis weiter.</span>'}</div>`;
+    $('#chk').textContent='Nächste Aufgabe ↵';$('#tip').hidden=true;$('#skip').hidden=true;$('#chk').focus()};
+}
+function renderTraps(g){const G=GMAP[g],el=$('#traps');el.hidden=false;el.className='traps '+G.b;
+  el.innerHTML=`<h4>${G.e} ${G.id} – ${G.name}</h4><p>${G.d} <span class="note">· ${G.n} Prüfungsaufgaben, ${G.pts} Punkte</span></p><p class="lbl" style="margin:4px 0 0">Die Fallen</p><ul>${G.t.map(x=>`<li>${x}</li>`).join('')}</ul>`}
+
+/* ---------- Formelblatt ---------- */
+function buildSheet(){
+  $('#v-sheet').innerHTML=`<p class="note">Alle Formeln der zwölf Gruppen mit jeder Umstellung, die in den Aufgaben vorkommt. Die Seitenzahlen deiner IHK-Formelsammlung trägst du im Sonderskript (§ 7) ein.</p>`+
+   GROUPS.map(G=>{const fs=FX.filter(f=>f.g===G.id);return `<section class="sgroup"><h3><span class="tag ${G.b}">${G.id}</span>${G.e} ${G.name}<span class="pt">${G.pts} Punkte · ${G.n} Aufgaben</span></h3><p>${G.d}</p>
+    ${fs.map(f=>{const tg=Object.keys(f.s).filter(k=>f.s[k][0]!==f.eq.split(' = ')[1]);
+      return `<div class="frm"><div class="fn">${f.name}${f.sub?`<small>${f.sub}</small>`:''}</div><div class="fl"><span class="main">${tex(f,f.eq)}</span>${tg.map(k=>`<span>${sym(f,k)} = ${tex(f,f.s[k][0])}</span>`).join('')}</div></div>`}).join('')}</section>`}).join('');
+}
+
+/* ---------- Fortschritt ---------- */
+function buildProg(){
+  $('#progList').innerHTML=GROUPS.map(G=>{const s=stats[G.id]||{r:0,w:0},n=s.r+s.w,pr=n?Math.round(s.r/n*100):0;
+    return `<div class="pr"><span class="tag ${G.b}">${G.id}</span><div class="bar" title="${G.name}"><i class="g" style="width:${n?s.r/n*100:0}%"></i><i class="r" style="width:${n?s.w/n*100:0}%"></i></div><span>${n?`${s.r} / ${n} · ${pr} %`:'noch nichts'}</span></div>`}).join('');
+}
+$('#examDate').value=store.get('exam','2026-11-03');
+$('#examDate').onchange=e=>{if(e.target.value){store.set('exam',e.target.value);updHead()}};
+let resetArm=false;
+$('#reset').onclick=()=>{if(!resetArm){resetArm=true;$('#reset').textContent='Wirklich löschen?';$('#resetNote').textContent='Noch einmal klicken, um alle Zähler zu löschen.';return}
+  stats={};fst={};day={d:today,r:0,w:0};store.set('stats',stats);store.set('fst',fst);store.set('day',day);resetArm=false;
+  $('#reset').textContent='Fortschritt zurücksetzen';$('#resetNote').textContent='Gelöscht.';buildProg();updHead()};
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  for(const t of ['train','sheet','prog'])$('#v-'+t).hidden=t!==b.dataset.tab;
+  if(b.dataset.tab==='prog')buildProg();});
+
+buildTopics();buildSheet();updHead();next();
+</script>
