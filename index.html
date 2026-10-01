@@ -13,6 +13,7 @@
   --cu:#e58b54; --cu-soft:#33241a; --st:#7eaaea; --st-soft:#1b2a3e;
   --ok:#5fc489; --ok-soft:#163023; --bad:#f2847a; --bad-soft:#391e1c;
   --btn:#e6eaed; --btn-fg:#0f1418;
+  --b-E:#e58b54; --b-S:#7eaaea; --b-F:#b49cf0; --b-K:#e7c35a; --b-W:#ef7d8e; --b-C:#5fc4a8; --warn:#e7c35a;
   --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
@@ -22,7 +23,8 @@
   --paper:#f2f3ee; --grid:rgba(60,90,80,.07); --card:#ffffff; --ink:#1c2530; --muted:#5b6571; --line:#d8dbd2;
   --cu:#b0521c; --cu-soft:#f6e6da; --st:#2a5ea8; --st-soft:#e1eaf7;
   --ok:#2c7a4b; --ok-soft:#e1f1e7; --bad:#b3261e; --bad-soft:#f8e2df;
-  --btn:#1c2530; --btn-fg:#f7f7f2; color-scheme:light}
+  --btn:#1c2530; --btn-fg:#f7f7f2;
+  --b-E:#b0521c; --b-S:#2a5ea8; --b-F:#6a4bbf; --b-K:#9a6a00; --b-W:#b8304a; --b-C:#1f7f68; --warn:#8a5a00; color-scheme:light}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
@@ -53,16 +55,11 @@ h1 small{display:block;font:500 13px/1.4 var(--f-body);color:var(--muted);letter
 .topic .code{font:800 12px/1 var(--f-display);padding:4px 6px;border-radius:5px;background:var(--paper);color:var(--muted)}
 .topic .nm{min-width:0;overflow-wrap:anywhere}
 .topic .pt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.topic[aria-pressed="true"][data-b="E"]{border-color:var(--cu);background:var(--cu-soft)}
-.topic[aria-pressed="true"][data-b="E"] .code{background:var(--cu);color:var(--card)}
-.topic[aria-pressed="true"][data-b="S"]{border-color:var(--st);background:var(--st-soft)}
-.topic[aria-pressed="true"][data-b="S"] .code{background:var(--st);color:var(--card)}
 .presets{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:14px;min-width:0}
 .card .head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
 .tag{font:600 12px/1.3 var(--f-body);padding:4px 8px;border-radius:6px;letter-spacing:.02em;min-width:0;overflow-wrap:anywhere}
 .data{font-family:var(--f-math);font-size:17px;margin-top:6px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.tag.E{background:var(--cu-soft);color:var(--cu)} .tag.S{background:var(--st-soft);color:var(--st)}
 .task{font-size:16px;margin:0}
 .fx{font-family:var(--f-math);font-size:clamp(20px,4.4vw,27px);line-height:1.5;padding:12px 16px;background:var(--paper);border-radius:10px;overflow-x:auto;white-space:nowrap}
 .fx i,.fl i,.opt i,.steps i,.legend i,.sheet i{font-family:var(--f-math);font-style:italic}
@@ -98,7 +95,6 @@ h1 small{display:block;font:500 13px/1.4 var(--f-body);color:var(--muted);letter
 .steps div{white-space:nowrap}
 .note{font-size:13.5px;color:var(--muted)}
 .traps{display:grid;gap:10px;padding:16px 18px;border-left:4px solid var(--line);background:var(--card);border-radius:0 12px 12px 0}
-.traps.E{border-color:var(--cu)} .traps.S{border-color:var(--st)}
 .traps h4{margin:0;font:800 16px var(--f-display)}
 .traps p{margin:0;font-size:14px;max-width:70ch}
 .traps ul{margin:0;padding-left:18px;font-size:14px;display:grid;gap:4px;max-width:72ch}
@@ -137,11 +133,44 @@ details.traps>summary::before{content:"▸";color:var(--muted);transition:transf
 details.traps[open]>summary::before{transform:rotate(90deg)}
 .iconbtn{all:unset;cursor:pointer;padding:6px 11px;border:1px solid var(--line);border-radius:999px;font-size:13px;background:var(--card)}
 .iconbtn:focus-visible{outline:2px solid var(--st);outline-offset:2px}
+.tag{background:color-mix(in srgb,var(--bc,var(--muted)) 18%,var(--card));color:var(--bc,var(--ink))}
+.tcol{--bc:var(--muted)}
+.topic[aria-pressed="true"]{border-color:var(--bc);background:color-mix(in srgb,var(--bc) 16%,var(--card))}
+.topic[aria-pressed="true"] .code{background:var(--bc);color:var(--card)}
+.traps{border-left-color:var(--bc,var(--line))}
+.bavg{margin:-2px 0 4px;font-size:12px;color:var(--muted)}
+.topics{grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))}
+.levels.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.md{all:unset;cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;display:grid;gap:2px;min-width:0}
+.md strong{font:800 16px/1.1 var(--f-display)} .md span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.md[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.md:focus-visible,.th:focus-visible,.key:focus-visible{outline:2px solid var(--st);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.th{all:unset;cursor:pointer;padding:6px 12px;font-size:13px;color:var(--muted)}
+.th[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.inp.big input{font-size:19px;flex:1 1 14em;width:auto;min-width:0}
+.pv{font-family:var(--f-math);font-size:20px;min-height:1.6em;padding:4px 2px;overflow-x:auto;white-space:nowrap}
+.warn{font-family:var(--f-body);font-size:14px;color:var(--warn)}
+.keys{display:flex;flex-wrap:wrap;gap:6px}
+.key{all:unset;cursor:pointer;min-width:2.4em;text-align:center;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font:500 16px var(--f-body);user-select:none}
+.key.var{font-family:var(--f-math);font-size:18px;border-color:color-mix(in srgb,var(--st) 45%,var(--line))}
+.key:active{transform:translateY(1px)}
+.guide{border:1px dashed var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:8px}
+.guide .lbl{margin:0}
+.stp{margin:0;padding-left:22px;display:grid;gap:10px}
+.stp li{display:grid;gap:3px}
+.stp .ex,.phint .ex{font-size:14px;color:var(--muted);line-height:1.45}
+.stp .fq{font-family:var(--f-math);font-size:19px;overflow-x:auto;white-space:nowrap}
+.stp .fq.hid{font-family:var(--f-body);font-size:14px;color:var(--warn)}
+.phint{padding:2px 0 0 2px}
+.ptip{margin-left:4px}
+h2.bh{font:800 20px var(--f-display);margin:10px 0 0;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
 @media (max-width:640px){
   .topics{grid-template-columns:minmax(0,1fr)}
   .tgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .opts{grid-template-columns:minmax(0,1fr)}
   .lv span{display:none}
+  .lv,.md{text-align:center;padding:10px 6px}
   .lv{text-align:center;padding:10px 6px}
   .frm{grid-template-columns:minmax(0,1fr)}
   .card{padding:16px}
@@ -153,20 +182,25 @@ details.traps[open]>summary::before{transform:rotate(90deg)}
   <section id="v-start" class="start">
     <header class="top">
       <h1>NTG Formeltrainer<small>Industriemeister Elektrotechnik · Formeln umstellen</small></h1>
-      <div class="chips"><span class="pill" id="pCount"><b>–</b> Tage</span><button class="iconbtn" id="mode" type="button">Hell</button></div>
+      <div class="chips"><span class="pill" id="pCount"><b>–</b> Tage</span>
+        <div class="seg" role="group" aria-label="Farbmodus"><button class="th" data-th="light" type="button">☀︎ Hell</button><button class="th" data-th="dark" type="button">☾ Dunkel</button></div></div>
     </header>
     <div>
       <p class="lbl">Stufe</p>
-      <div class="levels" id="levels">
-        <button class="lv" data-lv="1" aria-pressed="false"><strong>Leicht</strong><span>richtige Umstellung auswählen</span></button>
+      <div class="levels">
+        <button class="lv" data-lv="1" aria-pressed="false"><strong>Leicht</strong><span>Formel umstellen und eintippen</span></button>
         <button class="lv" data-lv="2" aria-pressed="true"><strong>Mittel</strong><span>umstellen und ausrechnen</span></button>
         <button class="lv" data-lv="3" aria-pressed="false"><strong>Schwer</strong><span>Rechenketten wie in der Prüfung</span></button>
       </div>
     </div>
-    <div class="topics">
-      <div class="tcol"><h3><span>⚡ Elektrotechnik</span><span class="q"><button class="mini" data-all="E">alle</button><button class="mini" data-none="E">keine</button></span></h3><div class="tgrid" id="colE"></div></div>
-      <div class="tcol"><h3><span>📊 Statistik</span><span class="q"><button class="mini" data-all="S">alle</button><button class="mini" data-none="S">keine</button></span></h3><div class="tgrid" id="colS"></div></div>
+    <div>
+      <p class="lbl">Erklärungen</p>
+      <div class="levels two">
+        <button class="md" data-md="1" aria-pressed="true"><strong>📖 Geführt</strong><span>jeder Schritt steht mit Erklärung da</span></button>
+        <button class="md" data-md="0" aria-pressed="false"><strong>🎯 Selbst</strong><span>ohne Erklärung – Tipps auf Knopfdruck</span></button>
+      </div>
     </div>
+    <div class="topics" id="topics"></div>
     <div class="presets"><button class="btn ghost" id="preTop">Top 5 nach Punkten</button><button class="btn ghost" id="preAll">Alles</button></div>
     <button class="go" id="go" type="button">Los geht’s →</button>
     <p class="hint" id="hint"></p>
@@ -216,7 +250,99 @@ const F=(x,p=4)=>isFinite(x)?sig(x,p).toLocaleString('de-DE',{maximumFractionDig
 const FG=x=>F(x,5);
 const SQ3='√3';
 
-/* ---------- Themen (aus dem Sonderskript) ---------- */
+/* ---------- Winkel in Grad ---------- */
+const D2R=Math.PI/180;
+const sinD=a=>Math.sin(a*D2R),cosD=a=>Math.cos(a*D2R),tanD=a=>Math.tan(a*D2R);
+const asinD=x=>Math.asin(x)/D2R,acosD=x=>Math.acos(x)/D2R,atanD=x=>Math.atan(x)/D2R;
+
+/* ---------- Eingetippte Formeln lesen ---------- */
+const GREEK={'ρ':'rho','η':'eta','α':'alpha','ϑ':'theta','φ':'phi','Δ':'d','Σ':'S','σ':'sigma','τ':'tau','ε':'eps','ω':'omega','μ':'mu','ν':'nu'};
+const LABEL={xq:'x̄',Sx:'Σx',cosφ:'cos φ'};
+const label=k=>LABEL[k]||k;
+const FUNCS={arcsin:asinD,arccos:acosD,arctan:atanD,asin:asinD,acos:acosD,atan:atanD,'sin⁻¹':asinD,'cos⁻¹':acosD,'tan⁻¹':atanD,sin:sinD,cos:cosD,tan:tanD};
+function aliases(f){const m=[];
+  for(const k in f.v){const set=new Set([k,label(k),k.replace(/_/g,'')]);
+    let a=k;for(const g in GREEK)a=a.split(g).join(GREEK[g]);set.add(a);set.add(a.replace(/_/g,''));
+    if(k.includes('μ')){set.add(k.replace('μ','µ'));}
+    if(k==='xq'){set.add('xquer');set.add('x_quer');set.add('x̄')}
+    if(k==='cosφ'){set.add('cosφ');set.add('cosphi')}
+    for(const s of set)if(s)m.push([s,'v',k])}
+  for(const fn in FUNCS)m.push([fn,'f',fn]);
+  return m.sort((a,b)=>b[0].length-a[0].length)}
+function tokenize(f,src){
+  const s=String(src).replace(/[×*⋅•]/g,'·').replace(/[:÷]/g,'/').replace(/[−–]/g,'-').replace(/,/g,'.')
+    .replace(/\^2/g,'²').replace(/sqrt|wurzel/gi,'√').replace(/\bpi\b/gi,'π');
+  const al=aliases(f),T=[];let i=0;
+  while(i<s.length){const c=s[i];
+    if(/\s/.test(c)||c==='%'||c==='°'){i++;continue}
+    if(c==='{'){const j=s.indexOf('}',i);T.push({t:'v',k:s.slice(i+1,j)});i=j+1;continue}
+    if(c==='½'){T.push({t:'n',v:0.5});i++;continue}
+    const mn=s.slice(i).match(/^\d+(\.\d+)?/);if(mn){T.push({t:'n',v:parseFloat(mn[0])});i+=mn[0].length;continue}
+    let hit=null;for(const a of al)if(s.startsWith(a[0],i)){hit=a;break}
+    if(hit){T.push(hit[1]==='v'?{t:'v',k:hit[2]}:{t:'f',k:hit[2]});i+=hit[0].length;continue}
+    if('+-·/()²√π^'.includes(c)){T.push({t:c});i++;continue}
+    throw new Error(`Das Zeichen „${c}“ kenne ich in dieser Formel nicht. Nutze die Knöpfe unten.`)}
+  const out=[];for(const tk of T){const p=out[out.length-1];
+    if(p&&['n','v',')','²','π'].includes(p.t)&&['n','v','(','√','π','f'].includes(tk.t))out.push({t:'·'});out.push(tk)}
+  return out}
+function parse(T){let i=0;const used=new Set();const eat=t=>{if(T[i]&&T[i].t===t){i++;return true}return false};
+  function expr(){let a=term();for(;;){if(eat('+')){const b=term(),x=a;a=v=>x(v)+b(v)}else if(eat('-')){const b=term(),x=a;a=v=>x(v)-b(v)}else return a}}
+  function term(){let a=unary();for(;;){if(eat('·')){const b=unary(),x=a;a=v=>x(v)*b(v)}else if(eat('/')){const b=unary(),x=a;a=v=>x(v)/b(v)}else return a}}
+  function unary(){if(eat('-')){const a=unary();return v=>-a(v)}if(eat('+'))return unary();
+    if(eat('√')){const a=unary();return v=>Math.sqrt(a(v))}
+    if(T[i]&&T[i].t==='f'){const fn=FUNCS[T[i].k];i++;const a=unary();return v=>fn(a(v))}
+    return power()}
+  function power(){let a=prim();for(;;){if(eat('²')){const x=a;a=v=>x(v)**2}else if(eat('^')){const b=unary(),x=a;a=v=>x(v)**b(v)}else return a}}
+  function prim(){const t=T[i];if(!t)throw new Error('Die Formel hört zu früh auf – da fehlt noch etwas.');
+    if(t.t==='n'){i++;return()=>t.v}if(t.t==='π'){i++;return()=>Math.PI}
+    if(t.t==='v'){i++;used.add(t.k);return v=>v[t.k]}
+    if(eat('(')){const a=expr();if(!eat(')'))throw new Error('Eine Klammer ist nicht geschlossen.');return a}
+    throw new Error('Zwischen zwei Zeichen fehlt eine Größe oder Zahl.')}
+  const fn=expr();if(i<T.length)throw new Error(T[i].t===')'?'Da ist eine Klammer ) zu viel.':'Die Formel ist so nicht lesbar.');
+  return{fn,used}}
+function checkFormula(f,t,src){
+  src=String(src).trim();const m=src.match(/^[^=]*=(.*)$/);if(m)src=m[1];
+  if(!src.trim())throw new Error('Tippe zuerst eine Formel ein.');
+  const {fn,used}=parse(tokenize(f,src));
+  if(used.has(t))return{ok:false,msg:`${sym(f,t)} darf rechts nicht mehr vorkommen – es soll ja allein links stehen.`};
+  for(let k=0;k<8;k++){const raw=f.gen(),c=f.s[t][1](raw),u=fn(raw);
+    if(!isFinite(u)||Math.abs(u-c)>1e-6*Math.max(1,Math.abs(c)))return{ok:false}}
+  return{ok:true}}
+function preview(f,src){
+  try{const s=String(src).replace(/^[^=]*=/,'');if(!s.trim())return '&nbsp;';
+    return tokenize(f,s).map(x=>x.t==='v'?`<span class="sy">${sym(f,x.k)}</span>`:x.t==='n'?F(x.v,10):x.t==='f'?x.k+' ':
+      ({'·':' · ','/':' / ','+':' + ','-':' − '})[x.t]||x.t).join('')}
+  catch(e){return `<span class="warn">${e.message}</span>`}}
+
+/* ---------- Umstell-Schritte erklären ---------- */
+const OPX={
+ '÷':X=>`Beide Seiten durch ${X} teilen. So fällt ${X} auf der Seite weg, wo es malgenommen war.`,
+ '·':X=>`Beide Seiten mit ${X} malnehmen. So verschwindet das „geteilt durch ${X}“.`,
+ '+':X=>`Auf beiden Seiten ${X} dazuzählen. So fällt das „− ${X}“ weg.`,
+ '−':X=>`Auf beiden Seiten ${X} abziehen. So fällt das „+ ${X}“ weg.`,
+ '√':()=>'Auf beiden Seiten die Wurzel ziehen. Wurzel und Quadrat heben sich auf.',
+ '²':()=>'Beide Seiten hoch 2 nehmen (quadrieren). Quadrat und Wurzel heben sich auf.',
+ '⇄':()=>'Seiten tauschen, damit die gesuchte Größe links steht. Fertig umgestellt.',
+};
+function umSteps(f,t){
+  const rhs=f.s[t][0],fin=`{${t}} = ${rhs}`,lhs=f.eq.split(' = ')[0];
+  if(lhs==='{'+t+'}')return[{txt:`${sym(f,t)} steht schon allein links. Hier musst du nichts umstellen.`,eq:tex(f,f.eq)}];
+  const out=[{txt:`Ausgangsformel. Gesucht ist ${sym(f,t)} – am Ende muss ${sym(f,t)} allein auf einer Seite stehen.`,eq:tex(f,f.eq)}];
+  const xs=(f.x&&f.x[t])||[['!Umstellen nach '+sym(f,t)+':',fin]];
+  for(const st_ of xs){const op=st_[0],c=op[0],X=op.slice(1);
+    const txt=c==='!'?tex(f,X):OPX[c](X?tex(f,X):'');out.push({txt,eq:tex(f,st_[1]||fin)})}
+  if(xs.length&&(xs[xs.length-1][1]||fin)!==fin)out.push({txt:'Seiten tauschen bzw. ordnen. Fertig umgestellt.',eq:tex(f,fin)});
+  return out}
+
+/* ---------- Blöcke und Themen (aus Sonderskript und NTG-Lernskript) ---------- */
+const BLOCKS=[
+ {id:'E',e:'⚡',name:'Elektrotechnik',avg:'Block 4 · Ø 16,9 P je Klausur · 34/36'},
+ {id:'S',e:'📊',name:'Statistik & QS',avg:'Block 6 · Ø 13,0 P · immer die letzte Aufgabe'},
+ {id:'F',e:'🔩',name:'Festigkeit & Statik',avg:'Block 2 · Ø 10,5 + 9,9 P'},
+ {id:'K',e:'🚗',name:'Kinematik, Energie, Leistung',avg:'Block 3 · Ø 12,0 + 10,8 P'},
+ {id:'W',e:'🌡️',name:'Wärme & Hydraulik',avg:'Block 5 · Ø 10,5 P'},
+ {id:'C',e:'🧪',name:'Chemie',avg:'Block 1 · immer Aufgabe 1 – hier nur die eine Formel'},
+];
 const GROUPS=[
  {id:'E1',sn:'Leitung & Spannungsfall',b:'E',e:'🔌',name:'Leiterwiderstand, Spannungsfall, Klemmenspannung',pts:75,n:5,
   d:'Der meistgeprüfte Einzeltyp der letzten zehn Jahre – kam dreimal in identischer Schrittfolge (2018 H, 2022 F, 2024 F).',
@@ -235,7 +361,7 @@ const GROUPS=[
   t:['Stern: U<sub>Str</sub> = U / √3, I<sub>Str</sub> = I. Dreieck: U<sub>Str</sub> = U, I<sub>Str</sub> = I / √3.','Wirkungsgradkette von hinten: P<sub>zu</sub> = P<sub>ab</sub> / η – geteilt, nicht multipliziert.','„Motorverluste 16 %“ heißt η = 0,84.','Drehzahl in 1/s umrechnen (÷ 60), bevor du v = d · π · n rechnest.']},
  {id:'E6',sn:'Quelle & Kosten',b:'E',e:'🔋',name:'Spannungsquelle, Innenwiderstand, Arbeit und Energiekosten',pts:24,n:2,
   d:'Der einfachste Block. W = P · t und Kosten = W · Preis sind geschenkte Punkte.',
-  t:['Einheiten: Watt ÷ 1000 → kW, Sekunden ÷ 3600 → h.','Innenwiderstand über Kreuz: R<sub>i</sub> = (U<sub>1</sub> − U<sub>2</sub>) / (I<sub>2</sub> − I<sub>1</sub>), damit R<sub>i</sub> positiv wird.','Zweiter Widerstand einer Parallelschaltung: R<sub>2</sub> = R<sub>1</sub> · R<sub>ges</sub> / (R<sub>1</sub> − R<sub>ges</sub>).']},
+  t:['Einheiten: Watt ÷ 1000 → kW, Sekunden ÷ 3600 → h.','Innenwiderstand über Kreuz: R<sub>i</sub> = (U<sub>1</sub> − U<sub>2</sub>) / (I<sub>2</sub> − I<sub>1</sub>), damit R<sub>i</sub> positiv wird.','Kurzschlussstrom: I<sub>k</sub> = U<sub>0</sub> / R<sub>i</sub>.']},
  {id:'S1',sn:'Urliste & Mittelwert',b:'S',e:'📋',name:'Urliste auswerten – Mittelwert, Spannweite, Median, Modalwert',pts:100,n:8,
   d:'Der billigste Punkt der ganzen Prüfung. Der Mittelwert kam in 25 von 36 Klausuren.',
   t:['Quote: Summe aller Tage / (Mitarbeiter · Arbeitstage) · 100 % – nicht pro Kopf rechnen.','Modalwert = der Messwert, nicht seine Anzahl.','„Nachvollziehbar“: Summe, n, dann der Quotient hinschreiben.','Einheiten mitschleppen: „R = 5 Tage“.']},
@@ -250,12 +376,61 @@ const GROUPS=[
   t:['RUN = 7 Werte in Folge auf einer Seite der Mittellinie. TREND = 7 Werte in Folge in eine Richtung.','Warngrenze = beobachten, Eingriffsgrenze = eingreifen.','Median bei n = 5: sortieren, dann der dritte Wert.','„Die Ursache ist festzustellen und zu beseitigen.“ – wörtlich hinschreiben.']},
  {id:'S5',sn:'Cp / Cpk',b:'S',e:'🎯',name:'Fähigkeitskennwerte Cm, Cmk, Cp, Cpk',pts:40,n:3,
   d:'Seit 2013 nicht mehr gekommen – als Letztes lernen, aber die zwei Formeln sitzen in fünf Minuten.',
-  t:['6s im Nenner bei Cp, 3s bei Cpk.','Bei Cpk immer beide Seiten rechnen und das Minimum nehmen.','Cpk = Cp nur, wenn x̄ exakt in der Toleranzmitte liegt.']},
+  t:['6s im Nenner bei Cp, 3s bei Cpk.','Bei Cpk immer beide Seiten rechnen und das Minimum nehmen.','Cpk = Cp nur, wenn x̄ exakt in der Toleranzmitte liegt.','Fähig ab 1,33 (Maschine: 1,66).']},
  {id:'S6',sn:'Klassierung',b:'S',e:'📊',name:'Klassierung und Histogramm',pts:10,n:1,
   d:'Eine Aufgabe, 10 Punkte – die Klassenformeln sind winzig.',
   t:['Klassenbreite auf einen glatten Wert aufrunden (0,042 → 0,05).','Die Summe der Klassenhäufigkeiten muss n ergeben.','Histogramm: Säulen ohne Lücke.']},
+ {id:'F1',sn:'Spannungen & Profil',b:'F',e:'🏗️',name:'Zug-, Druck-, Scherspannung, zulässige Spannung, Winkelprofil',
+  d:'Wiedergänger W1 (Winkelprofil, 3× je 18 P) und W5 (Zugstange, 2×). Immer: F in N, S in mm², Ergebnis in N/mm².',
+  t:['F immer in N, Fläche immer in mm² → N/mm² (= MPa). 1 cm² = 100 mm².','Schwellende Belastung: σ<sub>zul</sub> = ⅓ · R<sub>e</sub>.','Geschwächter Querschnitt: S<sub>neu</sub> = S − d · t – nicht π · d²/4 abziehen.','„Berechnen Sie, ob …“ braucht einen Entscheidungssatz.']},
+ {id:'F2',sn:'Querschnitte',b:'F',e:'⭕',name:'Querschnittsflächen – Kreis, Rohr, Langloch',
+  d:'Die Flächen hängen an fast jeder Festigkeitsaufgabe dran.',
+  t:['Beim Rohr den Kreisring rechnen, nicht den Vollkreis.','Innendurchmesser d = D − 2 · Wanddicke.','Langloch (Stadion, Breite b): S = 1,785 · b².','Rückwärts: d = √(4 · S / π).']},
+ {id:'F3',sn:'Stanzen & Nieten',b:'F',e:'✂️',name:'Stanzen, Schneidkraft, Nietanzahl',
+  d:'Wiedergänger W2: Stanzen kam 3× wortgleich, das Thema insgesamt 5× (74 P).',
+  t:['Scherfläche beim Stanzen = Umfang × Blechdicke, nicht die ausgestanzte Fläche.','Kreisbogen: U = 2 · π · r · Winkel / 360°.','Nietanzahl immer aufrunden.','Schneidkraft meist in kN angeben.']},
+ {id:'F4',sn:'Hooke & Dehnung',b:'F',e:'🪢',name:'Dehnung und Hookesches Gesetz',
+  d:'Kam Frühjahr 2023 und Herbst 2024. E-Modul aus der Formelsammlung (Stahl ≈ 210 000 N/mm²).',
+  t:['Gilt nur im elastischen Bereich bis R<sub>e</sub>.','ε hat keine Einheit (oft in % angegeben: × 100).','ΔL und L<sub>0</sub> in derselben Einheit.']},
+ {id:'F5',sn:'Hebel & Momente',b:'F',e:'⚖️',name:'Hebelgesetz, Momente, Kolbenkraft',
+  d:'Pedalkraft, Spannzylinder, Auflagerkräfte – immer Momentengleichgewicht ΣM = 0.',
+  t:['Hebelarm = senkrechter Abstand zur Wirkungslinie.','Eigenlast greift in der Mitte (l/2) an.','1 bar = 10 N/cm² = 0,1 N/mm².','Probe bei Auflagern: F<sub>A</sub> + F<sub>B</sub> = Summe aller Lasten.']},
+ {id:'F6',sn:'Schiefe Ebene & Reibung',b:'F',e:'⛰️',name:'Schiefe Ebene, Reibung, Rutschen und Kippen',
+  d:'Normalkraft mit cos, Hangabtrieb mit sin. Die Masse kürzt sich bei Rutsch- und Kippgrenze heraus.',
+  t:['cos = senkrecht zur Ebene (F<sub>N</sub>), sin = längs der Ebene (F<sub>H</sub>). Nicht vertauschen!','Steigung 15 % → tan α = 0,15 → α = 8,53°.','Rutschgrenze tan α = µ, Kippgrenze tan α = l<sub>1</sub> / l<sub>2</sub> – der kleinere Winkel tritt zuerst ein.','Taschenrechner auf DEG stellen.']},
+ {id:'K1',sn:'Bewegung & Bremsweg',b:'K',e:'🛑',name:'Geschwindigkeit, Beschleunigung, Brems- und Anhalteweg',
+  d:'Anhalteweg-Typ kam 2×. Reaktionsweg nie vergessen, km/h immer zuerst in m/s.',
+  t:['km/h ÷ 3,6 = m/s. 72 km/h = 20 m/s, 50 km/h = 13,9 m/s.','Anhalteweg = Reaktionsweg + Bremsweg.','s = ½ · a · t² nur aus dem Stillstand. Die Trapezformel ½ · (v₀ + v) · t geht immer.','Im v-t-Diagramm ist die Fläche der Weg.']},
+ {id:'K2',sn:'Energie',b:'K',e:'🔋',name:'Kinetische, potenzielle und Federenergie',
+  d:'Energieformeln stecken in Pumpspeicher-, Fall- und Bremsaufgaben.',
+  t:['v immer in m/s einsetzen.','h ist die Höhe, nicht die Streckenlänge.','Beim freien Fall kürzt sich die Masse raus: v = √(2 · g · h).','1 J = 1 Nm = 1 Ws · 1 kWh = 3,6 · 10⁶ J.']},
+ {id:'K3',sn:'Kreisbewegung',b:'K',e:'🌀',name:'Winkelgeschwindigkeit, Drehmoment, Fliehkraft, Kurve',
+  d:'Kurven-Schleudern kam 3× (2016 H, 2018 H, 2022 F). Die Masse spielt keine Rolle.',
+  t:['n in 1/s: min⁻¹ ÷ 60.','Oft ist d gegeben → r = d / 2.','Kurve: F<sub>z</sub> = F<sub>R</sub> → v = √(µ · g · r), danach × 3,6 für km/h.','Doppelte Masse ändert die Grenzgeschwindigkeit nicht.']},
+ {id:'K4',sn:'Arbeit & Leistung',b:'K',e:'💪',name:'Arbeit, Leistung, Wirkungsgradkette',
+  d:'Arbeit, Leistung, Wirkungsgrad: Ø 10,8 P, in 22 von 36 Klausuren.',
+  t:['t in Sekunden einsetzen.','η-Kette: multiplizieren, nie addieren.','P<sub>zu</sub> = P<sub>ab</sub> / η – η ist immer kleiner als 1.']},
+ {id:'W1',sn:'Wärmemenge & Zeit',b:'W',e:'♨️',name:'Wärmemenge, Erhitzungszeit, Verdampfen',
+  d:'Erhitzungszeit kam 2× praktisch identisch (2017 H, 2024 H). Antwort in Minuten UND Sekunden.',
+  t:['ΔT in °C = ΔT in K.','1 l Wasser = 1 kg. c<sub>Wasser</sub> = 4,18 kJ/(kg·K).','Schmelz-/Verdampfungswärme kommt ZUSÄTZLICH zu m · c · ΔT.','t = Q / (η · P): η gehört unter den Bruchstrich.']},
+ {id:'W2',sn:'Brennstoff & Heizwert',b:'W',e:'⛽',name:'Heizwert, Brennstoffbedarf, Motorwirkungsgrad',
+  d:'Wiedergänger W8: Wirkungsgrad eines Dieselmotors aus Heizwert, Arbeit und Wärme (2×).',
+  t:['Liter → kg über ρ: Diesel/Heizöl 0,83 kg/dm³.','H<sub>i</sub> Diesel/Benzin 42 000 kJ/kg · Heizöl 43 000 kJ/kg · Erdgas 35 000 kJ/m³.','Verlust 30 % → η = 0,7.']},
+ {id:'W3',sn:'Ausdehnung',b:'W',e:'↔️',name:'Längen- und Volumenausdehnung',
+  d:'Stoßfuge, Überlauf, Tank – immer ΔL = L₀ · α · ΔT.',
+  t:['α in 1/K: Stahl 0,000012 · Alu 0,000024.','Fester Körper: α<sub>V</sub> = 3 · α<sub>L</sub>.','Flüssigkeit: α<sub>V</sub> steht fertig in der Tabelle (Benzin 0,0011).']},
+ {id:'W4',sn:'Gasgesetze',b:'W',e:'🎈',name:'Boyle-Mariotte und allgemeine Gasgleichung',
+  d:'Temperaturen IMMER in Kelvin, Drücke als Absolutdruck.',
+  t:['T = ϑ + 273,15.','Absolutdruck = Überdruck + 1 bar.','Bei konstanter Temperatur: p₁ · V₁ = p₂ · V₂.']},
+ {id:'W5',sn:'Hydraulik',b:'W',e:'🛢️',name:'Druck, Kraftübersetzung, Volumenstrom, Differentialzylinder',
+  d:'Wiedergänger W6: Differentialzylinder – Aus- und Einfahrgeschwindigkeit plus Verhältnis (2×).',
+  t:['Druck im System ist überall gleich.','Einfahren: Ringfläche A = (D² − d²) · π / 4.','1 l = 1000 cm³ = 1 dm³. 1 m³/s = 60 000 l/min.','v = Q / A – kleinere Fläche, größere Geschwindigkeit.']},
+ {id:'C1',sn:'Galvanisches Element',b:'C',e:'🔋',name:'Spannung des galvanischen Elements',
+  d:'Kommt in Aufgabe 1 bei Korrosion und Opferanode (4×, 42 P). Der Rest von Block 1 ist Theorie.',
+  t:['U = U(edler) − U(unedler). Minus mal Minus gibt Plus.','Mg −2,36 V · Zn −0,76 V · Fe −0,44 V · Ni −0,25 V · Sn −0,14 V · Cu +0,34 V.','Pluspol = edleres Metall (Katode). Minuspol = unedleres Metall (Anode), es löst sich auf.']},
 ];
 const GMAP=Object.fromEntries(GROUPS.map(g=>[g.id,g]));
+const BMAP=Object.fromEntries(BLOCKS.map(b=>[b.id,b]));
 
 /* ---------- Formeln ----------
    eq: Formel mit {Größe}. s: {Größe:[umgestellte Form, Rechnung, [falsche Formen]]}  */
@@ -591,6 +766,298 @@ const FX=[
  s:{w:['{R} / {k}',v=>v.R/v.k,['{k} / {R}','{R} · {k}']],
     R:['{w} · {k}',v=>v.w*v.k,['{w} / {k}','{k} / {w}']],
     k:['{R} / {w}',v=>v.R/v.w,['{w} / {R}','{R} · {w}']]}},
+/* C1 */
+{id:'galv',g:'C1',name:'Spannung des galvanischen Elements',eq:'{U} = {E_edel} − {E_unedel}',
+ note:'Mg −2,36 V · Zn −0,76 V · Fe −0,44 V · Ni −0,25 V · Sn −0,14 V · Cu +0,34 V. Minus mal Minus gibt Plus.',
+ v:{U:['Elementspannung','V'],E_edel:['Potenzial des edleren Metalls','V'],E_unedel:['Potenzial des unedleren Metalls','V']},
+ gen(){const M=[-2.36,-0.76,-0.44,-0.25,-0.14,0.34];let a=pick(M),b=pick(M);while(a===b)b=pick(M);const e=Math.max(a,b),u=Math.min(a,b);return{E_edel:e,E_unedel:u,U:e-u}},
+ s:{U:['{E_edel} − {E_unedel}',v=>v.E_edel-v.E_unedel,['{E_unedel} − {E_edel}','{E_edel} + {E_unedel}']],
+    E_unedel:['{E_edel} − {U}',v=>v.E_edel-v.U,['{U} − {E_edel}','{E_edel} + {U}']],
+    E_edel:['{U} + {E_unedel}',v=>v.U+v.E_unedel,['{U} − {E_unedel}','{E_unedel} − {U}']]}},
+/* F1 */
+{id:'sig',g:'F1',name:'Zug-, Druck- und Scherspannung',eq:'{σ} = {F} / {S}',note:'F in N, S in mm² → σ in N/mm².',
+ v:{σ:['Spannung','N/mm²'],F:['Kraft','N'],S:['Querschnitt','mm²']},
+ gen(){const S=r(50,2000,0),σ=r(20,300,1);return{S,σ,F:S*σ}},
+ s:{σ:['{F} / {S}',v=>v.F/v.S,['{S} / {F}','{F} · {S}']],F:['{σ} · {S}',v=>v.σ*v.S,['{σ} / {S}','{S} / {σ}']],S:['{F} / {σ}',v=>v.F/v.σ,['{σ} / {F}','{F} · {σ}']]}},
+{id:'szul',g:'F1',name:'Zulässige Spannung',eq:'{σ_zul} = {R_e} / {ν}',note:'Schwellende Belastung: σ_zul = ⅓ · R_e, also ν = 3.',
+ v:{σ_zul:['zulässige Spannung','N/mm²'],R_e:['Streckgrenze','N/mm²'],ν:['Sicherheitszahl','']},
+ gen(){const R_e=pick([225,235,295,355,590]),ν=pick([1.5,2,2.5,3]);return{R_e,ν,σ_zul:R_e/ν}},
+ s:{σ_zul:['{R_e} / {ν}',v=>v.R_e/v.ν,['{R_e} · {ν}','{ν} / {R_e}']],R_e:['{σ_zul} · {ν}',v=>v.σ_zul*v.ν,['{σ_zul} / {ν}','{ν} / {σ_zul}']],ν:['{R_e} / {σ_zul}',v=>v.R_e/v.σ_zul,['{σ_zul} / {R_e}','{R_e} · {σ_zul}']]}},
+{id:'serf',g:'F1',name:'Erforderlicher Querschnitt',eq:'{S_erf} = {F} / {σ_zul}',note:'Danach auf ein Normmaß aufrunden.',
+ v:{S_erf:['erforderlicher Querschnitt','mm²'],F:['Kraft','N'],σ_zul:['zulässige Spannung','N/mm²']},
+ gen(){const F=r(5000,300000,0),σ_zul=pick([75,80,98.3,120,150,196.7]);return{F,σ_zul,S_erf:F/σ_zul}},
+ s:{S_erf:['{F} / {σ_zul}',v=>v.F/v.σ_zul,['{σ_zul} / {F}','{F} · {σ_zul}']],F:['{S_erf} · {σ_zul}',v=>v.S_erf*v.σ_zul,['{S_erf} / {σ_zul}','{σ_zul} / {S_erf}']],σ_zul:['{F} / {S_erf}',v=>v.F/v.S_erf,['{S_erf} / {F}','{F} · {S_erf}']]}},
+{id:'sneu',g:'F1',name:'Geschwächter Querschnitt',sub:'Bohrung im Profil',eq:'{S_neu} = {S} − {d} · {t}',note:'Abgezogen wird d · t, nicht π · d²/4.',
+ v:{S_neu:['Restquerschnitt','mm²'],S:['Querschnitt ohne Loch','mm²'],d:['Bohrungsdurchmesser','mm'],t:['Wanddicke','mm']},
+ gen(){const S=r(300,900,0),d=pick([11,13,17,21]),t=pick([4,5,6,8]);return{S,d,t,S_neu:S-d*t}},
+ s:{S_neu:['{S} − {d} · {t}',v=>v.S-v.d*v.t,['{S} − π · {d}² / 4','({S} − {d}) · {t}']],S:['{S_neu} + {d} · {t}',v=>v.S_neu+v.d*v.t,['{S_neu} − {d} · {t}','{S_neu} · {d} · {t}']],
+    d:['({S} − {S_neu}) / {t}',v=>(v.S-v.S_neu)/v.t,['{S} − {S_neu} / {t}','({S_neu} − {S}) / {t}']],t:['({S} − {S_neu}) / {d}',v=>(v.S-v.S_neu)/v.d,['{S} − {S_neu} / {d}','({S} + {S_neu}) / {d}']]}},
+{id:'masse',g:'F1',name:'Masse über die Dichte',eq:'{m} = {V} · {ρ}',note:'V in dm³ und ρ in kg/dm³ → m in kg. 1 cm² · 1 m = 0,1 dm³.',
+ v:{m:['Masse','kg'],V:['Volumen','dm³'],ρ:['Dichte','kg/dm³']},
+ gen(){const ρ=pick([2.7,7.85,0.83,1]),V=r(0.5,20,2);return{ρ,V,m:V*ρ}},
+ s:{m:['{V} · {ρ}',v=>v.V*v.ρ,['{V} / {ρ}','{ρ} / {V}']],V:['{m} / {ρ}',v=>v.m/v.ρ,['{m} · {ρ}','{ρ} / {m}']],ρ:['{m} / {V}',v=>v.m/v.V,['{V} / {m}','{m} · {V}']]}},
+/* F2 */
+{id:'kreisS',g:'F2',name:'Kreisquerschnitt',eq:'{S} = π · {d}² / 4',
+ v:{S:['Querschnitt','mm²'],d:['Durchmesser','mm']},
+ gen(){const d=r(5,60,0);return{d,S:Math.PI*d*d/4}},
+ s:{S:['π · {d}² / 4',v=>Math.PI*v.d**2/4,['π · {d}²','π · {d} / 4']],d:['√(4 · {S} / π)',v=>Math.sqrt(4*v.S/Math.PI),['√({S} · π / 4)','4 · {S} / π','√({S} / π)']]}},
+{id:'rohr',g:'F2',name:'Kreisring (Rohr)',eq:'{S} = π / 4 · ({D}² − {d}²)',note:'Innendurchmesser d = D − 2 · Wanddicke.',
+ v:{S:['Ringquerschnitt','mm²'],D:['Außendurchmesser','mm'],d:['Innendurchmesser','mm']},
+ gen(){const D=r(20,120,0),d=D-2*pick([2,3,4,5]);return{D,d,S:Math.PI/4*(D*D-d*d)}},
+ s:{S:['π / 4 · ({D}² − {d}²)',v=>Math.PI/4*(v.D**2-v.d**2),['π / 4 · ({D} − {d})²','π / 4 · {D}² − {d}²']],
+    d:['√({D}² − 4 · {S} / π)',v=>Math.sqrt(v.D**2-4*v.S/Math.PI),['√({D}² + 4 · {S} / π)','{D} − 4 · {S} / π']],
+    D:['√(4 · {S} / π + {d}²)',v=>Math.sqrt(4*v.S/Math.PI+v.d**2),['√(4 · {S} / π − {d}²)','4 · {S} / π + {d}']]}},
+{id:'lang',g:'F2',name:'Langloch-Querschnitt',sub:'Stadion mit Breite b',eq:'{S} = 1,785 · {b}²',note:'Entsteht aus S = b² + π · b²/4.',
+ v:{S:['Querschnitt','mm²'],b:['Breite','mm']},
+ gen(){const b=r(5,40,0);return{b,S:1.785*b*b}},
+ s:{S:['1,785 · {b}²',v=>1.785*v.b**2,['1,785 · {b}','{b}² / 1,785']],b:['√({S} / 1,785)',v=>Math.sqrt(v.S/1.785),['{S} / 1,785','√({S} · 1,785)']]}},
+{id:'rohrd',g:'F2',name:'Innendurchmesser aus der Wanddicke',eq:'{d} = {D} − 2 · {s}',
+ v:{d:['Innendurchmesser','mm'],D:['Außendurchmesser','mm'],s:['Wanddicke','mm']},
+ gen(){const D=r(20,120,0),s=pick([2,2.5,3,4,5]);return{D,s,d:D-2*s}},
+ s:{d:['{D} − 2 · {s}',v=>v.D-2*v.s,['{D} − {s}','2 · ({D} − {s})']],D:['{d} + 2 · {s}',v=>v.d+2*v.s,['{d} − 2 · {s}','{d} + {s}']],s:['({D} − {d}) / 2',v=>(v.D-v.d)/2,['{D} − {d} / 2','({D} + {d}) / 2']]}},
+/* F3 */
+{id:'scherf',g:'F3',name:'Scherfläche beim Stanzen',eq:'{S} = {U} · {t}',note:'U = Umfang der Schnittlinie, t = Blechdicke.',
+ v:{S:['Scherfläche','mm²'],U:['Umfang der Schnittlinie','mm'],t:['Blechdicke','mm']},
+ gen(){const U=r(40,600,1),t=pick([1,1.5,2,3,4]);return{U,t,S:U*t}},
+ s:{S:['{U} · {t}',v=>v.U*v.t,['{U} / {t}','{U}² · {t}']],U:['{S} / {t}',v=>v.S/v.t,['{S} · {t}','{t} / {S}']],t:['{S} / {U}',v=>v.S/v.U,['{U} / {S}','{S} · {U}']]}},
+{id:'schneid',g:'F3',name:'Schneidkraft',eq:'{F} = {S} · {τ_aB}',
+ v:{F:['Schneidkraft','N'],S:['Scherfläche','mm²'],τ_aB:['Scherfestigkeit','N/mm²']},
+ gen(){const S=r(100,1500,0),τ=pick([150,210,240,320]);return{S,τ_aB:τ,F:S*τ}},
+ s:{F:['{S} · {τ_aB}',v=>v.S*v.τ_aB,['{S} / {τ_aB}','{τ_aB} / {S}']],S:['{F} / {τ_aB}',v=>v.F/v.τ_aB,['{F} · {τ_aB}','{τ_aB} / {F}']],τ_aB:['{F} / {S}',v=>v.F/v.S,['{S} / {F}','{F} · {S}']]}},
+{id:'bogen',g:'F3',name:'Länge eines Kreisbogens',eq:'{U} = 2 · π · {r} · {φ} / 360°',
+ v:{U:['Bogenlänge','mm'],r:['Radius','mm'],φ:['Winkel','°']},
+ gen(){const r_=r(5,50,0),φ=pick([45,90,110,120,180,270]);return{r:r_,φ,U:2*Math.PI*r_*φ/360}},
+ s:{U:['2 · π · {r} · {φ} / 360°',v=>2*Math.PI*v.r*v.φ/360,['π · {r} · {φ} / 360°','2 · π · {r} · 360° / {φ}']],
+    r:['{U} · 360° / (2 · π · {φ})',v=>v.U*360/(2*Math.PI*v.φ),['{U} · {φ} / (2 · π · 360°)','2 · π · {φ} / ({U} · 360°)']],
+    φ:['{U} · 360° / (2 · π · {r})',v=>v.U*360/(2*Math.PI*v.r),['{U} · {r} / (2 · π · 360°)','{U} / (2 · π · {r})']]}},
+{id:'niet',g:'F3',name:'Anzahl der Niete',eq:'{n} = {S_erf} / {S_N}',note:'Immer aufrunden. S_N = π · d² / 4.',
+ v:{n:['Nietanzahl (vor dem Aufrunden)',''],S_erf:['erforderliche Gesamtscherfläche','mm²'],S_N:['Fläche eines Niets','mm²']},
+ gen(){const S_N=pick([50.27,78.54,113.1,153.9,201.1]),n=r(2,8,2);return{S_N,n,S_erf:n*S_N}},
+ s:{n:['{S_erf} / {S_N}',v=>v.S_erf/v.S_N,['{S_N} / {S_erf}','{S_erf} · {S_N}']],S_erf:['{n} · {S_N}',v=>v.n*v.S_N,['{n} / {S_N}','{S_N} / {n}']],S_N:['{S_erf} / {n}',v=>v.S_erf/v.n,['{n} / {S_erf}','{S_erf} · {n}']]}},
+/* F4 */
+{id:'eps',g:'F4',name:'Dehnung',eq:'{ε} = {ΔL} / {L_0}',
+ v:{ε:['Dehnung',''],ΔL:['Längenänderung','mm'],L_0:['Ausgangslänge','mm']},
+ gen(){const L_0=r(500,5000,0),ε=r(0.0002,0.0015,5);return{L_0,ε,ΔL:ε*L_0}},
+ s:{ε:['{ΔL} / {L_0}',v=>v.ΔL/v.L_0,['{L_0} / {ΔL}','{ΔL} · {L_0}']],ΔL:['{ε} · {L_0}',v=>v.ε*v.L_0,['{ε} / {L_0}','{L_0} / {ε}']],L_0:['{ΔL} / {ε}',v=>v.ΔL/v.ε,['{ε} / {ΔL}','{ΔL} · {ε}']]}},
+{id:'hooke',g:'F4',name:'Hookesches Gesetz',eq:'{σ} = {E} · {ε}',
+ v:{σ:['Spannung','N/mm²'],E:['Elastizitätsmodul','N/mm²'],ε:['Dehnung','']},
+ gen(){const E=pick([210000,210000,70000]),ε=r(0.0002,0.0012,5);return{E,ε,σ:E*ε}},
+ s:{σ:['{E} · {ε}',v=>v.E*v.ε,['{E} / {ε}','{ε} / {E}']],ε:['{σ} / {E}',v=>v.σ/v.E,['{E} / {σ}','{σ} · {E}']],E:['{σ} / {ε}',v=>v.σ/v.ε,['{ε} / {σ}','{σ} · {ε}']]}},
+{id:'dl',g:'F4',name:'Längenänderung durch Kraft',eq:'{ΔL} = {F} · {L_0} / ({E} · {S})',
+ v:{ΔL:['Längenänderung','mm'],F:['Kraft','N'],L_0:['Ausgangslänge','mm'],E:['Elastizitätsmodul','N/mm²'],S:['Querschnitt','mm²']},
+ gen(){const F=r(5000,100000,0),L_0=r(500,6000,0),E=210000,S=r(100,1500,0);return{F,L_0,E,S,ΔL:F*L_0/(E*S)}},
+ s:{ΔL:['{F} · {L_0} / ({E} · {S})',v=>v.F*v.L_0/(v.E*v.S),['{F} · {E} / ({L_0} · {S})','{F} · {L_0} · {E} / {S}']],
+    F:['{ΔL} · {E} · {S} / {L_0}',v=>v.ΔL*v.E*v.S/v.L_0,['{ΔL} · {L_0} / ({E} · {S})','{ΔL} · {E} / ({S} · {L_0})']],
+    S:['{F} · {L_0} / ({E} · {ΔL})',v=>v.F*v.L_0/(v.E*v.ΔL),['{ΔL} · {E} / ({F} · {L_0})','{F} · {E} / ({L_0} · {ΔL})']],
+    L_0:['{ΔL} · {E} · {S} / {F}',v=>v.ΔL*v.E*v.S/v.F,['{F} / ({ΔL} · {E} · {S})','{ΔL} · {F} / ({E} · {S})']]}},
+/* F5 */
+{id:'hebel',g:'F5',name:'Hebelgesetz',eq:'{F_1} · {l_1} = {F_2} · {l_2}',note:'Hebelarm = senkrechter Abstand zur Wirkungslinie.',
+ v:{F_1:['Kraft 1','N'],l_1:['Hebelarm 1','mm'],F_2:['Kraft 2','N'],l_2:['Hebelarm 2','mm']},
+ gen(){const F_2=r(50,2000,0),l_1=r(50,600,0),l_2=r(30,600,0);return{F_2,l_1,l_2,F_1:F_2*l_2/l_1}},
+ s:{F_1:['{F_2} · {l_2} / {l_1}',v=>v.F_2*v.l_2/v.l_1,['{F_2} · {l_1} / {l_2}','{l_1} · {l_2} / {F_2}']],F_2:['{F_1} · {l_1} / {l_2}',v=>v.F_1*v.l_1/v.l_2,['{F_1} · {l_2} / {l_1}','{l_1} · {l_2} / {F_1}']],
+    l_1:['{F_2} · {l_2} / {F_1}',v=>v.F_2*v.l_2/v.F_1,['{F_1} · {l_2} / {F_2}','{F_1} · {F_2} / {l_2}']],l_2:['{F_1} · {l_1} / {F_2}',v=>v.F_1*v.l_1/v.F_2,['{F_2} · {l_1} / {F_1}','{F_1} · {F_2} / {l_1}']]}},
+{id:'moment',g:'F5',name:'Drehmoment',eq:'{M} = {F} · {l}',
+ v:{M:['Moment','N·m'],F:['Kraft','N'],l:['Hebelarm','m']},
+ gen(){const F=r(20,5000,0),l=r(0.05,3,2);return{F,l,M:F*l}},
+ s:{M:['{F} · {l}',v=>v.F*v.l,['{F} / {l}','{l} / {F}']],F:['{M} / {l}',v=>v.M/v.l,['{M} · {l}','{l} / {M}']],l:['{M} / {F}',v=>v.M/v.F,['{F} / {M}','{M} · {F}']]}},
+{id:'kolben',g:'F5',name:'Kolbenkraft',eq:'{F} = {p} · {A}',note:'1 bar = 10 N/cm². p in N/cm² und A in cm² → F in N.',
+ v:{F:['Kraft','N'],p:['Druck','N/cm²'],A:['Kolbenfläche','cm²']},
+ gen(){const p=pick([40,60,80,100,160]),A=r(3,80,2);return{p,A,F:p*A}},
+ s:{F:['{p} · {A}',v=>v.p*v.A,['{p} / {A}','{A} / {p}']],p:['{F} / {A}',v=>v.F/v.A,['{F} · {A}','{A} / {F}']],A:['{F} / {p}',v=>v.F/v.p,['{p} / {F}','{F} · {p}']]}},
+/* F6 */
+{id:'hang',g:'F6',name:'Hangabtriebskraft',eq:'{F_H} = {F_G} · sin {α}',note:'sin = längs der Ebene. Taschenrechner auf DEG.',
+ v:{F_H:['Hangabtriebskraft','N'],F_G:['Gewichtskraft','N'],α:['Neigungswinkel','°']},
+ gen(){const F_G=r(500,20000,0),α=r(2,30,1);return{F_G,α,F_H:F_G*sinD(α)}},
+ s:{F_H:['{F_G} · sin {α}',v=>v.F_G*sinD(v.α),['{F_G} · cos {α}','{F_G} / sin {α}']],F_G:['{F_H} / sin {α}',v=>v.F_H/sinD(v.α),['{F_H} · sin {α}','{F_H} / cos {α}']],
+    α:['arcsin({F_H} / {F_G})',v=>asinD(v.F_H/v.F_G),['arccos({F_H} / {F_G})','arcsin({F_G} / {F_H})']]}},
+{id:'normal',g:'F6',name:'Normalkraft',eq:'{F_N} = {F_G} · cos {α}',note:'cos = senkrecht zur Ebene.',
+ v:{F_N:['Normalkraft','N'],F_G:['Gewichtskraft','N'],α:['Neigungswinkel','°']},
+ gen(){const F_G=r(500,20000,0),α=r(2,30,1);return{F_G,α,F_N:F_G*cosD(α)}},
+ s:{F_N:['{F_G} · cos {α}',v=>v.F_G*cosD(v.α),['{F_G} · sin {α}','{F_G} / cos {α}']],F_G:['{F_N} / cos {α}',v=>v.F_N/cosD(v.α),['{F_N} · cos {α}','{F_N} / sin {α}']],
+    α:['arccos({F_N} / {F_G})',v=>acosD(v.F_N/v.F_G),['arcsin({F_N} / {F_G})','arccos({F_G} / {F_N})']]}},
+{id:'reib',g:'F6',name:'Reibkraft',eq:'{F_R} = {μ} · {F_N}',note:'µ steht in der Formelsammlung.',
+ v:{F_R:['Reibkraft','N'],μ:['Reibzahl',''],F_N:['Normalkraft','N']},
+ gen(){const μ=pick([0.02,0.05,0.1,0.15,0.2,0.6]),F_N=r(200,20000,0);return{μ,F_N,F_R:μ*F_N}},
+ s:{F_R:['{μ} · {F_N}',v=>v.μ*v.F_N,['{F_N} / {μ}','{μ} / {F_N}']],μ:['{F_R} / {F_N}',v=>v.F_R/v.F_N,['{F_N} / {F_R}','{F_R} · {F_N}']],F_N:['{F_R} / {μ}',v=>v.F_R/v.μ,['{F_R} · {μ}','{μ} / {F_R}']]}},
+{id:'zug',g:'F6',name:'Zugkraft bergauf',eq:'{F_Z} = {F_H} + {F_R}',note:'Abwärts wirkt die Reibung der Bewegung entgegen.',
+ v:{F_Z:['Zugkraft','N'],F_H:['Hangabtriebskraft','N'],F_R:['Reibkraft','N']},
+ gen(){const F_H=r(100,5000,0),F_R=r(20,2000,0);return{F_H,F_R,F_Z:F_H+F_R}},
+ s:{F_Z:['{F_H} + {F_R}',v=>v.F_H+v.F_R,['{F_H} − {F_R}','{F_H} · {F_R}']],F_R:['{F_Z} − {F_H}',v=>v.F_Z-v.F_H,['{F_H} − {F_Z}','{F_Z} + {F_H}']],F_H:['{F_Z} − {F_R}',v=>v.F_Z-v.F_R,['{F_R} − {F_Z}','{F_Z} + {F_R}']]}},
+{id:'rutsch',g:'F6',name:'Rutschgrenze',eq:'tan {α} = {μ}',note:'Die Masse kürzt sich heraus.',
+ v:{α:['Grenzwinkel','°'],μ:['Haftreibungszahl','']},
+ gen(){const μ=pick([0.1,0.15,0.2,0.3,0.4,0.6]);return{μ,α:atanD(μ)}},
+ s:{α:['arctan {μ}',v=>atanD(v.μ),['tan {μ}','arcsin {μ}']],μ:['tan {α}',v=>tanD(v.α),['arctan {α}','sin {α}']]}},
+{id:'steig',g:'F6',name:'Steigung in Prozent',eq:'tan {α} = {p} / 100',note:'15 % → tan α = 0,15 → α = 8,53°.',
+ v:{α:['Steigungswinkel','°'],p:['Steigung','%']},
+ gen(){const p=pick([3,5,8,10,12,15,20]);return{p,α:atanD(p/100)}},
+ s:{α:['arctan({p} / 100)',v=>atanD(v.p/100),['arctan {p}','tan({p} / 100)']],p:['100 · tan {α}',v=>100*tanD(v.α),['tan {α} / 100','100 · arctan {α}']]}},
+/* K1 */
+{id:'vst',g:'K1',name:'Geschwindigkeit',eq:'{v} = {s} / {t}',note:'km/h ÷ 3,6 = m/s.',
+ v:{v:['Geschwindigkeit','m/s'],s:['Weg','m'],t:['Zeit','s']},
+ gen(){const v=r(1,40,1),t=r(2,120,0);return{v,t,s:v*t}},
+ s:{v:['{s} / {t}',v=>v.s/v.t,['{t} / {s}','{s} · {t}']],s:['{v} · {t}',v=>v.v*v.t,['{v} / {t}','{t} / {v}']],t:['{s} / {v}',v=>v.s/v.v,['{v} / {s}','{s} · {v}']]}},
+{id:'acc',g:'K1',name:'Beschleunigung / Verzögerung',eq:'{a} = {Δv} / {t}',
+ v:{a:['Beschleunigung','m/s²'],Δv:['Geschwindigkeitsänderung','m/s'],t:['Zeit','s']},
+ gen(){const Δv=pick([8.33,11.11,13.89,20,25,27.78]),t=r(2,12,1);return{Δv,t,a:Δv/t}},
+ s:{a:['{Δv} / {t}',v=>v.Δv/v.t,['{t} / {Δv}','{Δv} · {t}']],Δv:['{a} · {t}',v=>v.a*v.t,['{a} / {t}','{t} / {a}']],t:['{Δv} / {a}',v=>v.Δv/v.a,['{a} / {Δv}','{Δv} · {a}']]}},
+{id:'sat',g:'K1',name:'Weg aus dem Stillstand',eq:'{s} = ½ · {a} · {t}²',note:'Nur wenn die Anfangsgeschwindigkeit null ist.',
+ v:{s:['Weg','m'],a:['Beschleunigung','m/s²'],t:['Zeit','s']},
+ gen(){const a=r(0.5,6,2),t=r(2,15,1);return{a,t,s:0.5*a*t*t}},
+ s:{s:['½ · {a} · {t}²',v=>0.5*v.a*v.t**2,['{a} · {t}²','½ · {a} · {t}']],a:['2 · {s} / {t}²',v=>2*v.s/v.t**2,['{s} / (2 · {t}²)','2 · {s} / {t}']],t:['√(2 · {s} / {a})',v=>Math.sqrt(2*v.s/v.a),['2 · {s} / {a}','√({s} / (2 · {a}))']]}},
+{id:'brems',g:'K1',name:'Bremsweg',eq:'{s} = {v}² / (2 · {a})',
+ v:{s:['Bremsweg','m'],v:['Geschwindigkeit','m/s'],a:['Verzögerung','m/s²']},
+ gen(){const v=pick([8.33,11.11,13.89,16.67,20,25]),a=r(3,9,2);return{v,a,s:v*v/(2*a)}},
+ s:{s:['{v}² / (2 · {a})',v=>v.v**2/(2*v.a),['{v} / (2 · {a})','2 · {v}² / {a}']],v:['√(2 · {a} · {s})',v=>Math.sqrt(2*v.a*v.s),['2 · {a} · {s}','√({a} · {s} / 2)']],a:['{v}² / (2 · {s})',v=>v.v**2/(2*v.s),['2 · {s} / {v}²','{v} / (2 · {s})']]}},
+{id:'bremst',g:'K1',name:'Bremsweg mit Bremszeit',eq:'{s} = ½ · {v} · {t}',
+ v:{s:['Bremsweg','m'],v:['Anfangsgeschwindigkeit','m/s'],t:['Bremszeit','s']},
+ gen(){const v=pick([8.33,11.11,13.89,20,25]),t=r(2,8,1);return{v,t,s:0.5*v*t}},
+ s:{s:['½ · {v} · {t}',v=>0.5*v.v*v.t,['{v} · {t}','½ · {v} · {t}²']],v:['2 · {s} / {t}',v=>2*v.s/v.t,['{s} / (2 · {t})','{s} / {t}']],t:['2 · {s} / {v}',v=>2*v.s/v.v,['{s} / (2 · {v})','{s} / {v}']]}},
+{id:'reak',g:'K1',name:'Reaktionsweg',eq:'{s_R} = {v} · {t_R}',note:'t_R meist 1 s.',
+ v:{s_R:['Reaktionsweg','m'],v:['Geschwindigkeit','m/s'],t_R:['Reaktionszeit','s']},
+ gen(){const v=pick([8.33,11.11,13.89,20,25,33.33]),t_R=pick([0.7,1,1,1.5]);return{v,t_R,s_R:v*t_R}},
+ s:{s_R:['{v} · {t_R}',v=>v.v*v.t_R,['{v} / {t_R}','{t_R} / {v}']],v:['{s_R} / {t_R}',v=>v.s_R/v.t_R,['{s_R} · {t_R}','{t_R} / {s_R}']],t_R:['{s_R} / {v}',v=>v.s_R/v.v,['{v} / {s_R}','{s_R} · {v}']]}},
+/* K2 */
+{id:'ekin',g:'K2',name:'Kinetische Energie',eq:'{E_kin} = ½ · {m} · {v}²',
+ v:{E_kin:['Bewegungsenergie','J'],m:['Masse','kg'],v:['Geschwindigkeit','m/s']},
+ gen(){const m=r(1,2000,0),v=r(1,35,1);return{m,v,E_kin:0.5*m*v*v}},
+ s:{E_kin:['½ · {m} · {v}²',v=>0.5*v.m*v.v**2,['{m} · {v}²','½ · {m} · {v}']],m:['2 · {E_kin} / {v}²',v=>2*v.E_kin/v.v**2,['{E_kin} / (2 · {v}²)','2 · {E_kin} / {v}']],v:['√(2 · {E_kin} / {m})',v=>Math.sqrt(2*v.E_kin/v.m),['2 · {E_kin} / {m}','√({E_kin} / (2 · {m}))']]}},
+{id:'epot',g:'K2',name:'Potenzielle Energie',eq:'{E_pot} = {m} · {g} · {h}',
+ v:{E_pot:['Lageenergie','J'],m:['Masse','kg'],g:['Erdbeschleunigung','m/s²'],h:['Höhe','m']},
+ gen(){const m=r(1,2000,0),h=r(1,100,1);return{m,g:9.81,h,E_pot:m*9.81*h}},
+ s:{E_pot:['{m} · {g} · {h}',v=>v.m*v.g*v.h,['{m} · {h} / {g}','½ · {m} · {g} · {h}']],m:['{E_pot} / ({g} · {h})',v=>v.E_pot/(v.g*v.h),['{E_pot} · {g} · {h}','{g} · {h} / {E_pot}']],h:['{E_pot} / ({m} · {g})',v=>v.E_pot/(v.m*v.g),['{E_pot} · {m} · {g}','{m} · {g} / {E_pot}']]}},
+{id:'fall',g:'K2',name:'Freier Fall',eq:'{v} = √(2 · {g} · {h})',note:'Die Masse kürzt sich raus.',
+ v:{v:['Aufprallgeschwindigkeit','m/s'],g:['Erdbeschleunigung','m/s²'],h:['Fallhöhe','m']},
+ gen(){const h=r(1,80,1);return{g:9.81,h,v:Math.sqrt(2*9.81*h)}},
+ s:{v:['√(2 · {g} · {h})',v=>Math.sqrt(2*v.g*v.h),['2 · {g} · {h}','√({g} · {h})']],h:['{v}² / (2 · {g})',v=>v.v**2/(2*v.g),['{v} / (2 · {g})','2 · {g} / {v}²']]}},
+{id:'feder',g:'K2',name:'Federenergie',eq:'{E_F} = ½ · {R} · {s}²',
+ v:{E_F:['Federenergie','J'],R:['Federrate','N/m'],s:['Federweg','m']},
+ gen(){const R=r(500,50000,0),s=r(0.01,0.3,3);return{R,s,E_F:0.5*R*s*s}},
+ s:{E_F:['½ · {R} · {s}²',v=>0.5*v.R*v.s**2,['{R} · {s}²','½ · {R} · {s}']],R:['2 · {E_F} / {s}²',v=>2*v.E_F/v.s**2,['{E_F} / (2 · {s}²)','2 · {E_F} / {s}']],s:['√(2 · {E_F} / {R})',v=>Math.sqrt(2*v.E_F/v.R),['2 · {E_F} / {R}','√({E_F} / (2 · {R}))']]}},
+/* K3 */
+{id:'omega',g:'K3',name:'Winkelgeschwindigkeit',eq:'{ω} = 2 · π · {n}',note:'n in 1/s: min⁻¹ ÷ 60.',
+ v:{ω:['Winkelgeschwindigkeit','1/s'],n:['Drehzahl','1/s']},
+ gen(){const n=r(1,50,2);return{n,ω:2*Math.PI*n}},
+ s:{ω:['2 · π · {n}',v=>2*Math.PI*v.n,['π · {n}','2 · π / {n}']],n:['{ω} / (2 · π)',v=>v.ω/(2*Math.PI),['{ω} · 2 · π','2 · π / {ω}']]}},
+{id:'vwr',g:'K3',name:'Umfangsgeschwindigkeit',eq:'{v} = {ω} · {r}',
+ v:{v:['Umfangsgeschwindigkeit','m/s'],ω:['Winkelgeschwindigkeit','1/s'],r:['Radius','m']},
+ gen(){const ω=r(5,300,1),r_=r(0.05,1,2);return{ω,r:r_,v:ω*r_}},
+ s:{v:['{ω} · {r}',v=>v.ω*v.r,['{ω} / {r}','{r} / {ω}']],ω:['{v} / {r}',v=>v.v/v.r,['{v} · {r}','{r} / {v}']],r:['{v} / {ω}',v=>v.v/v.ω,['{ω} / {v}','{v} · {ω}']]}},
+{id:'mpw',g:'K3',name:'Drehmoment aus der Leistung',eq:'{M} = {P} / {ω}',
+ v:{M:['Drehmoment','N·m'],P:['Leistung','W'],ω:['Winkelgeschwindigkeit','1/s']},
+ gen(){const P=r(500,30000,0),ω=r(50,320,1);return{P,ω,M:P/ω}},
+ s:{M:['{P} / {ω}',v=>v.P/v.ω,['{P} · {ω}','{ω} / {P}']],P:['{M} · {ω}',v=>v.M*v.ω,['{M} / {ω}','{ω} / {M}']],ω:['{P} / {M}',v=>v.P/v.M,['{M} / {P}','{P} · {M}']]}},
+{id:'flieh',g:'K3',name:'Fliehkraft',eq:'{F_z} = {m} · {v}² / {r}',
+ v:{F_z:['Fliehkraft','N'],m:['Masse','kg'],v:['Geschwindigkeit','m/s'],r:['Radius','m']},
+ gen(){const m=r(1,1500,0),v=r(2,30,1),r_=r(2,150,0);return{m,v,r:r_,F_z:m*v*v/r_}},
+ s:{F_z:['{m} · {v}² / {r}',v=>v.m*v.v**2/v.r,['{m} · {v} / {r}','{m} · {r} / {v}²']],m:['{F_z} · {r} / {v}²',v=>v.F_z*v.r/v.v**2,['{F_z} · {v}² / {r}','{F_z} / ({v}² · {r})']],
+    v:['√({F_z} · {r} / {m})',v=>Math.sqrt(v.F_z*v.r/v.m),['{F_z} · {r} / {m}','√({F_z} · {m} / {r})']],r:['{m} · {v}² / {F_z}',v=>v.m*v.v**2/v.F_z,['{F_z} / ({m} · {v}²)','{m} · {F_z} / {v}²']]}},
+{id:'kurve',g:'K3',name:'Grenzgeschwindigkeit in der Kurve',eq:'{v} = √({μ} · {g} · {r})',note:'Aus F_z = F_R: m · v²/r = µ · m · g. × 3,6 → km/h.',
+ v:{v:['Grenzgeschwindigkeit','m/s'],μ:['Haftreibungszahl',''],g:['Erdbeschleunigung','m/s²'],r:['Kurvenradius','m']},
+ gen(){const μ=pick([0.2,0.3,0.5,0.6,0.8,1.1]),r_=r(4,150,0);return{μ,g:9.81,r:r_,v:Math.sqrt(μ*9.81*r_)}},
+ s:{v:['√({μ} · {g} · {r})',v=>Math.sqrt(v.μ*v.g*v.r),['{μ} · {g} · {r}','√({g} · {r} / {μ})']],r:['{v}² / ({μ} · {g})',v=>v.v**2/(v.μ*v.g),['{v} / ({μ} · {g})','{μ} · {g} / {v}²']],μ:['{v}² / ({g} · {r})',v=>v.v**2/(v.g*v.r),['{v} / ({g} · {r})','{g} · {r} / {v}²']]}},
+/* K4 */
+{id:'wfs',g:'K4',name:'Mechanische Arbeit',eq:'{W} = {F} · {s}',
+ v:{W:['Arbeit','J'],F:['Kraft','N'],s:['Weg','m']},
+ gen(){const F=r(10,5000,0),s=r(0.5,500,1);return{F,s,W:F*s}},
+ s:{W:['{F} · {s}',v=>v.F*v.s,['{F} / {s}','{s} / {F}']],F:['{W} / {s}',v=>v.W/v.s,['{W} · {s}','{s} / {W}']],s:['{W} / {F}',v=>v.W/v.F,['{F} / {W}','{W} · {F}']]}},
+{id:'pwt',g:'K4',name:'Leistung aus Arbeit und Zeit',eq:'{P} = {W} / {t}',note:'t in Sekunden.',
+ v:{P:['Leistung','W'],W:['Arbeit','J'],t:['Zeit','s']},
+ gen(){const P=r(50,10000,0),t=r(5,600,0);return{P,t,W:P*t}},
+ s:{P:['{W} / {t}',v=>v.W/v.t,['{W} · {t}','{t} / {W}']],W:['{P} · {t}',v=>v.P*v.t,['{P} / {t}','{t} / {P}']],t:['{W} / {P}',v=>v.W/v.P,['{P} / {W}','{W} · {P}']]}},
+{id:'pfv',g:'K4',name:'Leistung aus Kraft und Geschwindigkeit',eq:'{P} = {F} · {v}',
+ v:{P:['Leistung','W'],F:['Kraft','N'],v:['Geschwindigkeit','m/s']},
+ gen(){const F=r(100,20000,0),v=r(0.2,30,2);return{F,v,P:F*v}},
+ s:{P:['{F} · {v}',v=>v.F*v.v,['{F} / {v}','{v} / {F}']],F:['{P} / {v}',v=>v.P/v.v,['{P} · {v}','{v} / {P}']],v:['{P} / {F}',v=>v.P/v.F,['{F} / {P}','{P} · {F}']]}},
+{id:'pzu',g:'K4',name:'Zugeführte Leistung über die η-Kette',eq:'{P_zu} = {P_ab} / ({η_1} · {η_2})',
+ v:{P_zu:['zugeführte Leistung','W'],P_ab:['abgegebene Leistung','W'],η_1:['Wirkungsgrad 1',''],η_2:['Wirkungsgrad 2','']},
+ gen(){const P_ab=r(200,20000,0),a=r(0.7,0.95,2),b=r(0.6,0.95,2);return{P_ab,η_1:a,η_2:b,P_zu:P_ab/(a*b)}},
+ s:{P_zu:['{P_ab} / ({η_1} · {η_2})',v=>v.P_ab/(v.η_1*v.η_2),['{P_ab} · {η_1} · {η_2}','{P_ab} / ({η_1} + {η_2})']],P_ab:['{P_zu} · {η_1} · {η_2}',v=>v.P_zu*v.η_1*v.η_2,['{P_zu} / ({η_1} · {η_2})','{η_1} · {η_2} / {P_zu}']],
+    η_2:['{P_ab} / ({P_zu} · {η_1})',v=>v.P_ab/(v.P_zu*v.η_1),['{P_zu} / ({P_ab} · {η_1})','{P_ab} · {η_1} / {P_zu}']]}},
+/* W1 */
+{id:'waerme2',g:'W1',name:'Wärmemenge',eq:'{Q} = {m} · {c} · {ΔT}',note:'1 l Wasser ≈ 1 kg. Wasser 4,18 · Stahl 0,46 · Kupfer 0,39 · Benzin 2,02 kJ/(kg·K).',
+ v:{Q:['Wärmemenge','kJ'],m:['Masse','kg'],c:['spezifische Wärmekapazität','kJ/(kg·K)'],ΔT:['Temperaturänderung','K']},
+ gen(){const m=r(0.5,6500,1),c=pick([4.18,4.18,0.46,0.39,2.02]),ΔT=r(5,500,0);return{m,c,ΔT,Q:m*c*ΔT}},
+ s:{Q:['{m} · {c} · {ΔT}',v=>v.m*v.c*v.ΔT,['{m} · {c} / {ΔT}','{m} + {c} · {ΔT}']],m:['{Q} / ({c} · {ΔT})',v=>v.Q/(v.c*v.ΔT),['{Q} · {c} / {ΔT}','{c} · {ΔT} / {Q}']],
+    c:['{Q} / ({m} · {ΔT})',v=>v.Q/(v.m*v.ΔT),['{Q} · {m} / {ΔT}','{m} · {ΔT} / {Q}']],ΔT:['{Q} / ({m} · {c})',v=>v.Q/(v.m*v.c),['{Q} · {m} / {c}','{m} · {c} / {Q}']]}},
+{id:'tzeit',g:'W1',name:'Erhitzungszeit',eq:'{t} = {Q} / ({η} · {P})',note:'Q in kJ und P in kW → t in s. Danach in min und s zerlegen.',
+ v:{t:['Zeit','s'],Q:['Nutzwärme','kJ'],η:['Wirkungsgrad',''],P:['Leistung','kW']},
+ gen(){const Q=r(100,2000,0),η=pick([0.7,0.8,0.85,0.9]),P=pick([1.6,1.9,2,2.2,3]);return{Q,η,P,t:Q/(η*P)}},
+ s:{t:['{Q} / ({η} · {P})',v=>v.Q/(v.η*v.P),['{Q} · {η} / {P}','{η} · {P} / {Q}']],Q:['{t} · {η} · {P}',v=>v.t*v.η*v.P,['{t} / ({η} · {P})','{t} · {P} / {η}']],
+    P:['{Q} / ({η} · {t})',v=>v.Q/(v.η*v.t),['{Q} · {η} / {t}','{Q} · {t} / {η}']],η:['{Q} / ({P} · {t})',v=>v.Q/(v.P*v.t),['{P} · {t} / {Q}','{Q} · {P} / {t}']]}},
+{id:'verd',g:'W1',name:'Verdampfungswärme',eq:'{Q} = {m} · {r}',note:'Wasser: r = 2250 kJ/kg (22,5 · 10⁵ J/kg). Kommt zu m · c · ΔT dazu.',
+ v:{Q:['Wärmemenge','kJ'],m:['Masse','kg'],r:['Verdampfungswärme','kJ/kg']},
+ gen(){const m=r(0.2,20,2),r_=2250;return{m,r:r_,Q:m*r_}},
+ s:{Q:['{m} · {r}',v=>v.m*v.r,['{m} / {r}','{r} / {m}']],m:['{Q} / {r}',v=>v.Q/v.r,['{Q} · {r}','{r} / {Q}']]}},
+/* W2 */
+{id:'heiz',g:'W2',name:'Wärme aus Brennstoff',eq:'{Q} = {m} · {H_i}',note:'Gas: Q = V · H_i mit H_i in kJ/m³.',
+ v:{Q:['Wärmemenge','kJ'],m:['Brennstoffmasse','kg'],H_i:['Heizwert','kJ/kg']},
+ gen(){const m=r(0.2,200,2),H_i=pick([42000,42000,43000]);return{m,H_i,Q:m*H_i}},
+ s:{Q:['{m} · {H_i}',v=>v.m*v.H_i,['{m} / {H_i}','{H_i} / {m}']],m:['{Q} / {H_i}',v=>v.Q/v.H_i,['{Q} · {H_i}','{H_i} / {Q}']],H_i:['{Q} / {m}',v=>v.Q/v.m,['{m} / {Q}','{Q} · {m}']]}},
+{id:'bedarf',g:'W2',name:'Brennstoffbedarf',eq:'{m} = {Q_nutz} / ({H_i} · {η})',note:'η gehört unter den Bruchstrich.',
+ v:{m:['Brennstoffmasse','kg'],Q_nutz:['Nutzwärme','kJ'],H_i:['Heizwert','kJ/kg'],η:['Wirkungsgrad','']},
+ gen(){const Q=r(10000,800000,0),H_i=pick([42000,43000]),η=pick([0.6,0.7,0.8,0.85]);return{Q_nutz:Q,H_i,η,m:Q/(H_i*η)}},
+ s:{m:['{Q_nutz} / ({H_i} · {η})',v=>v.Q_nutz/(v.H_i*v.η),['{Q_nutz} · {η} / {H_i}','{Q_nutz} / {H_i} · {η}']],Q_nutz:['{m} · {H_i} · {η}',v=>v.m*v.H_i*v.η,['{m} · {H_i} / {η}','{m} / ({H_i} · {η})']],
+    η:['{Q_nutz} / ({m} · {H_i})',v=>v.Q_nutz/(v.m*v.H_i),['{m} · {H_i} / {Q_nutz}','{Q_nutz} · {m} / {H_i}']]}},
+{id:'etaw',g:'W2',name:'Wirkungsgrad aus Arbeit und Wärme',eq:'{η} = {W_ab} / {Q_zu}',note:'Beide in derselben Einheit, z. B. kJ.',
+ v:{η:['Wirkungsgrad',''],W_ab:['abgegebene Arbeit','kJ'],Q_zu:['zugeführte Wärme','kJ']},
+ gen(){const Q=r(10000,900000,0),η=r(0.2,0.45,3);return{Q_zu:Q,η,W_ab:Q*η}},
+ s:{η:['{W_ab} / {Q_zu}',v=>v.W_ab/v.Q_zu,['{Q_zu} / {W_ab}','{W_ab} · {Q_zu}']],W_ab:['{η} · {Q_zu}',v=>v.η*v.Q_zu,['{Q_zu} / {η}','{η} / {Q_zu}']],Q_zu:['{W_ab} / {η}',v=>v.W_ab/v.η,['{W_ab} · {η}','{η} / {W_ab}']]}},
+/* W3 */
+{id:'dlt',g:'W3',name:'Längenausdehnung',eq:'{ΔL} = {L_0} · {α} · {ΔT}',note:'Stahl 0,000012 · Alu 0,000024 1/K.',
+ v:{ΔL:['Längenänderung','mm'],L_0:['Ausgangslänge','mm'],α:['Längenausdehnungskoeffizient','1/K'],ΔT:['Temperaturänderung','K']},
+ gen(){const L_0=r(1000,50000,0),α=pick([0.000012,0.000024]),ΔT=r(10,80,0);return{L_0,α,ΔT,ΔL:L_0*α*ΔT}},
+ s:{ΔL:['{L_0} · {α} · {ΔT}',v=>v.L_0*v.α*v.ΔT,['{L_0} · {α} / {ΔT}','{L_0} + {α} · {ΔT}']],L_0:['{ΔL} / ({α} · {ΔT})',v=>v.ΔL/(v.α*v.ΔT),['{ΔL} · {α} · {ΔT}','{α} · {ΔT} / {ΔL}']],
+    ΔT:['{ΔL} / ({L_0} · {α})',v=>v.ΔL/(v.L_0*v.α),['{ΔL} · {L_0} / {α}','{L_0} · {α} / {ΔL}']],α:['{ΔL} / ({L_0} · {ΔT})',v=>v.ΔL/(v.L_0*v.ΔT),['{L_0} · {ΔT} / {ΔL}','{ΔL} · {L_0} / {ΔT}']]}},
+{id:'dvt',g:'W3',name:'Volumenausdehnung einer Flüssigkeit',eq:'{ΔV} = {V_0} · {α_V} · {ΔT}',note:'Benzin 0,0011 · Wasser 0,0002 1/K.',
+ v:{ΔV:['Volumenänderung','l'],V_0:['Ausgangsvolumen','l'],α_V:['Volumenausdehnungskoeffizient','1/K'],ΔT:['Temperaturänderung','K']},
+ gen(){const V_0=r(10,1000,0),α_V=pick([0.0011,0.0002]),ΔT=r(5,40,0);return{V_0,α_V,ΔT,ΔV:V_0*α_V*ΔT}},
+ s:{ΔV:['{V_0} · {α_V} · {ΔT}',v=>v.V_0*v.α_V*v.ΔT,['{V_0} · {α_V} / {ΔT}','{V_0} + {α_V} · {ΔT}']],V_0:['{ΔV} / ({α_V} · {ΔT})',v=>v.ΔV/(v.α_V*v.ΔT),['{ΔV} · {α_V} · {ΔT}','{α_V} · {ΔT} / {ΔV}']],
+    ΔT:['{ΔV} / ({V_0} · {α_V})',v=>v.ΔV/(v.V_0*v.α_V),['{ΔV} · {V_0} / {α_V}','{V_0} · {α_V} / {ΔV}']]}},
+{id:'dvf',g:'W3',name:'Volumenausdehnung eines festen Körpers',eq:'{ΔV} = {V_0} · 3 · {α} · {ΔT}',note:'α_V = 3 · α_L.',
+ v:{ΔV:['Volumenänderung','dm³'],V_0:['Ausgangsvolumen','dm³'],α:['Längenausdehnungskoeffizient','1/K'],ΔT:['Temperaturänderung','K']},
+ gen(){const V_0=r(1,500,1),α=pick([0.000012,0.000024]),ΔT=r(10,200,0);return{V_0,α,ΔT,ΔV:V_0*3*α*ΔT}},
+ s:{ΔV:['{V_0} · 3 · {α} · {ΔT}',v=>v.V_0*3*v.α*v.ΔT,['{V_0} · {α} · {ΔT}','3 · {V_0} · {α}']],V_0:['{ΔV} / (3 · {α} · {ΔT})',v=>v.ΔV/(3*v.α*v.ΔT),['{ΔV} / ({α} · {ΔT})','3 · {ΔV} / ({α} · {ΔT})']],
+    ΔT:['{ΔV} / ({V_0} · 3 · {α})',v=>v.ΔV/(v.V_0*3*v.α),['{ΔV} / ({V_0} · {α})','3 · {ΔV} / ({V_0} · {α})']]}},
+/* W4 */
+{id:'boyle',g:'W4',name:'Boyle-Mariotte',sub:'Temperatur bleibt gleich',eq:'{p_1} · {V_1} = {p_2} · {V_2}',note:'Absolutdruck = Überdruck + 1 bar.',
+ v:{p_1:['Druck vorher (absolut)','bar'],V_1:['Volumen vorher','l'],p_2:['Druck nachher (absolut)','bar'],V_2:['Volumen nachher','l']},
+ gen(){const p_1=r(1,10,1),V_1=r(1,100,1),V_2=r(0.5,100,1);return{p_1,V_1,V_2,p_2:p_1*V_1/V_2}},
+ s:{p_2:['{p_1} · {V_1} / {V_2}',v=>v.p_1*v.V_1/v.V_2,['{p_1} · {V_2} / {V_1}','{V_1} · {V_2} / {p_1}']],V_2:['{p_1} · {V_1} / {p_2}',v=>v.p_1*v.V_1/v.p_2,['{p_2} · {V_1} / {p_1}','{p_1} · {p_2} / {V_1}']],
+    V_1:['{p_2} · {V_2} / {p_1}',v=>v.p_2*v.V_2/v.p_1,['{p_1} · {V_2} / {p_2}','{p_1} · {p_2} / {V_2}']],p_1:['{p_2} · {V_2} / {V_1}',v=>v.p_2*v.V_2/v.V_1,['{p_2} · {V_1} / {V_2}','{V_1} · {V_2} / {p_2}']]}},
+{id:'gas',g:'W4',name:'Allgemeine Gasgleichung',eq:'{p_1} · {V_1} / {T_1} = {p_2} · {V_2} / {T_2}',note:'T immer in Kelvin: T = ϑ + 273,15.',
+ v:{p_1:['Druck vorher','bar'],V_1:['Volumen vorher','l'],T_1:['Temperatur vorher','K'],p_2:['Druck nachher','bar'],V_2:['Volumen nachher','l'],T_2:['Temperatur nachher','K']},
+ gen(){const p_1=r(1,10,1),V_1=r(1,100,1),T_1=r(253,373,2),V_2=r(1,100,1),T_2=r(253,500,2);return{p_1,V_1,T_1,V_2,T_2,p_2:p_1*V_1*T_2/(T_1*V_2)}},
+ s:{p_2:['{p_1} · {V_1} · {T_2} / ({T_1} · {V_2})',v=>v.p_1*v.V_1*v.T_2/(v.T_1*v.V_2),['{p_1} · {V_1} · {T_1} / ({T_2} · {V_2})','{p_1} · {V_2} · {T_2} / ({T_1} · {V_1})']],
+    V_2:['{p_1} · {V_1} · {T_2} / ({T_1} · {p_2})',v=>v.p_1*v.V_1*v.T_2/(v.T_1*v.p_2),['{p_1} · {V_1} · {T_1} / ({T_2} · {p_2})','{p_2} · {V_1} · {T_2} / ({T_1} · {p_1})']],
+    T_2:['{p_2} · {V_2} · {T_1} / ({p_1} · {V_1})',v=>v.p_2*v.V_2*v.T_1/(v.p_1*v.V_1),['{p_1} · {V_1} · {T_1} / ({p_2} · {V_2})','{p_2} · {V_2} / ({p_1} · {V_1} · {T_1})']]}},
+{id:'kelvin',g:'W4',name:'Celsius in Kelvin',eq:'{T} = {ϑ} + 273,15',
+ v:{T:['Temperatur','K'],ϑ:['Temperatur','°C']},
+ gen(){const ϑ=r(-30,300,0);return{ϑ,T:ϑ+273.15}},
+ s:{T:['{ϑ} + 273,15',v=>v.ϑ+273.15,['{ϑ} − 273,15','273,15 − {ϑ}']],ϑ:['{T} − 273,15',v=>v.T-273.15,['{T} + 273,15','273,15 − {T}']]}},
+/* W5 */
+{id:'druck',g:'W5',name:'Druck',eq:'{p} = {F} / {A}',note:'1 bar = 10 N/cm² · 1 MPa = 1 N/mm² = 10 bar.',
+ v:{p:['Druck','N/cm²'],F:['Kraft','N'],A:['Fläche','cm²']},
+ gen(){const A=r(2,200,1),p=pick([40,60,80,100,160,200]);return{A,p,F:p*A}},
+ s:{p:['{F} / {A}',v=>v.F/v.A,['{A} / {F}','{F} · {A}']],F:['{p} · {A}',v=>v.p*v.A,['{p} / {A}','{A} / {p}']],A:['{F} / {p}',v=>v.F/v.p,['{p} / {F}','{F} · {p}']]}},
+{id:'ueber',g:'W5',name:'Hydraulische Kraftübersetzung',eq:'{F_2} = {F_1} · {A_2} / {A_1}',note:'Der Druck ist überall gleich: F₁/A₁ = F₂/A₂.',
+ v:{F_2:['Kraft am großen Kolben','N'],F_1:['Kraft am kleinen Kolben','N'],A_2:['große Kolbenfläche','cm²'],A_1:['kleine Kolbenfläche','cm²']},
+ gen(){const F_1=r(50,2000,0),A_1=r(1,20,2),A_2=r(20,500,1);return{F_1,A_1,A_2,F_2:F_1*A_2/A_1}},
+ s:{F_2:['{F_1} · {A_2} / {A_1}',v=>v.F_1*v.A_2/v.A_1,['{F_1} · {A_1} / {A_2}','{A_1} · {A_2} / {F_1}']],F_1:['{F_2} · {A_1} / {A_2}',v=>v.F_2*v.A_1/v.A_2,['{F_2} · {A_2} / {A_1}','{A_1} · {A_2} / {F_2}']],
+    A_2:['{F_2} · {A_1} / {F_1}',v=>v.F_2*v.A_1/v.F_1,['{F_1} · {A_1} / {F_2}','{F_1} · {F_2} / {A_1}']]}},
+{id:'qav',g:'W5',name:'Volumenstrom',eq:'{Q} = {A} · {v}',note:'1 l = 1000 cm³.',
+ v:{Q:['Volumenstrom','cm³/min'],A:['Fläche','cm²'],v:['Geschwindigkeit','cm/min']},
+ gen(){const A=r(2,80,2),v=r(50,1000,0);return{A,v,Q:A*v}},
+ s:{Q:['{A} · {v}',v=>v.A*v.v,['{A} / {v}','{v} / {A}']],A:['{Q} / {v}',v=>v.Q/v.v,['{Q} · {v}','{v} / {Q}']],v:['{Q} / {A}',v=>v.Q/v.A,['{A} / {Q}','{Q} · {A}']]}},
+{id:'konti',g:'W5',name:'Kontinuitätsgleichung',eq:'{A_1} · {v_1} = {A_2} · {v_2}',
+ v:{A_1:['Fläche 1','cm²'],v_1:['Geschwindigkeit 1','m/s'],A_2:['Fläche 2','cm²'],v_2:['Geschwindigkeit 2','m/s']},
+ gen(){const A_1=r(5,100,1),v_1=r(0.5,5,2),A_2=r(1,100,1);return{A_1,v_1,A_2,v_2:A_1*v_1/A_2}},
+ s:{v_2:['{A_1} · {v_1} / {A_2}',v=>v.A_1*v.v_1/v.A_2,['{A_2} · {v_1} / {A_1}','{A_1} · {A_2} / {v_1}']],A_2:['{A_1} · {v_1} / {v_2}',v=>v.A_1*v.v_1/v.v_2,['{A_1} · {v_2} / {v_1}','{v_1} · {v_2} / {A_1}']],
+    v_1:['{A_2} · {v_2} / {A_1}',v=>v.A_2*v.v_2/v.A_1,['{A_1} · {v_2} / {A_2}','{A_1} · {A_2} / {v_2}']]}},
+{id:'ring',g:'W5',name:'Kolbenringfläche',sub:'Einfahren beim Differentialzylinder',eq:'{A_R} = ({D}² − {d}²) · π / 4',
+ v:{A_R:['Ringfläche','cm²'],D:['Kolbendurchmesser','cm'],d:['Kolbenstangendurchmesser','cm']},
+ gen(){const D=r(3,20,1),d=r(0.3*D,0.7*D,1);return{D,d,A_R:(D*D-d*d)*Math.PI/4}},
+ s:{A_R:['({D}² − {d}²) · π / 4',v=>(v.D**2-v.d**2)*Math.PI/4,['({D} − {d})² · π / 4','{D}² · π / 4 − {d}²']],d:['√({D}² − 4 · {A_R} / π)',v=>Math.sqrt(v.D**2-4*v.A_R/Math.PI),['√({D}² + 4 · {A_R} / π)','{D} − 4 · {A_R} / π']],
+    D:['√(4 · {A_R} / π + {d}²)',v=>Math.sqrt(4*v.A_R/Math.PI+v.d**2),['√(4 · {A_R} / π − {d}²)','4 · {A_R} / π + {d}²']]}},
 ];
 
 /* ---------- Darstellung von Formeln ---------- */
@@ -601,6 +1068,7 @@ const num=(f,t,v)=>t.replace(/\{([^}]+)\}/g,(_,k)=>FG(v[k])+unit(f,k));
 const parseNum=s=>{s=String(s).trim().replace(/[−–]/g,'-').replace(/\s/g,'').replace(/[^\d,.\-+eE]/g,'');
   if(/,/.test(s)){s=s.replace(/\./g,'').replace(',','.')}return s===''?NaN:Number(s)};
 const near=(a,t,tol)=>isFinite(a)&&(tol!=null?Math.abs(a-t)<=tol:Math.abs(a-t)<=Math.max(Math.abs(t)*0.02,1e-9));
+
 
 /* ---------- Schwere Aufgaben (Rechenketten) ---------- */
 const P_=(q,u,a,steps,tol)=>({q,u,a,steps,tol});
@@ -798,10 +1266,325 @@ S6:[()=>{const k=pick([5,6,7]),n=k*k,xmin=r(860,880,0)/100,R=r(15,35,0)/100,xmax
   parts:[P_('Klassenanzahl <i>k</i>','',k,[`<i>k</i> = √<i>n</i> = √${n} = ${k}`],0.01),
    P_('Spannweite <i>R</i>','mm',Rc,[`<i>R</i> = ${F(xmax)} − ${F(xmin)} = ${F(Rc)} mm`],0.0005),
    P_('Klassenbreite <i>w</i> (ungerundet)','mm',w,[`<i>w</i> = <i>R</i> / <i>k</i> = ${F(Rc)} / ${k} = ${F(w)} mm → auf glatten Wert aufrunden, z. B. ${F(Math.ceil(w*100)/100)} mm`])]}}],
+C1:[()=>{const M={Magnesium:-2.36,Zink:-0.76,Eisen:-0.44,Nickel:-0.25,Zinn:-0.14,Kupfer:0.34};const ks=Object.keys(M);let a=pick(ks),b=pick(ks);while(a===b)b=pick(ks);
+  const e=M[a]>M[b]?a:b,u=e===a?b:a,U=M[e]-M[u];let c=pick(ks);while(c===a||c===b)c=pick(ks);const e2=M[c]>M[u]?c:u,u2=e2===c?u:c,U2=M[e2]-M[u2];
+  return{t:'Galvanisches Element',ref:'wie 2016 F A1c / 2018 F A1c',
+  text:`Normalpotenziale: Mg −2,36 V · Zn −0,76 V · Fe −0,44 V · Ni −0,25 V · Sn −0,14 V · Cu +0,34 V. Zwei Metalle berühren sich in einem Elektrolyt.`,
+  parts:[P_(`Spannung zwischen ${a} und ${b}`,'V',U,[`edler: ${e} (${F(M[e])} V), unedler: ${u} (${F(M[u])} V)`,`<i>U</i> = ${F(M[e])} V − (${F(M[u])} V) = ${F(U)} V`,`Pluspol: ${e} · Minuspol (löst sich auf): ${u}`]),
+   P_(`Spannung zwischen ${u} und ${c}`,'V',U2,[`edler: ${e2}, unedler: ${u2}`,`<i>U</i> = ${F(M[e2])} V − (${F(M[u2])} V) = ${F(U2)} V`])]}}],
+F1:[()=>{const l=pick([4,5,6]),Scm=pick([4.79,5.69,6.91,3.89]),ρ=pick([2.7,7.85]),F_=pick([24000,30000,36000,45000]),d=pick([13,17,21]),t=5;
+  const S=Scm*100,V=S/100*l*10/100,m=V*ρ,σ=F_/S,Sn=S-d*t,σn=F_/Sn;
+  return{t:'Winkelprofil mit Bohrung',ref:'🔁 W1 · wie 2023 H A3 / 2019 H A2 / 2009 H A5',
+  text:`Ein <b>${l} m</b> langes Winkelprofil (Schenkeldicke <b>5 mm</b>) hat den Querschnitt <b>S = ${F(Scm)} cm²</b> und die Dichte <b>ρ = ${F(ρ)} kg/dm³</b>. Zugkraft <b>F = ${F(F_)} N</b>. Später wird ein Loch mit <b>d = ${d} mm</b> gebohrt.`,
+  parts:[P_('Masse des Profils','kg',m,[`<i>V</i> = <i>S</i> · <i>l</i> = ${F(Scm/100)} dm² · ${l*10} dm = ${F(V)} dm³`,`<i>m</i> = <i>V</i> · <i>ρ</i> = ${F(V)} dm³ · ${F(ρ)} kg/dm³ = ${F(m)} kg`]),
+   P_('Zugspannung ohne Loch','N/mm²',σ,[`<i>S</i> = ${F(Scm)} cm² = ${F(S)} mm²`,`<i>σ</i><sub>z</sub> = <i>F</i> / <i>S</i> = ${F(F_)} N / ${F(S)} mm² = ${F(σ)} N/mm²`]),
+   P_('Restquerschnitt mit Loch','mm²',Sn,[`<i>S</i><sub>neu</sub> = <i>S</i> − <i>d</i> · <i>t</i> = ${F(S)} mm² − ${d} mm · 5 mm = ${F(Sn)} mm²`]),
+   P_('Zugspannung mit Loch','N/mm²',σn,[`<i>σ</i><sub>z,neu</sub> = ${F(F_)} N / ${F(Sn)} mm² = ${F(σn)} N/mm²`])]}},
+ ()=>{const Re=pick([225,355,590]),F_=pick([120,200,280])*1000;const σz=Re/3,S=F_/σz,a=Math.sqrt(S);
+  return{t:'Zugstange bei schwellender Belastung',ref:'🔁 W5 · wie 2021 H A5 / 2015 F A4',
+  text:`Eine Zugstange (<b>R<sub>e</sub> = ${Re} N/mm²</b>) wird mit <b>${F(F_/1000)} kN</b> schwellend belastet. Zulässig ist <b>⅓ · R<sub>e</sub></b>. Der Querschnitt soll quadratisch werden.`,
+  parts:[P_('zulässige Spannung','N/mm²',σz,[`<i>σ</i><sub>zul</sub> = ⅓ · ${Re} N/mm² = ${F(σz)} N/mm²`]),
+   P_('erforderlicher Querschnitt','mm²',S,[`<i>S</i><sub>erf</sub> = <i>F</i> / <i>σ</i><sub>zul</sub> = ${F(F_)} N / ${F(σz)} N/mm² = ${F(S)} mm²`]),
+   P_('Seitenlänge des Quadrats (vor dem Aufrunden)','mm',a,[`<i>S</i> = <i>a</i>² → <i>a</i> = √<i>S</i> = √${F(S)} mm² = ${F(a)} mm → aufrunden auf ${Math.ceil(a)} mm`])]}}],
+F2:[()=>{const D=r(40,120,0),s=pick([3,4,5,6]),F_=r(20,200,0)*1000;const d=D-2*s,S=Math.PI/4*(D*D-d*d),σ=F_/S;
+  return{t:'Rohr als Druckstütze',ref:'wie 2024 H A3 (Stützbock aus Rohr)',
+  text:`Ein Stahlrohr <b>Ø ${D} × ${s} mm</b> trägt eine Druckkraft von <b>${F(F_/1000)} kN</b>.`,
+  parts:[P_('Innendurchmesser','mm',d,[`<i>d</i> = <i>D</i> − 2 · <i>s</i> = ${D} − 2 · ${s} = ${d} mm`],0.01),
+   P_('Ringquerschnitt','mm²',S,[`<i>S</i> = π/4 · (<i>D</i>² − <i>d</i>²) = π/4 · (${D}² − ${d}²) = ${F(S)} mm²`]),
+   P_('Druckspannung','N/mm²',σ,[`<i>σ</i><sub>d</sub> = <i>F</i> / <i>S</i> = ${F(F_)} N / ${F(S)} mm² = ${F(σ)} N/mm²`])]}}],
+F3:[()=>{const a=r(20,80,0),b=r(15,60,0),d=r(6,14,0),t=pick([1.5,2,3]),τ=pick([210,240,320]);const U=2*(a+b)+Math.PI*d,S=U*t,F_=S*τ;
+  return{t:'Stanzen: Platte mit Loch',ref:'🔁 W2 · wie 2010 H A5 / 2013 F A5 / 2018 H A5',
+  text:`Aus <b>${F(t)} mm</b> dickem Blech wird eine Rechteckplatte <b>${a} × ${b} mm</b> mit einem Loch <b>Ø ${d} mm</b> in einem Arbeitsgang gestanzt. Scherfestigkeit <b>τ<sub>aB,max</sub> = ${τ} N/mm²</b>.`,
+  parts:[P_('Länge aller Schnittlinien <i>U</i>','mm',U,[`Außen: 2 · (${a} + ${b}) mm = ${2*(a+b)} mm`,`Loch: π · ${d} mm = ${F(Math.PI*d)} mm`,`<i>U</i> = ${F(U)} mm`]),
+   P_('Scherfläche <i>S</i>','mm²',S,[`<i>S</i> = <i>U</i> · <i>t</i> = ${F(U)} mm · ${F(t)} mm = ${F(S)} mm²`]),
+   P_('Schneidkraft','kN',F_/1000,[`<i>F</i> = <i>S</i> · <i>τ</i> = ${F(S)} mm² · ${τ} N/mm² = ${F(F_)} N = ${F(F_/1000)} kN`])]}},
+ ()=>{const F_=r(10,80,0)*1000,τ=pick([80,90,100,120]),d=pick([6,8,10,12]);const Se=F_/τ,SN=Math.PI*d*d/4,n=Se/SN;
+  return{t:'Wie viele Niete?',ref:'Nietverbindung (Lernkarte Block 2)',
+  text:`Eine einschnittige Nietverbindung überträgt <b>${F(F_/1000)} kN</b>. Zulässige Scherspannung <b>${τ} N/mm²</b>, Nietdurchmesser <b>${d} mm</b>.`,
+  parts:[P_('erforderliche Scherfläche','mm²',Se,[`<i>S</i><sub>erf</sub> = <i>F</i> / <i>τ</i><sub>zul</sub> = ${F(F_)} N / ${τ} N/mm² = ${F(Se)} mm²`]),
+   P_('Fläche eines Niets','mm²',SN,[`<i>S</i><sub>N</sub> = π · <i>d</i>² / 4 = π · ${d}² / 4 = ${F(SN)} mm²`]),
+   P_('Nietanzahl (aufgerundet)','',Math.ceil(n),[`<i>n</i> = ${F(Se)} / ${F(SN)} = ${F(n)} → aufrunden: ${Math.ceil(n)} Niete`],0.01)]}}],
+F4:[()=>{const F_=r(10,80,0)*1000,L=r(1,6,1),d=pick([10,12,16,20]),E=210000;const S=Math.PI*d*d/4,σ=F_/S,ε=σ/E,dL=ε*L*1000;
+  return{t:'Stahlstab wird gezogen',ref:'wie 2023 F A6a / 2024 H A3a',
+  text:`Ein Rundstab aus Stahl (<b>E = 210 000 N/mm²</b>), <b>d = ${d} mm</b>, <b>L₀ = ${F(L)} m</b>, wird mit <b>${F(F_/1000)} kN</b> gezogen.`,
+  parts:[P_('Querschnitt','mm²',S,[`<i>S</i> = π · ${d}² / 4 = ${F(S)} mm²`]),
+   P_('Zugspannung','N/mm²',σ,[`<i>σ</i> = <i>F</i> / <i>S</i> = ${F(F_)} N / ${F(S)} mm² = ${F(σ)} N/mm²`]),
+   P_('Dehnung ε','',ε,[`<i>ε</i> = <i>σ</i> / <i>E</i> = ${F(σ)} / 210 000 = ${F(ε)} (= ${F(ε*100)} %)`]),
+   P_('Längenänderung','mm',dL,[`Δ<i>L</i> = <i>ε</i> · <i>L</i><sub>0</sub> = ${F(ε)} · ${F(L*1000)} mm = ${F(dL)} mm`])]}}],
+F5:[()=>{const F1=r(100,600,0),l1=r(200,400,0),l2=r(40,90,0),d2=pick([20,25,32]);const F2=F1*l1/l2,A=Math.PI*d2*d2/400,p=F2/A;
+  return{t:'Pedal auf Hydraulikkolben',ref:'wie 2022 F A2 (Pedalkraft)',
+  text:`Am Pedal wirkt <b>F₁ = ${F1} N</b> am Hebelarm <b>l₁ = ${l1} mm</b>. Die Kolbenstange greift bei <b>l₂ = ${l2} mm</b> an. Der Kolben hat <b>d = ${d2} mm</b>.`,
+  parts:[P_('Kraft auf den Kolben <i>F</i><sub>2</sub>','N',F2,[`<i>F</i><sub>1</sub> · <i>l</i><sub>1</sub> = <i>F</i><sub>2</sub> · <i>l</i><sub>2</sub> → <i>F</i><sub>2</sub> = ${F1} N · ${l1} mm / ${l2} mm = ${F(F2)} N`]),
+   P_('Kolbenfläche','cm²',A,[`<i>A</i> = π · (${F(d2/10)} cm)² / 4 = ${F(A)} cm²`]),
+   P_('Druck im System','bar',p/10,[`<i>p</i> = <i>F</i> / <i>A</i> = ${F(F2)} N / ${F(A)} cm² = ${F(p)} N/cm² = ${F(p/10)} bar`])]}}],
+F6:[()=>{const m=r(200,3000,0),pp=pick([5,8,10,12,15]),μ=pick([0.05,0.1,0.15,0.2]);const α=atanD(pp/100),G=m*9.81,FH=G*sinD(α),FN=G*cosD(α),FR=μ*FN,FZ=FH+FR;
+  return{t:'Last die Rampe hinaufziehen',ref:'Schiefe Ebene (Lernkarte Block 2)',
+  text:`Eine Last mit <b>${m} kg</b> wird eine Rampe mit <b>${pp} % Steigung</b> hinaufgezogen. Reibzahl <b>µ = ${F(μ)}</b>.`,
+  parts:[P_('Steigungswinkel α','°',α,[`tan <i>α</i> = ${pp} / 100 → <i>α</i> = arctan ${F(pp/100)} = ${F(α)}°`]),
+   P_('Hangabtriebskraft','N',FH,[`<i>F</i><sub>G</sub> = ${m} kg · 9,81 m/s² = ${F(G)} N`,`<i>F</i><sub>H</sub> = <i>F</i><sub>G</sub> · sin <i>α</i> = ${F(FH)} N`]),
+   P_('Reibkraft','N',FR,[`<i>F</i><sub>N</sub> = <i>F</i><sub>G</sub> · cos <i>α</i> = ${F(FN)} N`,`<i>F</i><sub>R</sub> = <i>µ</i> · <i>F</i><sub>N</sub> = ${F(μ)} · ${F(FN)} N = ${F(FR)} N`]),
+   P_('Zugkraft bergauf','N',FZ,[`<i>F</i><sub>Z</sub> = <i>F</i><sub>H</sub> + <i>F</i><sub>R</sub> = ${F(FZ)} N`])]}},
+ ()=>{const μ=pick([0.3,0.4,0.5,0.6]),l1=r(200,500,0),l2=r(400,1000,0);const ar=atanD(μ),ak=atanD(l1/l2);
+  return{t:'Rutscht oder kippt die Kiste?',ref:'„rutscht oder kippt“ (Schrittfolge Block 2)',
+  text:`Eine Kiste steht auf einer Ladefläche, die langsam angehoben wird. Haftreibungszahl <b>µ₀ = ${F(μ)}</b>. Der Schwerpunkt liegt <b>${l1} mm</b> waagerecht von der Kippkante und <b>${l2} mm</b> über dem Boden.`,
+  parts:[P_('Rutschwinkel','°',ar,[`tan <i>α</i> = <i>µ</i> → <i>α</i> = arctan ${F(μ)} = ${F(ar)}°`]),
+   P_('Kippwinkel','°',ak,[`tan <i>α</i> = <i>l</i><sub>1</sub> / <i>l</i><sub>2</sub> = ${l1} / ${l2} → <i>α</i> = ${F(ak)}°`,`Bewertung: ${ar<ak?'die Kiste rutscht zuerst':'die Kiste kippt zuerst'} (kleinerer Winkel).`])]}}],
+K1:[()=>{const vk=pick([50,72,90,100]),tR=1,tb=r(3,6,1),d=r(40,110,0);const v=vk/3.6,sR=v*tR,sB=0.5*v*tb,s=sR+sB,a=v/tb;
+  return{t:'Kommt der Pkw rechtzeitig zum Stehen?',ref:'🔁 Anhalteweg · wie 2023 H A2 / 2012 H A5',
+  text:`Ein Pkw fährt <b>${vk} km/h</b>. Ein Hindernis ist <b>${d} m</b> entfernt. Nach <b>1 s</b> Reaktionszeit bremst der Fahrer in <b>${F(tb)} s</b> gleichmäßig bis zum Stillstand.`,
+  parts:[P_('Geschwindigkeit in m/s','m/s',v,[`<i>v</i> = ${vk} km/h ÷ 3,6 = ${F(v)} m/s`]),
+   P_('Reaktionsweg','m',sR,[`<i>s</i><sub>R</sub> = <i>v</i> · <i>t</i><sub>R</sub> = ${F(v)} m/s · 1 s = ${F(sR)} m`]),
+   P_('Bremsweg','m',sB,[`<i>s</i><sub>B</sub> = ½ · <i>v</i> · <i>t</i> = ½ · ${F(v)} m/s · ${F(tb)} s = ${F(sB)} m`]),
+   P_('Anhalteweg','m',s,[`<i>s</i> = ${F(sR)} m + ${F(sB)} m = ${F(s)} m`,`${s<d?`${F(s)} m < ${d} m → der Pkw hält rechtzeitig.`:`${F(s)} m > ${d} m → der Pkw hält NICHT rechtzeitig.`}`]),
+   P_('Verzögerung','m/s²',a,[`<i>a</i> = Δ<i>v</i> / <i>t</i> = ${F(v)} m/s / ${F(tb)} s = ${F(a)} m/s²`])]}},
+ ()=>{const vk=pick([30,50,60]),a=r(6,9.5,2),d=r(15,40,0);const v=vk/3.6,sR=v,sB=v*v/(2*a),s=sR+sB;
+  return{t:'Hindernis in der Stadt',ref:'wie 2012 H A5',
+  text:`Du fährst <b>${vk} km/h</b>. Ein Hindernis taucht <b>${d} m</b> vor dir auf. Reaktionszeit <b>1 s</b>, Verzögerung <b>${F(a)} m/s²</b>.`,
+  parts:[P_('Reaktionsweg','m',sR,[`<i>v</i> = ${vk} ÷ 3,6 = ${F(v)} m/s`,`<i>s</i><sub>R</sub> = ${F(v)} m/s · 1 s = ${F(sR)} m`]),
+   P_('Bremsweg','m',sB,[`<i>s</i><sub>B</sub> = <i>v</i>² / (2 · <i>a</i>) = (${F(v)} m/s)² / (2 · ${F(a)} m/s²) = ${F(sB)} m`]),
+   P_('Anhalteweg','m',s,[`<i>s</i> = ${F(s)} m → ${s<d?'hält vor dem Hindernis':'hält NICHT vor dem Hindernis'}`])]}}],
+K2:[()=>{const m=r(1,500,0),h=r(2,60,1);const E=m*9.81*h,v=Math.sqrt(2*9.81*h);
+  return{t:'Last fällt herunter',ref:'Energie (Lernkarte Block 3)',
+  text:`Eine Last mit <b>${m} kg</b> fällt aus <b>${F(h)} m</b> Höhe (ohne Luftwiderstand).`,
+  parts:[P_('potenzielle Energie','J',E,[`<i>E</i><sub>pot</sub> = <i>m</i> · <i>g</i> · <i>h</i> = ${m} · 9,81 · ${F(h)} = ${F(E)} J`]),
+   P_('Aufprallgeschwindigkeit','m/s',v,[`<i>E</i><sub>pot</sub> = <i>E</i><sub>kin</sub> → <i>v</i> = √(2 · <i>g</i> · <i>h</i>) = √(2 · 9,81 · ${F(h)}) = ${F(v)} m/s`]),
+   P_('in km/h','km/h',v*3.6,[`${F(v)} m/s · 3,6 = ${F(v*3.6)} km/h`])]}}],
+K3:[()=>{const μ=pick([0.2,0.3,0.6,0.7]),r_=r(4,150,0),m=r(15,1500,0);const v=Math.sqrt(μ*9.81*r_);
+  return{t:'Wann schleudert es aus der Kurve?',ref:'🔁 Kurven-Schleudern · wie 2022 F A4 / 2018 H A4 / 2016 H A4',
+  text:`Ein Körper mit <b>${m} kg</b> fährt durch eine Kurve mit <b>r = ${r_} m</b>. Haftreibungszahl <b>µ₀ = ${F(μ)}</b>.`,
+  parts:[P_('Grenzgeschwindigkeit','m/s',v,[`<i>F</i><sub>z</sub> = <i>F</i><sub>R</sub> → <i>m</i> · <i>v</i>² / <i>r</i> = <i>µ</i> · <i>m</i> · <i>g</i>`,`<i>v</i> = √(<i>µ</i> · <i>g</i> · <i>r</i>) = √(${F(μ)} · 9,81 · ${r_}) = ${F(v)} m/s`]),
+   P_('in km/h','km/h',v*3.6,[`${F(v)} · 3,6 = ${F(v*3.6)} km/h`,'Doppelte Masse ändert nichts – die Masse kürzt sich raus.'])]}},
+ ()=>{const n=pick([1400,1450,2800,2900]),d=r(0.1,0.6,2),P=r(1,15,1)*1000,m=r(0.5,5,1);const ns=n/60,ω=2*Math.PI*ns,v=ω*d/2,M=P/ω,Fz=m*ω*ω*d/2;
+  return{t:'Rotierende Scheibe',ref:'Rotation (Schrittfolge Block 3)',
+  text:`Ein Motor mit <b>${F(P)} W</b> dreht mit <b>${n} min⁻¹</b> eine Scheibe mit <b>d = ${F(d)} m</b>. Am Rand sitzt eine Masse von <b>${F(m)} kg</b>.`,
+  parts:[P_('Winkelgeschwindigkeit ω','1/s',ω,[`<i>n</i> = ${n} / 60 = ${F(ns)} s⁻¹`,`<i>ω</i> = 2 · π · <i>n</i> = ${F(ω)} 1/s`]),
+   P_('Umfangsgeschwindigkeit','m/s',v,[`<i>r</i> = <i>d</i>/2 = ${F(d/2)} m`,`<i>v</i> = <i>ω</i> · <i>r</i> = ${F(v)} m/s`]),
+   P_('Drehmoment','N·m',M,[`<i>M</i> = <i>P</i> / <i>ω</i> = ${F(P)} W / ${F(ω)} 1/s = ${F(M)} N·m`]),
+   P_('Fliehkraft am Rand','N',Fz,[`<i>F</i><sub>z</sub> = <i>m</i> · <i>ω</i>² · <i>r</i> = ${F(m)} · ${F(ω)}² · ${F(d/2)} = ${F(Fz)} N`])]}}],
+K4:[()=>{const F_=r(500,8000,0),s=r(5,50,0),t=r(5,60,0),η=pick([0.7,0.75,0.8,0.85]);const W=F_*s,Pab=W/t,Pzu=Pab/η;
+  return{t:'Seilwinde zieht eine Last',ref:'Arbeit & Leistung (Lernkarte Block 3)',
+  text:`Eine Seilwinde zieht mit <b>${F(F_)} N</b> eine Last <b>${s} m</b> weit in <b>${t} s</b>. Wirkungsgrad der Winde <b>η = ${F(η)}</b>.`,
+  parts:[P_('Arbeit','J',W,[`<i>W</i> = <i>F</i> · <i>s</i> = ${F(F_)} N · ${s} m = ${F(W)} J`]),
+   P_('abgegebene Leistung','W',Pab,[`<i>P</i> = <i>W</i> / <i>t</i> = ${F(W)} J / ${t} s = ${F(Pab)} W`]),
+   P_('aufgenommene Leistung','W',Pzu,[`<i>P</i><sub>zu</sub> = <i>P</i><sub>ab</sub> / <i>η</i> = ${F(Pab)} W / ${F(η)} = ${F(Pzu)} W`])]}}],
+W1:[()=>{const V=pick([1,1.5,1.7,2]),T1=pick([12,15,20]),T2=pick([95,100]),η=pick([0.7,0.85,0.9]),P=pick([1.6,1.9,2.2]);const Q=V*4.18*(T2-T1),E=Q/η,t=E/P,mi=Math.floor(t/60),se=Math.round(t-mi*60);
+  return{t:'Wie lange braucht das Wasser?',ref:'🔁 Erhitzungszeit · wie 2024 H A2 / 2017 H A2',
+  text:`<b>${F(V)} l</b> Wasser werden von <b>${T1} °C</b> auf <b>${T2} °C</b> erhitzt. Die Kochplatte hat <b>${F(P)} kW</b>, der Wirkungsgrad ist <b>${F(η*100)} %</b>.`,
+  parts:[P_('Nutzwärme <i>Q</i>','kJ',Q,[`<i>m</i> = ${F(V)} kg (1 l Wasser = 1 kg)`,`<i>Q</i> = <i>m</i> · <i>c</i> · Δ<i>T</i> = ${F(V)} kg · 4,18 kJ/(kg·K) · ${T2-T1} K = ${F(Q)} kJ`]),
+   P_('zugeführte Energie','kJ',E,[`<i>E</i><sub>zu</sub> = <i>Q</i> / <i>η</i> = ${F(Q)} kJ / ${F(η)} = ${F(E)} kJ`]),
+   P_('Zeit in Sekunden','s',t,[`<i>t</i> = <i>E</i><sub>zu</sub> / <i>P</i> = ${F(E)} kJ / ${F(P)} kW = ${F(t)} s`,`= ${mi} min ${se} s`])]}}],
+W2:[()=>{const P=pick([150,220,300]),tm=pick([10,15,20]),V=r(15,40,0),ρ=0.83,H=42000;const W=P*tm*60,m=V*ρ,Q=m*H,η=W/Q;
+  return{t:'Wirkungsgrad eines Dieselmotors',ref:'🔁 W8 · wie 2019 H A3 / 2016 H A6',
+  text:`Ein Dieselmotor leistet <b>${P} kW</b>. In <b>${tm} min</b> verbraucht er <b>${V} l</b> Diesel (<b>ρ = 0,83 kg/dm³</b>, <b>H<sub>i</sub> = 42 000 kJ/kg</b>).`,
+  parts:[P_('abgegebene Arbeit','kJ',W,[`<i>W</i><sub>ab</sub> = <i>P</i> · <i>t</i> = ${P} kW · ${tm*60} s = ${F(W)} kJ`]),
+   P_('Masse des Diesels','kg',m,[`<i>m</i> = <i>V</i> · <i>ρ</i> = ${V} dm³ · 0,83 kg/dm³ = ${F(m)} kg`]),
+   P_('zugeführte Wärme','kJ',Q,[`<i>Q</i><sub>zu</sub> = <i>m</i> · <i>H</i><sub>i</sub> = ${F(m)} kg · 42 000 kJ/kg = ${F(Q)} kJ`]),
+   P_('Wirkungsgrad (Dezimalzahl)','',η,[`<i>η</i> = <i>W</i><sub>ab</sub> / <i>Q</i><sub>zu</sub> = ${F(W)} / ${F(Q)} = ${F(η)} = ${F(η*100)} %`])]}},
+ ()=>{const V=pick([500,1000,2500]),T1=pick([10,15,18]),T2=pick([60,80,90]),vl=pick([20,30,40]);const Q=V*4.18*(T2-T1),Qz=Q/(1-vl/100),m=Qz/43000,Vh=m/0.83;
+  return{t:'Wie viel Heizöl wird gebraucht?',ref:'wie 2020 H A5',
+  text:`<b>${F(V)} l</b> Wasser werden von <b>${T1} °C</b> auf <b>${T2} °C</b> aufgeheizt. Wärmeverlust <b>${vl} %</b>. Heizöl: <b>H<sub>i</sub> = 43 000 kJ/kg</b>, <b>ρ = 0,83 kg/dm³</b>.`,
+  parts:[P_('Nutzwärme','kJ',Q,[`<i>Q</i> = ${F(V)} kg · 4,18 kJ/(kg·K) · ${T2-T1} K = ${F(Q)} kJ`]),
+   P_('zugeführte Wärme','kJ',Qz,[`Verlust ${vl} % → <i>η</i> = ${F(1-vl/100)}`,`<i>Q</i><sub>zu</sub> = ${F(Q)} kJ / ${F(1-vl/100)} = ${F(Qz)} kJ`]),
+   P_('Heizöl in Litern','l',Vh,[`<i>m</i> = <i>Q</i><sub>zu</sub> / <i>H</i><sub>i</sub> = ${F(Qz)} / 43 000 = ${F(m)} kg`,`<i>V</i> = <i>m</i> / <i>ρ</i> = ${F(m)} kg / 0,83 kg/dm³ = ${F(Vh)} l`])]}}],
+W3:[()=>{const L=r(10,120,0),α=pick([0.000012,0.000024]),T1=pick([-20,-10,0]),T2=pick([30,40,50]);const dT=T2-T1,dL=L*1000*α*dT;
+  return{t:'Wie viel Platz braucht die Dehnfuge?',ref:'Stoßfuge (Schrittfolge Block 5)',
+  text:`Ein ${α===0.000012?'Stahl':'Alu'}träger (<b>α = ${F(α)} 1/K</b>) ist bei <b>${T1} °C</b> genau <b>${L} m</b> lang. Im Sommer wird er <b>${T2} °C</b> warm.`,
+  parts:[P_('Temperaturänderung','K',dT,[`Δ<i>T</i> = ${T2} − (${T1}) = ${dT} K`],0.01),
+   P_('Längenänderung','mm',dL,[`Δ<i>L</i> = <i>L</i><sub>0</sub> · <i>α</i> · Δ<i>T</i> = ${F(L*1000)} mm · ${F(α)} · ${dT} = ${F(dL)} mm`])]}}],
+W4:[()=>{const p1=r(2,8,1),V1=r(5,50,1),t1=pick([10,15,20]),V2=r(2,40,1),t2=pick([40,60,80]);const T1=t1+273.15,T2=t2+273.15,p2=p1*V1*T2/(T1*V2);
+  return{t:'Gas wird verdichtet und erwärmt',ref:'Gasgleichung (Schrittfolge Block 5)',
+  text:`Ein Gas hat <b>${F(p1)} bar</b> (absolut), <b>${F(V1)} l</b> und <b>${t1} °C</b>. Danach: <b>${F(V2)} l</b> und <b>${t2} °C</b>.`,
+  parts:[P_('<i>T</i><sub>1</sub> in Kelvin','K',T1,[`<i>T</i><sub>1</sub> = ${t1} + 273,15 = ${F(T1,6)} K`],0.01),
+   P_('<i>T</i><sub>2</sub> in Kelvin','K',T2,[`<i>T</i><sub>2</sub> = ${t2} + 273,15 = ${F(T2,6)} K`],0.01),
+   P_('Druck danach <i>p</i><sub>2</sub>','bar',p2,[`<i>p</i><sub>2</sub> = <i>p</i><sub>1</sub> · <i>V</i><sub>1</sub> · <i>T</i><sub>2</sub> / (<i>T</i><sub>1</sub> · <i>V</i><sub>2</sub>) = ${F(p1)} · ${F(V1)} · ${F(T2,6)} / (${F(T1,6)} · ${F(V2)}) = ${F(p2)} bar`])]}}],
+W5:[()=>{const Q=pick([8,10,12,15]),D=pick([5,6,8,10]),d=D/2;const A1=D*D*Math.PI/4,A2=(D*D-d*d)*Math.PI/4,v1=Q*1000/A1,v2=Q*1000/A2;
+  return{t:'Differentialzylinder',ref:'🔁 W6 · wie 2017 H A6 / 2015 H A4',
+  text:`Ein Zylinder bekommt <b>${Q} l/min</b>. Kolbendurchmesser <b>${D} cm</b>, Kolbenstange <b>${F(d)} cm</b>.`,
+  parts:[P_('Kolbenfläche <i>A</i><sub>1</sub>','cm²',A1,[`<i>A</i><sub>1</sub> = <i>D</i>² · π / 4 = ${D}² · π / 4 = ${F(A1)} cm²`]),
+   P_('Ausfahrgeschwindigkeit','cm/min',v1,[`<i>Q</i> = ${Q} l/min = ${Q*1000} cm³/min`,`<i>v</i><sub>1</sub> = <i>Q</i> / <i>A</i><sub>1</sub> = ${Q*1000} / ${F(A1)} = ${F(v1)} cm/min`]),
+   P_('Einfahrgeschwindigkeit','cm/min',v2,[`<i>A</i><sub>2</sub> = (<i>D</i>² − <i>d</i>²) · π / 4 = ${F(A2)} cm²`,`<i>v</i><sub>2</sub> = ${Q*1000} / ${F(A2)} = ${F(v2)} cm/min`]),
+   P_('Verhältnis <i>v</i><sub>1</sub> : <i>v</i><sub>2</sub>','',v1/v2,[`<i>v</i><sub>1</sub> / <i>v</i><sub>2</sub> = <i>A</i><sub>2</sub> / <i>A</i><sub>1</sub> = ${F(v1/v2)} (= 3 : 4 bei d = D/2)`])]}}],
 };
 
+/* ---------- Umstell-Schritte je Formel und Zielgröße ----------
+   ['÷X'|'·X'|'+X'|'−X'|'√'|'²'|'⇄'|'!Text', Gleichung danach]   (⇄ ohne Gleichung = Endform) */
+const SWAP=['⇄'];
+const XS={
+ohm:{R:[['÷{I}','{U} / {I} = {R}'],SWAP],I:[['÷{R}','{U} / {R} = {I}'],SWAP]},
+pui:{U:[['÷{I}','{P} / {I} = {U}'],SWAP],I:[['÷{U}','{P} / {U} = {I}'],SWAP]},
+pur:{U:[['·{R}','{P} · {R} = {U}²'],['√','√({P} · {R}) = {U}'],SWAP],R:[['·{R}','{P} · {R} = {U}²'],['÷{P}','{R} = {U}² / {P}']]},
+pir:{I:[['÷{R}','{P} / {R} = {I}²'],['√','√({P} / {R}) = {I}'],SWAP],R:[['÷{I}²','{P} / {I}² = {R}'],SWAP]},
+rl2:{l:[['·{A}','{R_L} · {A} = 2 · {ρ} · {l}'],['÷(2 · {ρ})','{R_L} · {A} / (2 · {ρ}) = {l}'],SWAP],A:[['·{A}','{R_L} · {A} = 2 · {ρ} · {l}'],['÷{R_L}','{A} = 2 · {ρ} · {l} / {R_L}']],ρ:[['·{A}','{R_L} · {A} = 2 · {ρ} · {l}'],['÷(2 · {l})','{R_L} · {A} / (2 · {l}) = {ρ}'],SWAP]},
+uk:{R_L:[['+{I} · {R_L}','{U_K} + {I} · {R_L} = {U}'],['−{U_K}','{I} · {R_L} = {U} − {U_K}'],['÷{I}','{R_L} = ({U} − {U_K}) / {I}']],I:[['+{I} · {R_L}','{U_K} + {I} · {R_L} = {U}'],['−{U_K}','{I} · {R_L} = {U} − {U_K}'],['÷{R_L}','{I} = ({U} − {U_K}) / {R_L}']]},
+du:{U_L:[['·{U}','{Δu} · {U} = {U_L} · 100 %'],['÷100 %','{Δu} · {U} / 100 % = {U_L}'],SWAP],U:[['·{U}','{Δu} · {U} = {U_L} · 100 %'],['÷{Δu}','{U} = {U_L} · 100 % / {Δu}']]},
+rla:{l:[['·{A}','{R} · {A} = {ρ} · {l}'],['÷{ρ}','{R} · {A} / {ρ} = {l}'],SWAP],A:[['·{A}','{R} · {A} = {ρ} · {l}'],['÷{R}','{A} = {ρ} · {l} / {R}']],ρ:[['·{A}','{R} · {A} = {ρ} · {l}'],['÷{l}','{R} · {A} / {l} = {ρ}'],SWAP]},
+kreis:{d:[['·4','4 · {A} = {d}² · π'],['÷π','4 · {A} / π = {d}²'],['√','√(4 · {A} / π) = {d}'],SWAP]},
+lrho:{R:[['·4 · {ρ}','4 · {ρ} · {l} = {R} · {d}² · π'],['÷({d}² · π)','4 · {ρ} · {l} / ({d}² · π) = {R}'],SWAP],d:[['·4 · {ρ}','4 · {ρ} · {l} = {R} · {d}² · π'],['÷({R} · π)','4 · {ρ} · {l} / ({R} · π) = {d}²'],['√','√(4 · {ρ} · {l} / ({R} · π)) = {d}'],SWAP]},
+reihe:{R_3:[['−{R_1}','{R_ges} − {R_1} = {R_2} + {R_3}'],['−{R_2}','{R_ges} − {R_1} − {R_2} = {R_3}'],SWAP]},
+par2:{R_2:[['·({R_1} + {R_2})','{R_ges} · ({R_1} + {R_2}) = {R_1} · {R_2}'],['!Klammer ausmultiplizieren: jedes Glied in der Klammer mit {R_ges} malnehmen.','{R_ges} · {R_1} + {R_ges} · {R_2} = {R_1} · {R_2}'],['−{R_ges} · {R_2}','{R_ges} · {R_1} = {R_1} · {R_2} − {R_ges} · {R_2}'],['!{R_2} steht rechts zweimal drin – ausklammern.','{R_ges} · {R_1} = {R_2} · ({R_1} − {R_ges})'],['÷({R_1} − {R_ges})','{R_1} · {R_ges} / ({R_1} − {R_ges}) = {R_2}'],SWAP]},
+parn:{R:[['·{n}','{R_ges} · {n} = {R}'],SWAP],n:[['·{n}','{R_ges} · {n} = {R}'],['÷{R_ges}','{n} = {R} / {R_ges}']]},
+arbeit:{P:[['÷{t}','{W} / {t} = {P}'],SWAP],t:[['÷{P}','{W} / {P} = {t}'],SWAP]},
+kosten:{W:[['÷{k}','{K} / {k} = {W}'],SWAP],k:[['÷{W}','{K} / {W} = {k}'],SWAP]},
+zaehler:{z:[['·({c_Z} · {t})','{P} · {c_Z} · {t} = {z}'],SWAP],t:[['·({c_Z} · {t})','{P} · {c_Z} · {t} = {z}'],['÷({c_Z} · {P})','{t} = {z} / ({c_Z} · {P})']]},
+teiler:{R_2:[['·({R_1} + {R_2})','{U_2} · ({R_1} + {R_2}) = {U} · {R_2}'],['!Klammer ausmultiplizieren.','{U_2} · {R_1} + {U_2} · {R_2} = {U} · {R_2}'],['−{U_2} · {R_2}','{U_2} · {R_1} = {U} · {R_2} − {U_2} · {R_2}'],['!{R_2} steht rechts zweimal drin – ausklammern.','{U_2} · {R_1} = {R_2} · ({U} − {U_2})'],['÷({U} − {U_2})','{R_1} · {U_2} / ({U} − {U_2}) = {R_2}'],SWAP],
+  R_1:[['·({R_1} + {R_2})','{U_2} · ({R_1} + {R_2}) = {U} · {R_2}'],['÷{U_2}','{R_1} + {R_2} = {U} · {R_2} / {U_2}'],['−{R_2}','{R_1} = {U} · {R_2} / {U_2} − {R_2}'],['!{R_2} ausklammern und auf einen Bruch bringen.','{R_1} = {R_2} · ({U} − {U_2}) / {U_2}']],
+  U:[['·({R_1} + {R_2})','{U_2} · ({R_1} + {R_2}) = {U} · {R_2}'],['÷{R_2}','{U_2} · ({R_1} + {R_2}) / {R_2} = {U}'],SWAP]},
+ptc:{R_20:[['÷(1 + {α} · {Δϑ})','{R_ϑ} / (1 + {α} · {Δϑ}) = {R_20}'],SWAP],Δϑ:[['÷{R_20}','{R_ϑ} / {R_20} = 1 + {α} · {Δϑ}'],['−1','{R_ϑ} / {R_20} − 1 = {α} · {Δϑ}'],['÷{α}','({R_ϑ} / {R_20} − 1) / {α} = {Δϑ}'],SWAP],α:[['÷{R_20}','{R_ϑ} / {R_20} = 1 + {α} · {Δϑ}'],['−1','{R_ϑ} / {R_20} − 1 = {α} · {Δϑ}'],['÷{Δϑ}','({R_ϑ} / {R_20} − 1) / {Δϑ} = {α}'],SWAP]},
+dreh:{I:[['÷(√3 · {U} · {cosφ})','{P} / (√3 · {U} · {cosφ}) = {I}'],SWAP],cosφ:[['÷(√3 · {U} · {I})','{P} / (√3 · {U} · {I}) = {cosφ}'],SWAP]},
+eta:{P_zu:[['·{P_zu}','{η} · {P_zu} = {P_ab}'],['÷{η}','{P_zu} = {P_ab} / {η}']],P_ab:[['·{P_zu}','{η} · {P_zu} = {P_ab}'],SWAP]},
+etag:{η_2:[['÷{η_1}','{η_ges} / {η_1} = {η_2}'],SWAP]},
+hub:{m:[['·{t}','{P} · {t} = {m} · {g} · {h}'],['÷({g} · {h})','{P} · {t} / ({g} · {h}) = {m}'],SWAP],h:[['·{t}','{P} · {t} = {m} · {g} · {h}'],['÷({m} · {g})','{P} · {t} / ({m} · {g}) = {h}'],SWAP],t:[['·{t}','{P} · {t} = {m} · {g} · {h}'],['÷{P}','{t} = {m} · {g} · {h} / {P}']]},
+stern:{U:[['·√3','√3 · {U_Str} = {U}'],SWAP]},
+dreieck:{I:[['·√3','√3 · {I_Str} = {I}'],SWAP]},
+waerme:{Δϑ:[['÷({m} · {c})','{Q} / ({m} · {c}) = {Δϑ}'],SWAP],m:[['÷({c} · {Δϑ})','{Q} / ({c} · {Δϑ}) = {m}'],SWAP]},
+umfang:{n:[['÷({d} · π)','{v} / ({d} · π) = {n}'],SWAP],d:[['÷(π · {n})','{v} / (π · {n}) = {d}'],SWAP]},
+getriebe:{n_an:[['·{i}','{n_ab} · {i} = {n_an}'],SWAP],i:[['·{i}','{n_ab} · {i} = {n_an}'],['÷{n_ab}','{i} = {n_an} / {n_ab}']]},
+quelle:{U_0:[['+{I} · {R_i}','{U_K} + {I} · {R_i} = {U_0}'],SWAP],R_i:[['+{I} · {R_i}','{U_K} + {I} · {R_i} = {U_0}'],['−{U_K}','{I} · {R_i} = {U_0} − {U_K}'],['÷{I}','{R_i} = ({U_0} − {U_K}) / {I}']],I:[['+{I} · {R_i}','{U_K} + {I} · {R_i} = {U_0}'],['−{U_K}','{I} · {R_i} = {U_0} − {U_K}'],['÷{R_i}','{I} = ({U_0} − {U_K}) / {R_i}']]},
+ri:{U_2:[['·({I_2} − {I_1})','{R_i} · ({I_2} − {I_1}) = {U_1} − {U_2}'],['+{U_2}','{R_i} · ({I_2} − {I_1}) + {U_2} = {U_1}'],['−{R_i} · ({I_2} − {I_1})','{U_2} = {U_1} − {R_i} · ({I_2} − {I_1})']],I_2:[['·({I_2} − {I_1})','{R_i} · ({I_2} − {I_1}) = {U_1} − {U_2}'],['÷{R_i}','{I_2} − {I_1} = ({U_1} − {U_2}) / {R_i}'],['+{I_1}','{I_2} = {I_1} + ({U_1} − {U_2}) / {R_i}']]},
+arbeitws:{t:[['÷({U} · {I})','{W} / ({U} · {I}) = {t}'],SWAP],I:[['÷({U} · {t})','{W} / ({U} · {t}) = {I}'],SWAP]},
+mittel:{Sx:[['·{n}','{xq} · {n} = {Sx}'],SWAP],n:[['·{n}','{xq} · {n} = {Sx}'],['÷{xq}','{n} = {Sx} / {xq}']]},
+quote:{S:[['·({N} · {T})','{Q} · {N} · {T} = {S} · 100 %'],['÷100 %','{Q} · {N} · {T} / 100 % = {S}'],SWAP],N:[['·({N} · {T})','{Q} · {N} · {T} = {S} · 100 %'],['÷({Q} · {T})','{N} = {S} · 100 % / ({Q} · {T})']],T:[['·({N} · {T})','{Q} · {N} · {T} = {S} · 100 %'],['÷({Q} · {N})','{T} = {S} · 100 % / ({Q} · {N})']]},
+quote2:{xq:[['·{T}','{Q} · {T} = {xq} · 100 %'],['÷100 %','{Q} · {T} / 100 % = {xq}'],SWAP]},
+spann:{x_min:[['+{x_min}','{R} + {x_min} = {x_max}'],['−{R}','{x_min} = {x_max} − {R}']],x_max:[['+{x_min}','{R} + {x_min} = {x_max}'],SWAP]},
+relh:{n_i:[['·{n}','{h} · {n} = {n_i} · 100 %'],['÷100 %','{h} · {n} / 100 % = {n_i}'],SWAP],n:[['·{n}','{h} · {n} = {n_i} · 100 %'],['÷{h}','{n} = {n_i} · 100 % / {h}']]},
+std:{SQ:[['²','{s}² = {SQ} / ({n} − 1)'],['·({n} − 1)','{s}² · ({n} − 1) = {SQ}'],SWAP],n:[['²','{s}² = {SQ} / ({n} − 1)'],['·({n} − 1)','{s}² · ({n} − 1) = {SQ}'],['÷{s}²','{n} − 1 = {SQ} / {s}²'],['+1','{n} = {SQ} / {s}² + 1']]},
+o3:{xq:[['−3 · {s}','{x_o} − 3 · {s} = {xq}'],SWAP],s:[['−{xq}','{x_o} − {xq} = 3 · {s}'],['÷3','({x_o} − {xq}) / 3 = {s}'],SWAP]},
+u3:{xq:[['+3 · {s}','{x_u} + 3 · {s} = {xq}'],SWAP],s:[['+3 · {s}','{x_u} + 3 · {s} = {xq}'],['−{x_u}','3 · {s} = {xq} − {x_u}'],['÷3','{s} = ({xq} − {x_u}) / 3']]},
+o2:{s:[['−{xq}','{x_o} − {xq} = 2 · {s}'],['÷2','({x_o} − {xq}) / 2 = {s}'],SWAP]},
+wp:{s:[['−{xq}','{x_WP} − {xq} = {s}'],SWAP]},
+netzs:{x_15:[['+{x_15}','{s} + {x_15} = {xq}'],['−{s}','{x_15} = {xq} − {s}']],xq:[['+{x_15}','{s} + {x_15} = {xq}'],SWAP]},
+netzs2:{x_84:[['+{xq}','{s} + {xq} = {x_84}'],SWAP]},
+aussch:{N:[['·100 %','{A} · 100 % = {N} · {p}'],['÷{p}','{A} · 100 % / {p} = {N}'],SWAP],p:[['·100 %','{A} · 100 % = {N} · {p}'],['÷{N}','{A} · 100 % / {N} = {p}'],SWAP]},
+mitte:{OGW:[['·2','2 · {C} = {OGW} + {UGW}'],['−{UGW}','2 · {C} − {UGW} = {OGW}'],SWAP],UGW:[['·2','2 · {C} = {OGW} + {UGW}'],['−{OGW}','2 · {C} − {OGW} = {UGW}'],SWAP]},
+tol:{UGW:[['+{UGW}','{T} + {UGW} = {OGW}'],['−{T}','{UGW} = {OGW} − {T}']],OGW:[['+{UGW}','{T} + {UGW} = {OGW}'],SWAP]},
+phat:{x:[['·{n}','{p} · {n} = {x} · 100 %'],['÷100 %','{p} · {n} / 100 % = {x}'],SWAP],n:[['·{n}','{p} · {n} = {x} · 100 %'],['÷{p}','{n} = {x} · 100 % / {p}']]},
+cp:{T:[['·6 · {s}','{C_p} · 6 · {s} = {T}'],SWAP],s:[['·6 · {s}','{C_p} · 6 · {s} = {T}'],['÷(6 · {C_p})','{s} = {T} / (6 · {C_p})']]},
+cpko:{xq:[['·3 · {s}','{C_pk} · 3 · {s} = {OGW} − {xq}'],['+{xq}','{C_pk} · 3 · {s} + {xq} = {OGW}'],['−{C_pk} · 3 · {s}','{xq} = {OGW} − 3 · {s} · {C_pk}']],s:[['·3 · {s}','{C_pk} · 3 · {s} = {OGW} − {xq}'],['÷(3 · {C_pk})','{s} = ({OGW} − {xq}) / (3 · {C_pk})']],OGW:[['·3 · {s}','{C_pk} · 3 · {s} = {OGW} − {xq}'],['+{xq}','{xq} + 3 · {s} · {C_pk} = {OGW}'],SWAP]},
+cpku:{UGW:[['·3 · {s}','{C_pk} · 3 · {s} = {xq} − {UGW}'],['+{UGW}','{C_pk} · 3 · {s} + {UGW} = {xq}'],['−{C_pk} · 3 · {s}','{UGW} = {xq} − 3 · {s} · {C_pk}']],s:[['·3 · {s}','{C_pk} · 3 · {s} = {xq} − {UGW}'],['÷(3 · {C_pk})','{s} = ({xq} − {UGW}) / (3 · {C_pk})']]},
+kl:{n:[['²','{k}² = {n}'],SWAP]},
+kb:{R:[['·{k}','{w} · {k} = {R}'],SWAP],k:[['·{k}','{w} · {k} = {R}'],['÷{w}','{k} = {R} / {w}']]},
+galv:{E_unedel:[['+{E_unedel}','{U} + {E_unedel} = {E_edel}'],['−{U}','{E_unedel} = {E_edel} − {U}']],E_edel:[['+{E_unedel}','{U} + {E_unedel} = {E_edel}'],SWAP]},
+sig:{F:[['·{S}','{σ} · {S} = {F}'],SWAP],S:[['·{S}','{σ} · {S} = {F}'],['÷{σ}','{S} = {F} / {σ}']]},
+szul:{R_e:[['·{ν}','{σ_zul} · {ν} = {R_e}'],SWAP],ν:[['·{ν}','{σ_zul} · {ν} = {R_e}'],['÷{σ_zul}','{ν} = {R_e} / {σ_zul}']]},
+serf:{F:[['·{σ_zul}','{S_erf} · {σ_zul} = {F}'],SWAP],σ_zul:[['·{σ_zul}','{S_erf} · {σ_zul} = {F}'],['÷{S_erf}','{σ_zul} = {F} / {S_erf}']]},
+sneu:{S:[['+{d} · {t}','{S_neu} + {d} · {t} = {S}'],SWAP],d:[['+{d} · {t}','{S_neu} + {d} · {t} = {S}'],['−{S_neu}','{d} · {t} = {S} − {S_neu}'],['÷{t}','{d} = ({S} − {S_neu}) / {t}']],t:[['+{d} · {t}','{S_neu} + {d} · {t} = {S}'],['−{S_neu}','{d} · {t} = {S} − {S_neu}'],['÷{d}','{t} = ({S} − {S_neu}) / {d}']]},
+masse:{V:[['÷{ρ}','{m} / {ρ} = {V}'],SWAP],ρ:[['÷{V}','{m} / {V} = {ρ}'],SWAP]},
+kreisS:{d:[['·4','4 · {S} = π · {d}²'],['÷π','4 · {S} / π = {d}²'],['√','√(4 · {S} / π) = {d}'],SWAP]},
+rohr:{d:[['·4 / π','4 · {S} / π = {D}² − {d}²'],['+{d}²','4 · {S} / π + {d}² = {D}²'],['−4 · {S} / π','{d}² = {D}² − 4 · {S} / π'],['√','{d} = √({D}² − 4 · {S} / π)']],D:[['·4 / π','4 · {S} / π = {D}² − {d}²'],['+{d}²','4 · {S} / π + {d}² = {D}²'],['√','√(4 · {S} / π + {d}²) = {D}'],SWAP]},
+lang:{b:[['÷1,785','{S} / 1,785 = {b}²'],['√','√({S} / 1,785) = {b}'],SWAP]},
+rohrd:{D:[['+2 · {s}','{d} + 2 · {s} = {D}'],SWAP],s:[['+2 · {s}','{d} + 2 · {s} = {D}'],['−{d}','2 · {s} = {D} − {d}'],['÷2','{s} = ({D} − {d}) / 2']]},
+scherf:{U:[['÷{t}','{S} / {t} = {U}'],SWAP],t:[['÷{U}','{S} / {U} = {t}'],SWAP]},
+schneid:{S:[['÷{τ_aB}','{F} / {τ_aB} = {S}'],SWAP],τ_aB:[['÷{S}','{F} / {S} = {τ_aB}'],SWAP]},
+bogen:{r:[['·360°','{U} · 360° = 2 · π · {r} · {φ}'],['÷(2 · π · {φ})','{U} · 360° / (2 · π · {φ}) = {r}'],SWAP],φ:[['·360°','{U} · 360° = 2 · π · {r} · {φ}'],['÷(2 · π · {r})','{U} · 360° / (2 · π · {r}) = {φ}'],SWAP]},
+niet:{S_erf:[['·{S_N}','{n} · {S_N} = {S_erf}'],SWAP],S_N:[['·{S_N}','{n} · {S_N} = {S_erf}'],['÷{n}','{S_N} = {S_erf} / {n}']]},
+eps:{ΔL:[['·{L_0}','{ε} · {L_0} = {ΔL}'],SWAP],L_0:[['·{L_0}','{ε} · {L_0} = {ΔL}'],['÷{ε}','{L_0} = {ΔL} / {ε}']]},
+hooke:{ε:[['÷{E}','{σ} / {E} = {ε}'],SWAP],E:[['÷{ε}','{σ} / {ε} = {E}'],SWAP]},
+dl:{F:[['·({E} · {S})','{ΔL} · {E} · {S} = {F} · {L_0}'],['÷{L_0}','{ΔL} · {E} · {S} / {L_0} = {F}'],SWAP],S:[['·({E} · {S})','{ΔL} · {E} · {S} = {F} · {L_0}'],['÷({E} · {ΔL})','{S} = {F} · {L_0} / ({E} · {ΔL})']],L_0:[['·({E} · {S})','{ΔL} · {E} · {S} = {F} · {L_0}'],['÷{F}','{ΔL} · {E} · {S} / {F} = {L_0}'],SWAP]},
+hebel:{F_1:[['÷{l_1}','{F_1} = {F_2} · {l_2} / {l_1}']],F_2:[['÷{l_2}','{F_1} · {l_1} / {l_2} = {F_2}'],SWAP],l_1:[['÷{F_1}','{l_1} = {F_2} · {l_2} / {F_1}']],l_2:[['÷{F_2}','{F_1} · {l_1} / {F_2} = {l_2}'],SWAP]},
+moment:{F:[['÷{l}','{M} / {l} = {F}'],SWAP],l:[['÷{F}','{M} / {F} = {l}'],SWAP]},
+kolben:{p:[['÷{A}','{F} / {A} = {p}'],SWAP],A:[['÷{p}','{F} / {p} = {A}'],SWAP]},
+hang:{F_G:[['÷sin {α}','{F_H} / sin {α} = {F_G}'],SWAP],α:[['÷{F_G}','{F_H} / {F_G} = sin {α}'],['!Auf beiden Seiten arcsin anwenden (Taschenrechner: sin⁻¹). arcsin hebt sin auf.','arcsin({F_H} / {F_G}) = {α}'],SWAP]},
+normal:{F_G:[['÷cos {α}','{F_N} / cos {α} = {F_G}'],SWAP],α:[['÷{F_G}','{F_N} / {F_G} = cos {α}'],['!Auf beiden Seiten arccos anwenden (Taschenrechner: cos⁻¹). arccos hebt cos auf.','arccos({F_N} / {F_G}) = {α}'],SWAP]},
+reib:{μ:[['÷{F_N}','{F_R} / {F_N} = {μ}'],SWAP],F_N:[['÷{μ}','{F_R} / {μ} = {F_N}'],SWAP]},
+zug:{F_R:[['−{F_H}','{F_Z} − {F_H} = {F_R}'],SWAP],F_H:[['−{F_R}','{F_Z} − {F_R} = {F_H}'],SWAP]},
+rutsch:{α:[['!Auf beiden Seiten arctan anwenden (Taschenrechner: tan⁻¹). arctan hebt tan auf.','{α} = arctan {μ}']],μ:[SWAP]},
+steig:{α:[['!Auf beiden Seiten arctan anwenden (Taschenrechner: tan⁻¹).','{α} = arctan({p} / 100)']],p:[['·100','100 · tan {α} = {p}'],SWAP]},
+vst:{s:[['·{t}','{v} · {t} = {s}'],SWAP],t:[['·{t}','{v} · {t} = {s}'],['÷{v}','{t} = {s} / {v}']]},
+acc:{Δv:[['·{t}','{a} · {t} = {Δv}'],SWAP],t:[['·{t}','{a} · {t} = {Δv}'],['÷{a}','{t} = {Δv} / {a}']]},
+sat:{a:[['·2','2 · {s} = {a} · {t}²'],['÷{t}²','2 · {s} / {t}² = {a}'],SWAP],t:[['·2','2 · {s} = {a} · {t}²'],['÷{a}','2 · {s} / {a} = {t}²'],['√','√(2 · {s} / {a}) = {t}'],SWAP]},
+brems:{v:[['·(2 · {a})','2 · {a} · {s} = {v}²'],['√','√(2 · {a} · {s}) = {v}'],SWAP],a:[['·(2 · {a})','2 · {a} · {s} = {v}²'],['÷(2 · {s})','{a} = {v}² / (2 · {s})']]},
+bremst:{v:[['·2','2 · {s} = {v} · {t}'],['÷{t}','2 · {s} / {t} = {v}'],SWAP],t:[['·2','2 · {s} = {v} · {t}'],['÷{v}','2 · {s} / {v} = {t}'],SWAP]},
+reak:{v:[['÷{t_R}','{s_R} / {t_R} = {v}'],SWAP],t_R:[['÷{v}','{s_R} / {v} = {t_R}'],SWAP]},
+ekin:{m:[['·2','2 · {E_kin} = {m} · {v}²'],['÷{v}²','2 · {E_kin} / {v}² = {m}'],SWAP],v:[['·2','2 · {E_kin} = {m} · {v}²'],['÷{m}','2 · {E_kin} / {m} = {v}²'],['√','√(2 · {E_kin} / {m}) = {v}'],SWAP]},
+epot:{m:[['÷({g} · {h})','{E_pot} / ({g} · {h}) = {m}'],SWAP],h:[['÷({m} · {g})','{E_pot} / ({m} · {g}) = {h}'],SWAP]},
+fall:{h:[['²','{v}² = 2 · {g} · {h}'],['÷(2 · {g})','{v}² / (2 · {g}) = {h}'],SWAP]},
+feder:{R:[['·2','2 · {E_F} = {R} · {s}²'],['÷{s}²','2 · {E_F} / {s}² = {R}'],SWAP],s:[['·2','2 · {E_F} = {R} · {s}²'],['÷{R}','2 · {E_F} / {R} = {s}²'],['√','√(2 · {E_F} / {R}) = {s}'],SWAP]},
+omega:{n:[['÷(2 · π)','{ω} / (2 · π) = {n}'],SWAP]},
+vwr:{ω:[['÷{r}','{v} / {r} = {ω}'],SWAP],r:[['÷{ω}','{v} / {ω} = {r}'],SWAP]},
+mpw:{P:[['·{ω}','{M} · {ω} = {P}'],SWAP],ω:[['·{ω}','{M} · {ω} = {P}'],['÷{M}','{ω} = {P} / {M}']]},
+flieh:{m:[['·{r}','{F_z} · {r} = {m} · {v}²'],['÷{v}²','{F_z} · {r} / {v}² = {m}'],SWAP],v:[['·{r}','{F_z} · {r} = {m} · {v}²'],['÷{m}','{F_z} · {r} / {m} = {v}²'],['√','√({F_z} · {r} / {m}) = {v}'],SWAP],r:[['·{r}','{F_z} · {r} = {m} · {v}²'],['÷{F_z}','{r} = {m} · {v}² / {F_z}']]},
+kurve:{r:[['²','{v}² = {μ} · {g} · {r}'],['÷({μ} · {g})','{v}² / ({μ} · {g}) = {r}'],SWAP],μ:[['²','{v}² = {μ} · {g} · {r}'],['÷({g} · {r})','{v}² / ({g} · {r}) = {μ}'],SWAP]},
+wfs:{F:[['÷{s}','{W} / {s} = {F}'],SWAP],s:[['÷{F}','{W} / {F} = {s}'],SWAP]},
+pwt:{W:[['·{t}','{P} · {t} = {W}'],SWAP],t:[['·{t}','{P} · {t} = {W}'],['÷{P}','{t} = {W} / {P}']]},
+pfv:{F:[['÷{v}','{P} / {v} = {F}'],SWAP],v:[['÷{F}','{P} / {F} = {v}'],SWAP]},
+pzu:{P_ab:[['·({η_1} · {η_2})','{P_zu} · {η_1} · {η_2} = {P_ab}'],SWAP],η_2:[['·({η_1} · {η_2})','{P_zu} · {η_1} · {η_2} = {P_ab}'],['÷({P_zu} · {η_1})','{η_2} = {P_ab} / ({P_zu} · {η_1})']]},
+waerme2:{m:[['÷({c} · {ΔT})','{Q} / ({c} · {ΔT}) = {m}'],SWAP],c:[['÷({m} · {ΔT})','{Q} / ({m} · {ΔT}) = {c}'],SWAP],ΔT:[['÷({m} · {c})','{Q} / ({m} · {c}) = {ΔT}'],SWAP]},
+tzeit:{Q:[['·({η} · {P})','{t} · {η} · {P} = {Q}'],SWAP],P:[['·({η} · {P})','{t} · {η} · {P} = {Q}'],['÷({η} · {t})','{P} = {Q} / ({η} · {t})']],η:[['·({η} · {P})','{t} · {η} · {P} = {Q}'],['÷({P} · {t})','{η} = {Q} / ({P} · {t})']]},
+verd:{m:[['÷{r}','{Q} / {r} = {m}'],SWAP]},
+heiz:{m:[['÷{H_i}','{Q} / {H_i} = {m}'],SWAP],H_i:[['÷{m}','{Q} / {m} = {H_i}'],SWAP]},
+bedarf:{Q_nutz:[['·({H_i} · {η})','{m} · {H_i} · {η} = {Q_nutz}'],SWAP],η:[['·({H_i} · {η})','{m} · {H_i} · {η} = {Q_nutz}'],['÷({m} · {H_i})','{η} = {Q_nutz} / ({m} · {H_i})']]},
+etaw:{W_ab:[['·{Q_zu}','{η} · {Q_zu} = {W_ab}'],SWAP],Q_zu:[['·{Q_zu}','{η} · {Q_zu} = {W_ab}'],['÷{η}','{Q_zu} = {W_ab} / {η}']]},
+dlt:{L_0:[['÷({α} · {ΔT})','{ΔL} / ({α} · {ΔT}) = {L_0}'],SWAP],ΔT:[['÷({L_0} · {α})','{ΔL} / ({L_0} · {α}) = {ΔT}'],SWAP],α:[['÷({L_0} · {ΔT})','{ΔL} / ({L_0} · {ΔT}) = {α}'],SWAP]},
+dvt:{V_0:[['÷({α_V} · {ΔT})','{ΔV} / ({α_V} · {ΔT}) = {V_0}'],SWAP],ΔT:[['÷({V_0} · {α_V})','{ΔV} / ({V_0} · {α_V}) = {ΔT}'],SWAP]},
+dvf:{V_0:[['÷(3 · {α} · {ΔT})','{ΔV} / (3 · {α} · {ΔT}) = {V_0}'],SWAP],ΔT:[['÷({V_0} · 3 · {α})','{ΔV} / ({V_0} · 3 · {α}) = {ΔT}'],SWAP]},
+boyle:{p_2:[['÷{V_2}','{p_1} · {V_1} / {V_2} = {p_2}'],SWAP],V_2:[['÷{p_2}','{p_1} · {V_1} / {p_2} = {V_2}'],SWAP],V_1:[['÷{p_1}','{V_1} = {p_2} · {V_2} / {p_1}']],p_1:[['÷{V_1}','{p_1} = {p_2} · {V_2} / {V_1}']]},
+gas:{p_2:[['·{T_2}','{p_1} · {V_1} · {T_2} / {T_1} = {p_2} · {V_2}'],['÷{V_2}','{p_1} · {V_1} · {T_2} / ({T_1} · {V_2}) = {p_2}'],SWAP],V_2:[['·{T_2}','{p_1} · {V_1} · {T_2} / {T_1} = {p_2} · {V_2}'],['÷{p_2}','{p_1} · {V_1} · {T_2} / ({T_1} · {p_2}) = {V_2}'],SWAP],
+  T_2:[['·{T_2}','{p_1} · {V_1} · {T_2} / {T_1} = {p_2} · {V_2}'],['·{T_1}','{p_1} · {V_1} · {T_2} = {p_2} · {V_2} · {T_1}'],['÷({p_1} · {V_1})','{T_2} = {p_2} · {V_2} · {T_1} / ({p_1} · {V_1})']]},
+kelvin:{ϑ:[['−273,15','{T} − 273,15 = {ϑ}'],SWAP]},
+druck:{F:[['·{A}','{p} · {A} = {F}'],SWAP],A:[['·{A}','{p} · {A} = {F}'],['÷{p}','{A} = {F} / {p}']]},
+ueber:{F_1:[['·{A_1}','{F_2} · {A_1} = {F_1} · {A_2}'],['÷{A_2}','{F_2} · {A_1} / {A_2} = {F_1}'],SWAP],A_2:[['·{A_1}','{F_2} · {A_1} = {F_1} · {A_2}'],['÷{F_1}','{F_2} · {A_1} / {F_1} = {A_2}'],SWAP]},
+qav:{A:[['÷{v}','{Q} / {v} = {A}'],SWAP],v:[['÷{A}','{Q} / {A} = {v}'],SWAP]},
+konti:{v_2:[['÷{A_2}','{A_1} · {v_1} / {A_2} = {v_2}'],SWAP],A_2:[['÷{v_2}','{A_1} · {v_1} / {v_2} = {A_2}'],SWAP],v_1:[['÷{A_1}','{v_1} = {A_2} · {v_2} / {A_1}']]},
+ring:{d:[['·4 / π','4 · {A_R} / π = {D}² − {d}²'],['+{d}²','4 · {A_R} / π + {d}² = {D}²'],['−4 · {A_R} / π','{d}² = {D}² − 4 · {A_R} / π'],['√','{d} = √({D}² − 4 · {A_R} / π)']],D:[['·4 / π','4 · {A_R} / π = {D}² − {d}²'],['+{d}²','4 · {A_R} / π + {d}² = {D}²'],['√','√(4 · {A_R} / π + {d}²) = {D}'],SWAP]},
+};
+
+/* ---------- Tipps für die schweren Aufgaben (je Teilaufgabe) ---------- */
+const HINTS={
+'Verbraucher an langer Anschlussleitung':['Typenschild: <i>R</i><sub>V</sub> = <i>U</i>² / <i>P</i>. Die Nennleistung gilt bei 230 V.','Leitung: <i>R</i><sub>L</sub> = 2 · <i>ρ</i> · <i>l</i> / <i>A</i>. Die 2, weil der Strom hin UND zurück fließt.','Verbraucher und Leitung liegen in Reihe: erst <i>R</i><sub>ges</sub> = <i>R</i><sub>V</sub> + <i>R</i><sub>L</sub>, dann <i>I</i> = <i>U</i> / <i>R</i><sub>ges</sub>.','Erst den Spannungsfall auf der Leitung: <i>U</i><sub>L</sub> = <i>I</i> · <i>R</i><sub>L</sub>. Dann <i>U</i><sub>K</sub> = <i>U</i> − <i>U</i><sub>L</sub>.','Mit der echten Spannung am Gerät rechnen: <i>P</i> = <i>U</i><sub>K</sub> · <i>I</i>.'],
+'Lampe an Verlängerungsleitung':['Lampenwiderstand aus den Nennwerten: <i>R</i> = <i>U</i>² / <i>P</i>.','Hin- und Rückleitung liegen mit der Lampe in Reihe: <i>R</i> = <i>R</i><sub>La</sub> + 2 · <i>R</i><sub>Ltg</sub>, dann <i>I</i> = <i>U</i> / <i>R</i>.','Leistung an der Lampe: <i>P</i> = <i>I</i>² · <i>R</i><sub>La</sub> – nur der Lampenwiderstand, nicht der ganze Kreis.'],
+'Sonderwiderstand aus Konstantan':['<i>P</i> = <i>I</i>² · <i>R</i> nach <i>I</i> umstellen: <i>I</i> = √(<i>P</i> / <i>R</i>).','Runddraht: <i>A</i> = <i>d</i>² · π / 4 (d in mm → A in mm²).','<i>R</i> = <i>ρ</i> · <i>l</i> / <i>A</i> nach <i>l</i> umstellen: <i>l</i> = <i>R</i> · <i>A</i> / <i>ρ</i>.','Größter erlaubter Widerstand = <i>R</i> + 10 %. Dann <i>U</i> = <i>I</i> · <i>R</i><sub>max</sub> mit 0,1 A.'],
+'Heizdraht im Heißwasserbereiter':['Widerstand aus Spannung und Leistung: <i>R</i> = <i>U</i>² / <i>P</i>.','<i>l</i> = <i>R</i> · <i>A</i> / <i>ρ</i> mit ρ<sub>Konstantan</sub> = 0,49 Ω·mm²/m.'],
+'Heizung mit zwei Heizwiderständen':['Nur ein Widerstand an 230 V: <i>P</i> = <i>U</i>² / <i>R</i>.','Reihe: Widerstände addieren, dann <i>P</i> = <i>U</i>² / <i>R</i><sub>ges</sub>.','Parallel: <i>R</i><sub>ges</sub> = <i>R</i><sub>1</sub> · <i>R</i><sub>2</sub> / (<i>R</i><sub>1</sub> + <i>R</i><sub>2</sub>) – oder einfach <i>P</i><sub>1</sub> + <i>P</i><sub>2</sub>.','Arbeit <i>W</i> = <i>P</i> · <i>t</i> in kWh (W ÷ 1000), dann mal Preis.'],
+'Ofen am Stromzähler':['Umdrehungen ÷ Zählerkonstante = Arbeit in kWh. Dann <i>P</i> = <i>W</i> / <i>t</i> mit t in Stunden.','<i>R</i> = <i>U</i>² / <i>P</i>.','Drei gleiche parallel: <i>R</i><sub>ges</sub> = <i>R</i><sub>1</sub> / 3 → <i>R</i><sub>1</sub> = 3 · <i>R</i><sub>ges</sub>.','In Reihe: <i>R</i> = 3 · <i>R</i><sub>1</sub>, dann <i>P</i> = <i>U</i>² / <i>R</i>. Ergebnis: ein Neuntel.'],
+'Gemischte Schaltung':['Von innen nach außen: erst <i>R</i><sub>2</sub> + <i>R</i><sub>4</sub>, dann parallel zu <i>R</i><sub>3</sub>, dann <i>R</i><sub>1</sub> dazu.','<i>I</i> = <i>U</i> / <i>R</i><sub>ges</sub>.','Spannung an <i>R</i><sub>1</sub> abziehen: <i>U</i><sub>3</sub> = <i>U</i> − <i>I</i> · <i>R</i><sub>1</sub>.','<i>P</i> = <i>U</i><sub>3</sub>² / <i>R</i><sub>3</sub>.'],
+'NTC im Spannungsteiler – rückwärts':['Erst die Spannung an <i>R</i><sub>1</sub>: <i>U</i><sub>EIN</sub> − <i>U</i><sub>AUS</sub>. Dann <i>R</i><sub>2</sub> = <i>R</i><sub>1</sub> · <i>U</i><sub>AUS</sub> / <i>U</i><sub>R1</sub>.','Reihe: <i>I</i> = <i>U</i><sub>EIN</sub> / (<i>R</i><sub>1</sub> + <i>R</i><sub>2</sub>).','<i>P</i> = <i>I</i>² · <i>R</i><sub>1</sub>.'],
+'Kupferspule wird warm':['<i>A</i> = <i>d</i>² · π / 4, dann <i>R</i><sub>20</sub> = <i>ρ</i> · <i>l</i> / <i>A</i>.','<i>R</i><sub>ϑ</sub> = <i>R</i><sub>20</sub> · (1 + <i>α</i> · Δ<i>ϑ</i>) mit Δϑ = Endtemperatur − 20 °C.','Beide Ströme mit <i>I</i> = <i>U</i> / <i>R</i>, dann die Differenz.'],
+'Ventilspule mit NTC und Vorwiderstand':['Der Strom kommt aus der Spule: <i>I</i> = <i>P</i> / <i>U</i> = <i>P</i> / 24 V. In Reihe ist er überall gleich.','<i>U</i><sub>R1</sub> = <i>I</i> · <i>R</i><sub>1</sub>.','Restspannung für den NTC: 200 V − <i>U</i><sub>R1</sub> − 24 V. Dann <i>R</i><sub>2</sub> = <i>U</i><sub>R2</sub> / <i>I</i>.','<i>R</i> = <i>U</i> / <i>I</i> mit den Spulenwerten.'],
+'Kran hebt eine Last':['Hubleistung: <i>P</i> = <i>m</i> · <i>g</i> · <i>h</i> / <i>t</i> (t in s).','Der Motor muss mehr aufnehmen: <i>P</i><sub>zu</sub> = <i>P</i><sub>ab</sub> / <i>η</i>.','<i>P</i> = √3 · <i>U</i> · <i>I</i> · cos <i>φ</i> nach <i>I</i> umstellen.'],
+'Stern oder Dreieck':['Stern: <i>U</i><sub>Str</sub> = 400 V / √3.','<i>I</i><sub>Str</sub> = <i>U</i><sub>Str</sub> / <i>R</i>.','Drei Stränge: <i>P</i> = 3 · <i>U</i><sub>Str</sub> · <i>I</i><sub>Str</sub>.','Dreieck: jeder Strang hat 400 V, also <i>P</i> = 3 · (400 V)² / <i>R</i>.'],
+'Förderband mit Getriebe':['Getriebeausgang: <i>P</i><sub>ab</sub> = <i>P</i><sub>Motor</sub> · <i>η</i><sub>Getriebe</sub>.','Erst die Rollendrehzahl <i>n</i> / <i>i</i>, in 1/s umrechnen (÷ 60), dann <i>v</i> = <i>d</i> · π · <i>n</i>.','<i>P</i> = <i>F</i> · <i>v</i> → <i>F</i> = <i>P</i> / <i>v</i>.','<i>P</i><sub>zu</sub> = √3 · <i>U</i> · <i>I</i> · cos <i>φ</i>, dann <i>η</i> = <i>P</i><sub>ab</sub> / <i>P</i><sub>zu</sub>.'],
+'Warmwasserspeicher':['<i>W</i> = <i>P</i> · <i>t</i> mit t in Sekunden. W in Ws = J, ÷ 1000 → kJ.','Δ<i>ϑ</i> = <i>Q</i> / (<i>m</i> · <i>c</i>), 1 l Wasser = 1 kg.'],
+'Akku mit zwei Lastpunkten':['<i>R</i><sub>i</sub> = (<i>U</i><sub>1</sub> − <i>U</i><sub>2</sub>) / (<i>I</i><sub>2</sub> − <i>I</i><sub>1</sub>) – die Differenzen über Kreuz.','Leerlauf: <i>U</i><sub>0</sub> = <i>U</i><sub>1</sub> + <i>I</i><sub>1</sub> · <i>R</i><sub>i</sub>.','<i>W</i> = <i>U</i> · <i>I</i> · <i>t</i>, 10 min = 1/6 h.','<i>R</i> = <i>U</i> / <i>I</i> mit dem zweiten Lastpunkt.'],
+'Werkstattbeleuchtung und Heizlüfter':['Leistungen addieren, dann <i>I</i> = <i>P</i> / <i>U</i>.','<i>t</i> = <i>W</i> / <i>P</i> – P vorher in kW umrechnen.','<i>W</i> = <i>P</i> · <i>t</i> in kWh, dann mal Preis.'],
+'Tage auswerten':['Alle Häufigkeiten zusammenzählen.','Gewogener Mittelwert: Σ(Wert · Anzahl) / Σ Anzahl.','Summe aller Tage / (Mitarbeiter · 200 Tage) · 100 %.','<i>R</i> = größter Wert − kleinster Wert.'],
+'Fehlende Häufigkeit aus dem Mittelwert':['Mittelwert-Formel mit <i>x</i> für die fehlende Anzahl aufschreiben, mit dem Nenner malnehmen, nach <i>x</i> auflösen.','Alle Anzahlen zusammenzählen.'],
+'Urliste: Modalwert, Median, Mittelwert':['Der Wert, der am häufigsten vorkommt.','Erst sortieren. Ungerade Anzahl: der mittlere Wert. Gerade: Mittel der beiden mittleren.','Alle Werte addieren und durch ihre Anzahl teilen.'],
+'Messreihe: s und Streugrenzen':['Alle Werte addieren, durch n teilen.','<i>s</i> = √(Σ(<i>x</i><sub>i</sub> − <i>x̄</i>)² / (<i>n</i> − 1)) – oder die s-Taste am Taschenrechner.','99,73 % ≙ <i>x̄</i> + 3s.','99,73 % ≙ <i>x̄</i> − 3s.'],
+'Wuchtgewichte: Lage und Streuung beurteilen':['<i>x̄</i> + 3 · <i>s</i>.','<i>x̄</i> − 3 · <i>s</i>.','6s = 6 · <i>s</i>, mit der Toleranz T = 6 g vergleichen.','Wendepunkt = <i>x̄</i> + 1 · <i>s</i>.'],
+'Wahrscheinlichkeitsnetz auswerten':['<i>s</i> = Wert bei 50 % − Wert bei 15,87 %.','95,45 % ≙ <i>x̄</i> ± 2s.','<i>x̄</i> + 2s.','Ausschussanteile addieren, dann Anzahl = N · p / 100 %.'],
+'Stichprobe für die Regelkarte':['Sortieren, bei n = 5 der dritte Wert.','<i>R</i> = größter − kleinster Wert.','Alle fünf addieren, durch 5 teilen.'],
+'Urwertkarte: Maschine richtig einstellen':['OGW = Nennmaß + obere Abweichung.','UGW = Nennmaß − untere Abweichung.','<i>C</i> = (OGW + UGW) / 2.','Verstellung = Ziel <i>C</i> − aktuelle Lage <i>x̄</i>.'],
+'Cp und Cpk bestimmen':['<i>T</i> = OGW − UGW, dann <i>C</i><sub>p</sub> = <i>T</i> / (6s).','Beide Seiten rechnen: (OGW − <i>x̄</i>)/(3s) und (<i>x̄</i> − UGW)/(3s). Der kleinere Wert ist <i>C</i><sub>pk</sub>.'],
+'Toleranz aus der Forderung':['<i>C</i><sub>p</sub> = <i>T</i> / (6s) nach <i>T</i> umstellen: <i>T</i> = <i>C</i><sub>p</sub> · 6 · <i>s</i>.','Cpk = Cp heißt: µ liegt genau in der Mitte. OGW = µ + T/2.','UGW = µ − T/2.'],
+'Klassen bilden':['<i>k</i> = √<i>n</i>.','<i>R</i> = <i>x</i><sub>max</sub> − <i>x</i><sub>min</sub>.','<i>w</i> = <i>R</i> / <i>k</i>, danach aufrunden.'],
+'Galvanisches Element':['Edleres Metall = höheres (positiveres) Potenzial. <i>U</i> = <i>E</i><sub>edel</sub> − <i>E</i><sub>unedel</sub>. Minus mal Minus gibt Plus.','Gleiche Regel: höheres Potenzial minus niedrigeres.'],
+'Winkelprofil mit Bohrung':['<i>V</i> = <i>S</i> · <i>l</i> in dm³ (cm² ÷ 100 = dm², m · 10 = dm). Dann <i>m</i> = <i>V</i> · <i>ρ</i>.','cm² · 100 = mm². <i>σ</i> = <i>F</i> / <i>S</i>.','Das Loch nimmt im Schnitt ein Rechteck <i>d</i> · <i>t</i> weg: <i>S</i><sub>neu</sub> = <i>S</i> − <i>d</i> · <i>t</i>.','Gleiche Kraft, kleinere Fläche: <i>σ</i> = <i>F</i> / <i>S</i><sub>neu</sub>.'],
+'Zugstange bei schwellender Belastung':['Schwellend: <i>σ</i><sub>zul</sub> = ⅓ · <i>R</i><sub>e</sub>.','<i>S</i><sub>erf</sub> = <i>F</i> / <i>σ</i><sub>zul</sub> (F in N).','Quadrat: <i>S</i> = <i>a</i>², also <i>a</i> = √<i>S</i>.'],
+'Rohr als Druckstütze':['<i>d</i> = <i>D</i> − 2 · Wanddicke.','Kreisring: <i>S</i> = π/4 · (<i>D</i>² − <i>d</i>²).','<i>σ</i> = <i>F</i> / <i>S</i> (kN · 1000 = N).'],
+'Stanzen: Platte mit Loch':['Alle Schnittlinien zusammen: Rechteckumfang 2 · (a + b) plus Lochumfang π · d.','<i>S</i> = <i>U</i> · <i>t</i>.','<i>F</i> = <i>S</i> · <i>τ</i>, dann ÷ 1000 für kN.'],
+'Wie viele Niete?':['<i>S</i><sub>erf</sub> = <i>F</i> / <i>τ</i><sub>zul</sub>.','<i>S</i><sub>N</sub> = π · <i>d</i>² / 4.','<i>n</i> = <i>S</i><sub>erf</sub> / <i>S</i><sub>N</sub>, immer aufrunden.'],
+'Stahlstab wird gezogen':['<i>S</i> = π · <i>d</i>² / 4.','<i>σ</i> = <i>F</i> / <i>S</i>.','Hooke: <i>σ</i> = <i>E</i> · <i>ε</i> → <i>ε</i> = <i>σ</i> / <i>E</i>.','Δ<i>L</i> = <i>ε</i> · <i>L</i><sub>0</sub> (L₀ in mm).'],
+'Pedal auf Hydraulikkolben':['Hebelgesetz: <i>F</i><sub>1</sub> · <i>l</i><sub>1</sub> = <i>F</i><sub>2</sub> · <i>l</i><sub>2</sub> nach <i>F</i><sub>2</sub> umstellen.','<i>A</i> = <i>d</i>² · π / 4 mit d in cm.','<i>p</i> = <i>F</i> / <i>A</i> in N/cm², dann ÷ 10 für bar.'],
+'Last die Rampe hinaufziehen':['tan <i>α</i> = Steigung / 100, dann arctan.','<i>F</i><sub>G</sub> = <i>m</i> · <i>g</i>, dann <i>F</i><sub>H</sub> = <i>F</i><sub>G</sub> · sin <i>α</i>.','<i>F</i><sub>N</sub> = <i>F</i><sub>G</sub> · cos <i>α</i>, dann <i>F</i><sub>R</sub> = <i>µ</i> · <i>F</i><sub>N</sub>.','Bergauf: <i>F</i><sub>Z</sub> = <i>F</i><sub>H</sub> + <i>F</i><sub>R</sub>.'],
+'Rutscht oder kippt die Kiste?':['Rutschgrenze: tan <i>α</i> = <i>µ</i>.','Kippgrenze: tan <i>α</i> = waagerechter / senkrechter Schwerpunktabstand. Der kleinere Winkel tritt zuerst ein.'],
+'Kommt der Pkw rechtzeitig zum Stehen?':['km/h ÷ 3,6.','<i>s</i><sub>R</sub> = <i>v</i> · <i>t</i><sub>R</sub>.','Bremszeit gegeben: <i>s</i> = ½ · <i>v</i> · <i>t</i>.','Reaktionsweg + Bremsweg, dann mit dem Abstand vergleichen.','<i>a</i> = <i>v</i> / <i>t</i><sub>Brems</sub>.'],
+'Hindernis in der Stadt':['Erst km/h ÷ 3,6, dann <i>s</i><sub>R</sub> = <i>v</i> · 1 s.','Verzögerung gegeben: <i>s</i> = <i>v</i>² / (2 · <i>a</i>).','Beide Wege addieren und mit dem Abstand vergleichen.'],
+'Last fällt herunter':['<i>E</i><sub>pot</sub> = <i>m</i> · <i>g</i> · <i>h</i>.','<i>E</i><sub>pot</sub> = <i>E</i><sub>kin</sub> → <i>v</i> = √(2 · <i>g</i> · <i>h</i>). Die Masse kürzt sich raus.','m/s · 3,6 = km/h.'],
+'Wann schleudert es aus der Kurve?':['Fliehkraft = Reibkraft: <i>m</i> · <i>v</i>² / <i>r</i> = <i>µ</i> · <i>m</i> · <i>g</i> → <i>v</i> = √(<i>µ</i> · <i>g</i> · <i>r</i>).','m/s · 3,6 = km/h.'],
+'Rotierende Scheibe':['min⁻¹ ÷ 60 = s⁻¹, dann <i>ω</i> = 2 · π · <i>n</i>.','<i>v</i> = <i>ω</i> · <i>r</i> mit r = d / 2.','<i>M</i> = <i>P</i> / <i>ω</i>.','<i>F</i><sub>z</sub> = <i>m</i> · <i>ω</i>² · <i>r</i>.'],
+'Seilwinde zieht eine Last':['<i>W</i> = <i>F</i> · <i>s</i>.','<i>P</i> = <i>W</i> / <i>t</i>.','<i>P</i><sub>zu</sub> = <i>P</i><sub>ab</sub> / <i>η</i>.'],
+'Wie lange braucht das Wasser?':['1 l Wasser = 1 kg. <i>Q</i> = <i>m</i> · <i>c</i> · Δ<i>T</i> mit c = 4,18 kJ/(kg·K).','Mehr Energie nötig als ankommt: <i>E</i><sub>zu</sub> = <i>Q</i> / <i>η</i>.','<i>t</i> = <i>E</i> / <i>P</i>: kJ geteilt durch kW gibt Sekunden. Dann in min und s zerlegen.'],
+'Wirkungsgrad eines Dieselmotors':['<i>W</i> = <i>P</i> · <i>t</i>: kW mal s gibt kJ.','<i>m</i> = <i>V</i> · <i>ρ</i> (Liter = dm³).','<i>Q</i> = <i>m</i> · <i>H</i><sub>i</sub>.','<i>η</i> = <i>W</i><sub>ab</sub> / <i>Q</i><sub>zu</sub>.'],
+'Wie viel Heizöl wird gebraucht?':['<i>Q</i> = <i>m</i> · <i>c</i> · Δ<i>T</i>, 1 l Wasser = 1 kg.','Verlust 30 % → <i>η</i> = 0,7. <i>Q</i><sub>zu</sub> = <i>Q</i> / <i>η</i>.','<i>m</i> = <i>Q</i><sub>zu</sub> / <i>H</i><sub>i</sub>, dann <i>V</i> = <i>m</i> / <i>ρ</i>.'],
+'Wie viel Platz braucht die Dehnfuge?':['Endtemperatur minus Anfangstemperatur (Vorzeichen beachten).','Δ<i>L</i> = <i>L</i><sub>0</sub> · <i>α</i> · Δ<i>T</i> mit L₀ in mm.'],
+'Gas wird verdichtet und erwärmt':['<i>T</i> = <i>ϑ</i> + 273,15.','<i>T</i> = <i>ϑ</i> + 273,15.','<i>p</i><sub>1</sub> · <i>V</i><sub>1</sub> / <i>T</i><sub>1</sub> = <i>p</i><sub>2</sub> · <i>V</i><sub>2</sub> / <i>T</i><sub>2</sub> nach <i>p</i><sub>2</sub> umstellen.'],
+'Differentialzylinder':['<i>A</i><sub>1</sub> = <i>D</i>² · π / 4.','<i>Q</i> in cm³/min (l · 1000), dann <i>v</i> = <i>Q</i> / <i>A</i><sub>1</sub>.','Einfahren: Ringfläche (<i>D</i>² − <i>d</i>²) · π / 4, dann <i>v</i> = <i>Q</i> / <i>A</i><sub>2</sub>.','<i>v</i><sub>1</sub> / <i>v</i><sub>2</sub> = <i>A</i><sub>2</sub> / <i>A</i><sub>1</sub>.'],
+};
+const hintFor=t=>HINTS[t]||HINTS[Object.keys(HINTS).find(k=>t.endsWith(k))]||[];
+
 /* ---------- Zustand ---------- */
-const st={lv:store.get('lv',2),sel:new Set(store.get('sel',['E1','E3','E4','S1','S2'])),cur:null,done:false,streak:0};
+for(const f of FX)f.x=XS[f.id];
+const st={lv:store.get('lv',2),guided:store.get('guided',true),sel:new Set(store.get('sel',['E1','E3','E4','S1','S2']).filter(g=>GMAP[g])),cur:null,done:false,streak:0};
 let stats=store.get('stats',{}),fst=store.get('fst',{});
 let day=store.get('day',{d:'',r:0,w:0});
 const today=new Date().toISOString().slice(0,10);
@@ -819,112 +1602,149 @@ function updHead(){
   $('#pCount').innerHTML=diff>=0?`<b>${diff}</b> Tage bis zur Prüfung`:'<b>✓</b> Prüfung vorbei';
 }
 
-/* ---------- Auswahl-UI ---------- */
+/* ---------- Startbildschirm ---------- */
 function buildTopics(){
-  for(const b of ['E','S']){const col=$('#col'+b);col.innerHTML='';
-    GROUPS.filter(g=>g.b===b).forEach(g=>{const el=document.createElement('button');el.className='topic c';el.dataset.b=b;el.dataset.g=g.id;
-      el.setAttribute('aria-pressed',st.sel.has(g.id));el.title=g.name+' · '+g.pts+' Punkte';
-      el.innerHTML=`<span class="code">${g.id}</span><span class="nm">${g.e} ${g.sn}</span>`;
-      el.onclick=()=>{st.sel.has(g.id)?st.sel.delete(g.id):st.sel.add(g.id);selChanged()};col.appendChild(el)})}
+  $('#topics').innerHTML=BLOCKS.map(B=>`<div class="tcol" style="--bc:var(--b-${B.id})"><h3><span>${B.e} ${B.name}</span><span class="q"><button class="mini" data-all="${B.id}">alle</button><button class="mini" data-none="${B.id}">keine</button></span></h3><p class="bavg">${B.avg}</p><div class="tgrid">${
+    GROUPS.filter(g=>g.b===B.id).map(g=>`<button class="topic c" data-g="${g.id}" aria-pressed="${st.sel.has(g.id)}" title="${g.name}"><span class="code">${g.id}</span><span class="nm">${g.e} ${g.sn}</span></button>`).join('')}</div></div>`).join('');
+  document.querySelectorAll('.topic').forEach(el=>el.onclick=()=>{const g=el.dataset.g;st.sel.has(g)?st.sel.delete(g):st.sel.add(g);selChanged()});
+  document.querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.all).forEach(g=>st.sel.add(g.id));selChanged()});
+  document.querySelectorAll('[data-none]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.none).forEach(g=>st.sel.delete(g.id));selChanged()});
 }
 function selChanged(){store.set('sel',[...st.sel]);document.querySelectorAll('.topic').forEach(t=>t.setAttribute('aria-pressed',st.sel.has(t.dataset.g)));$('#hint').textContent=''}
-document.querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.all).forEach(g=>st.sel.add(g.id));selChanged()});
-document.querySelectorAll('[data-none]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.none).forEach(g=>st.sel.delete(g.id));selChanged()});
 $('#preTop').onclick=()=>{st.sel=new Set(['E3','S1','S2','E4','E1']);selChanged()};
 $('#preAll').onclick=()=>{st.sel=new Set(GROUPS.map(g=>g.id));selChanged()};
-document.querySelectorAll('.lv').forEach(b=>b.onclick=()=>{st.lv=+b.dataset.lv;store.set('lv',st.lv);
-  document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x===b))});
-document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',+x.dataset.lv===st.lv));
+function setPressed(sel,attr,val){document.querySelectorAll(sel).forEach(x=>x.setAttribute('aria-pressed',x.dataset[attr]===String(val)))}
+document.querySelectorAll('.lv').forEach(b=>b.onclick=()=>{st.lv=+b.dataset.lv;store.set('lv',st.lv);setPressed('.lv','lv',st.lv)});
+document.querySelectorAll('.md').forEach(b=>b.onclick=()=>{st.guided=b.dataset.md==='1';store.set('guided',st.guided);setPressed('.md','md',st.guided?1:0)});
+setPressed('.lv','lv',st.lv);setPressed('.md','md',st.guided?1:0);
 
-/* ---------- Aufgaben ---------- */
+/* ---------- Aufgaben auswählen ---------- */
 const weight=id=>{const s=fst[id]||{r:0,w:0};return Math.max(0.4,1+s.w*0.8-s.r*0.25)};
 function wpick(items,wf){const ws=items.map(wf),sum=ws.reduce((a,b)=>a+b,0);let x=Math.random()*sum;for(let i=0;i<items.length;i++){x-=ws[i];if(x<=0)return items[i]}return items[items.length-1]}
-
 function next(){
-  const card=$('#card');st.done=false;
-  const groups=[...st.sel];
-  if(!groups.length){card.innerHTML=`<p class="task">Wähl oben mindestens ein Thema aus.</p>`;$('#traps').hidden=true;return}
+  const groups=[...st.sel];st.done=false;st.tries=0;st.revealed=false;
   if(st.lv===3){
     const g=wpick(groups.filter(x=>SCH[x]),x=>{const s=stats[x]||{r:0,w:0};return Math.max(0.5,1+s.w*0.3-s.r*0.1)});
-    const gen=pick(SCH[g]);const t=gen();st.cur={kind:3,g,t};renderHard();
+    st.cur={kind:3,g,t:pick(SCH[g])()};renderHard();
   }else{
     const pool=FX.filter(f=>st.sel.has(f.g));const f=wpick(pool,x=>weight(x.id));
-    const target=pick(Object.keys(f.s));
-    const raw=f.gen();const v={};for(const k in raw)v[k]=sig(raw[k]);
+    let ts=Object.keys(f.s);if(st.lv===1){const lhs=f.eq.split(' = ')[0];const nl=ts.filter(t=>lhs!=='{'+t+'}');if(nl.length)ts=nl}
+    const target=pick(ts);const raw=f.gen();const v={};for(const k in raw)v[k]=sig(raw[k]);
     v[target]=f.s[target][1](v);
     st.cur={kind:st.lv,g:f.g,f,target,v};st.lv===1?renderEasy():renderMid();
   }
-  renderTraps(st.cur.g);
+  renderTraps(st.cur.g);window.scrollTo(0,0);
 }
-const head=(g,extra='')=>{const G=GMAP[g];return `<div class="head"><span class="tag ${G.b}">${G.e} ${G.id} · ${G.name}</span><span class="note">${extra}</span></div>`};
-const legend=(f,skip)=>`<div class="legend">${Object.keys(f.v).map(k=>`<span>${sym(f,k)} = ${f.v[k][0]}${f.v[k][1]?' in '+f.v[k][1]:''}</span>`).join('')}</div>`;
 
+/* ---------- Bausteine ---------- */
+const head=(g,extra='')=>{const G=GMAP[g];return `<div class="head"><span class="tag" style="--bc:var(--b-${G.b})">${G.e} ${G.id} · ${G.name}</span><span class="note">${extra}</span></div>`};
+const legend=f=>`<div class="legend">${Object.keys(f.v).map(k=>`<span>${sym(f,k)} = ${f.v[k][0]}${f.v[k][1]?' in '+f.v[k][1]:''}</span>`).join('')}</div>`;
+const stepList=(arr,start=1,hideLastEq=false)=>`<ol class="stp" start="${start}">${arr.map((s,i)=>`<li><span class="ex">${s.txt}</span>${hideLastEq&&i===arr.length-1?'<span class="fq hid">? – das ist dein Teil</span>':`<span class="fq">${s.eq}</span>`}</li>`).join('')}</ol>`;
+const mode=()=>st.guided?'geführt':'selbst';
+function bottomRow(extra=''){return `<div class="row"><button class="btn" type="submit" id="chk">Prüfen ↵</button><button class="btn ghost" type="button" id="tip">💡 Tipp</button><button class="btn ghost" type="button" id="sol">Lösung zeigen</button>${extra}<button class="btn ghost" type="button" id="skip">Weiter →</button></div>`}
+function finish(ok,first){st.done=true;if(first)record(ok,st.cur.g,st.cur.f?st.cur.f.id:null);
+  $('#chk').textContent='Nächste Aufgabe ↵';$('#tip').hidden=true;$('#sol').hidden=true;$('#skip').hidden=true;$('#chk').focus({preventScroll:true})}
+const isTouch=()=>matchMedia('(pointer:coarse)').matches;
+
+/* ---------- Leicht: Formel umstellen und eintippen ---------- */
 function renderEasy(){
-  const {f,target,v}=st.cur,c=$('#card');
-  const opts=shuffle([{t:f.s[target][0],ok:true},...f.s[target][2].slice(0,3).map(t=>({t,ok:false}))]);
-  c.innerHTML=head(f.g,f.name)+
-   `<p class="task">Stelle nach <b>${sym(f,target)}</b> um.</p><div class="fx">${tex(f,f.eq)}</div>${legend(f)}
-    <div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${sym(f,target)} = ${tex(f,o.t)}</button>`).join('')}</div>
-    <div id="fb"></div><div class="row"><button class="btn" id="nx" hidden>Nächste Formel ↵</button></div>`;
-  c.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(st.done)return;st.done=true;const o=opts[+b.dataset.i];
-    c.querySelectorAll('.opt').forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('ok')});if(!o.ok)b.classList.add('bad');
-    record(o.ok,f.g,f.id);
-    const probe=`${sym(f,target)} = ${num(f,f.s[target][0],v)} = ${F(v[target])}${unit(f,target)}`;
-    $('#fb').innerHTML=`<div class="fb ${o.ok?'ok':'bad'}"><strong>${o.ok?'Richtig.':'Nicht ganz.'}</strong>
-      <div class="steps"><div>${sym(f,target)} = ${tex(f,f.s[target][0])}</div><div class="note">Probe mit Zahlen: ${probe}</div></div>${f.note?`<div class="note">${f.note}</div>`:''}</div>`;
-    const nx=$('#nx');nx.hidden=false;nx.onclick=next;nx.focus()});
+  const {f,target:t,v}=st.cur,c=$('#card'),steps=umSteps(f,t),keys=Object.keys(f.v).filter(k=>k!==t);let shown=st.guided?steps.length-1:0;
+  const ops=['+','−','·','/','(',')','²','√','π'];if(/sin|cos|tan/.test(f.eq))ops.push('sin','cos','tan','arcsin','arccos','arctan');
+  c.innerHTML=head(f.g,`${f.name} · Leicht · ${mode()}`)+
+   `<p class="task">Stelle nach <b>${sym(f,t)}</b> um und <b>tippe die Formel ein</b>.</p><div class="fx">${tex(f,f.eq)}</div>${legend(f)}
+    <div id="guide"></div>
+    <form class="ans" id="frm" autocomplete="off">
+      <div class="inp big"><label for="fin">${sym(f,t)} =</label><input id="fin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="hier tippen oder Knöpfe nutzen"></div>
+      <div class="pv" id="pv" aria-live="polite">&nbsp;</div>
+      <div class="keys">${keys.map(k=>`<button type="button" class="key var" data-ins="${label(k)}">${sym(f,k)}</button>`).join('')}${ops.map(o=>`<button type="button" class="key" data-ins="${o.length>1?o+'(':o}">${o}</button>`).join('')}<button type="button" class="key" data-del="1" aria-label="Zeichen löschen">⌫</button><button type="button" class="key" data-clr="1">C</button></div>
+      ${bottomRow()}
+    </form><div id="fb"></div>`;
+  const inp=$('#fin');let pos=0;
+  const upd=()=>{$('#pv').innerHTML=preview(f,inp.value)};
+  inp.addEventListener('input',()=>{pos=inp.selectionStart;upd()});inp.addEventListener('keyup',()=>pos=inp.selectionStart);inp.addEventListener('click',()=>pos=inp.selectionStart);
+  c.querySelectorAll('.key').forEach(b=>b.onclick=()=>{if(st.done)return;const val=inp.value;
+    if(b.dataset.clr){inp.value='';pos=0}
+    else if(b.dataset.del){if(pos>0){inp.value=val.slice(0,pos-1)+val.slice(pos);pos--}}
+    else{const s=b.dataset.ins;inp.value=val.slice(0,pos)+s+val.slice(pos);pos+=s.length}
+    upd();if(!isTouch()){inp.focus();inp.setSelectionRange(pos,pos)}});
+  const showGuide=()=>{const g=$('#guide');
+    if(!shown){g.innerHTML='';return}
+    const part=steps.slice(0,shown);g.innerHTML=`<div class="guide"><p class="lbl">${st.guided?'Schritt für Schritt':'Tipp'}</p>${stepList(part)}${shown<steps.length?`<p class="note">Letzter Schritt: ${steps[shown].txt} Das Ergebnis tippst du selbst ein.</p>`:''}</div>`};
+  showGuide();
+  $('#tip').onclick=()=>{if(shown<steps.length-1){shown++;showGuide()}else{$('#fb').innerHTML=`<div class="fb info">Mehr Tipps gibt es nicht – drück „Lösung zeigen“, wenn du nicht weiterkommst.</div>`}};
+  $('#sol').onclick=()=>{shown=steps.length;showGuide();$('#fb').innerHTML=`<div class="fb bad"><strong>Lösung</strong><div class="steps"><div>${sym(f,t)} = ${tex(f,f.s[t][0])}</div><div class="note">Probe: ${sym(f,t)} = ${num(f,f.s[t][0],v)} = ${F(v[t])}${unit(f,t)}</div></div></div>`;finish(false,st.tries===0)};
+  $('#skip').onclick=next;
+  $('#frm').onsubmit=e=>{e.preventDefault();if(st.done){next();return}
+    let res;try{res=checkFormula(f,t,inp.value)}catch(err){$('#fb').innerHTML=`<div class="fb info">${err.message}</div>`;return}
+    const first=st.tries===0;st.tries++;
+    if(res.ok){inp.classList.remove('bad');inp.classList.add('ok');shown=steps.length;showGuide();
+      $('#fb').innerHTML=`<div class="fb ok"><strong>Richtig${first?'':' – im zweiten Anlauf'}.</strong><div class="steps"><div>${sym(f,t)} = ${tex(f,f.s[t][0])}</div><div class="note">Probe mit Zahlen: ${sym(f,t)} = ${num(f,f.s[t][0],v)} = ${F(v[t])}${unit(f,t)}</div></div>${f.note?`<div class="note">${f.note}</div>`:''}</div>`;
+      finish(true,first)}
+    else{inp.classList.add('bad');if(first)record(false,f.g,f.id);
+      $('#fb').innerHTML=`<div class="fb bad"><strong>Noch nicht richtig.</strong> ${res.msg||'Deine Formel ergibt andere Werte.'} Versuch es nochmal – oder hol dir einen 💡 Tipp.</div>`}};
+  if(!isTouch())setTimeout(()=>inp.focus({preventScroll:true}),0);
 }
+
+/* ---------- Mittel: umstellen und ausrechnen ---------- */
 function renderMid(){
-  const {f,target,v}=st.cur,c=$('#card');const gk=Object.keys(f.v).filter(k=>k!==target);
-  c.innerHTML=head(f.g,f.name)+
-   `<p class="task">Berechne <b>${sym(f,target)}</b> (${f.v[target][0]}).</p><div class="fx">${tex(f,f.eq)}</div>
+  const {f,target:t,v}=st.cur,c=$('#card'),gk=Object.keys(f.v).filter(k=>k!==t);
+  const steps=umSteps(f,t).concat([{txt:'Zahlen mit Einheiten einsetzen.',eq:`${sym(f,t)} = ${num(f,f.s[t][0],v)}`}]);
+  let shown=st.guided?steps.length:0;
+  c.innerHTML=head(f.g,`${f.name} · Mittel · ${mode()}`)+
+   `<p class="task">Berechne <b>${sym(f,t)}</b> (${f.v[t][0]}).</p><div class="fx">${tex(f,f.eq)}</div>
     <div class="given">${gk.map(k=>`<div><span class="n">${f.v[k][0]}</span><span class="v">${sym(f,k)} = ${FG(v[k])}${unit(f,k)}</span></div>`).join('')}</div>
-    <form class="ans" id="frm"><div class="inp"><label for="a0">${sym(f,target)} =</label><input id="a0" inputmode="decimal" autocomplete="off" placeholder="Ergebnis"><span class="u">${f.v[target][1]}</span></div>
-    <div class="row"><button class="btn" type="submit" id="chk">Prüfen ↵</button><button class="btn ghost" type="button" id="tip">Tipp: umgestellte Formel</button><button class="btn ghost" type="button" id="skip">Überspringen</button></div></form>
-    <div id="fb"></div>`;
-  const inp=$('#a0');setTimeout(()=>inp.focus({preventScroll:true}),0);
-  $('#tip').onclick=()=>{$('#fb').innerHTML=`<div class="fb info"><div class="steps"><div>${sym(f,target)} = ${tex(f,f.s[target][0])}</div></div></div>`};
+    <div id="guide"></div>
+    <form class="ans" id="frm" autocomplete="off"><div class="inp big"><label for="a0">${sym(f,t)} =</label><input id="a0" inputmode="decimal" autocomplete="off" placeholder="Ergebnis"><span class="u">${f.v[t][1]}</span></div>
+    ${bottomRow()}</form><div id="fb"></div>`;
+  const inp=$('#a0');
+  const showGuide=()=>{$('#guide').innerHTML=shown?`<div class="guide"><p class="lbl">${st.guided?'Schritt für Schritt':'Tipp'}</p>${stepList(steps.slice(0,shown))}${shown===steps.length?'<p class="note">Jetzt nur noch in den Taschenrechner tippen und das Ergebnis unten eintragen.</p>':''}</div>`:''};
+  showGuide();
+  $('#tip').onclick=()=>{if(shown<steps.length){shown++;showGuide()}else $('#fb').innerHTML=`<div class="fb info">Alle Schritte stehen schon da. Rechne den letzten Ausdruck mit dem Taschenrechner aus.</div>`};
+  const sol=ok=>`<div class="steps"><div>umgestellt: ${sym(f,t)} = ${tex(f,f.s[t][0])}</div><div>eingesetzt: ${sym(f,t)} = ${num(f,f.s[t][0],v)}</div><div>Ergebnis: <b>${sym(f,t)} = ${F(v[t])}${unit(f,t)}</b></div></div>${f.note?`<div class="note">${f.note}</div>`:''}`;
+  $('#sol').onclick=()=>{shown=steps.length;showGuide();$('#fb').innerHTML=`<div class="fb bad"><strong>Lösung</strong>${sol()}</div>`;finish(false,st.tries===0)};
   $('#skip').onclick=next;
   $('#frm').onsubmit=e=>{e.preventDefault();if(st.done){next();return}
-    const a=parseNum(inp.value);if(!isFinite(a)){inp.focus();return}
-    st.done=true;const t=v[target],ok=near(a,t);inp.classList.add(ok?'ok':'bad');inp.readOnly=true;record(ok,f.g,f.id);
-    $('#fb').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><strong>${ok?'Richtig.':'Leider falsch.'}</strong><div class="steps">
-      <div>umgestellt: ${sym(f,target)} = ${tex(f,f.s[target][0])}</div>
-      <div>eingesetzt: ${sym(f,target)} = ${num(f,f.s[target][0],v)}</div>
-      <div>Ergebnis: <b>${sym(f,target)} = ${F(t)}${unit(f,target)}</b></div></div>${f.note?`<div class="note">${f.note}</div>`:''}</div>`;
-    $('#chk').textContent='Nächste Aufgabe ↵';$('#tip').hidden=true;$('#skip').hidden=true;$('#chk').focus()};
+    const a=parseNum(inp.value);if(!isFinite(a)){$('#fb').innerHTML=`<div class="fb info">Gib eine Zahl ein, z. B. 12,5.</div>`;inp.focus();return}
+    const first=st.tries===0;st.tries++;const ok=near(a,v[t]);
+    if(ok){inp.classList.remove('bad');inp.classList.add('ok');shown=steps.length;showGuide();$('#fb').innerHTML=`<div class="fb ok"><strong>Richtig${first?'':' – im zweiten Anlauf'}.</strong>${sol()}</div>`;finish(true,first)}
+    else{inp.classList.add('bad');if(first)record(false,f.g,f.id);$('#fb').innerHTML=`<div class="fb bad"><strong>Noch nicht richtig.</strong> Prüf die Umstellung und die Einheiten – oder hol dir einen 💡 Tipp.</div>`}};
+  if(!isTouch())setTimeout(()=>inp.focus({preventScroll:true}),0);
 }
+
+/* ---------- Schwer: Rechenketten ---------- */
 function renderHard(){
-  const {g,t}=st.cur,c=$('#card');
-  c.innerHTML=head(g,t.ref)+`<p class="task"><b>${t.t}</b></p><div>${t.text}</div>
-   <form class="ans" id="frm">${t.parts.map((p,i)=>`<div class="part"><div class="inp"><label for="a${i}">${String.fromCharCode(97+i)}) ${p.q} =</label><input id="a${i}" inputmode="decimal" autocomplete="off"><span class="u">${p.u}</span></div><div id="s${i}"></div></div>`).join('')}
-   <div class="row"><button class="btn" type="submit" id="chk">Alle prüfen ↵</button><button class="btn ghost" type="button" id="tip">Formeln zum Thema</button><button class="btn ghost" type="button" id="skip">Neue Aufgabe</button></div></form><div id="fb"></div>`;
-  setTimeout(()=>$('#a0').focus({preventScroll:true}),0);
+  const {g,t}=st.cur,c=$('#card'),H=hintFor(t.t);
+  c.innerHTML=head(g,`${t.ref} · Schwer · ${mode()}`)+`<p class="task"><b>${t.t}</b></p><div>${t.text}</div>
+   <form class="ans" id="frm" autocomplete="off">${t.parts.map((p,i)=>`<div class="part"><div class="inp"><label for="a${i}">${String.fromCharCode(97+i)}) ${p.q} =</label><input id="a${i}" inputmode="decimal" autocomplete="off"><span class="u">${p.u}</span>${st.guided?'':`<button type="button" class="mini ptip" data-i="${i}">💡 Tipp</button>`}</div><div class="phint" id="h${i}"${st.guided?'':' hidden'}>${H[i]?`<span class="ex">${H[i]}</span>`:''}</div><div id="s${i}"></div></div>`).join('')}
+   ${bottomRow()}</form><div id="fb"></div>`;
+  c.querySelectorAll('.ptip').forEach(b=>b.onclick=()=>{$('#h'+b.dataset.i).hidden=false;b.hidden=true});
+  $('#tip').onclick=()=>{const i=t.parts.findIndex((p,k)=>$('#h'+k).hidden);if(i<0){$('#fb').innerHTML=`<div class="fb info">Alle Tipps sind schon offen.</div>`;return}$('#h'+i).hidden=false;const b=c.querySelector(`.ptip[data-i="${i}"]`);if(b)b.hidden=true};
+  const showAll=()=>t.parts.forEach((p,i)=>{$('#s'+i).innerHTML=`<div class="fb ${$('#a'+i).classList.contains('ok')?'ok':'bad'}"><div class="steps">${p.steps.map(s=>`<div>${s}</div>`).join('')}<div>→ <b>${F(p.a)}${p.u?' '+p.u:''}</b></div></div></div>`});
+  $('#sol').onclick=()=>{showAll();finish(false,st.tries===0)};
   $('#skip').onclick=next;
-  $('#tip').onclick=()=>{const fs=FX.filter(f=>f.g===g);$('#fb').innerHTML=`<div class="fb info"><div class="steps">${fs.map(f=>`<div>${tex(f,f.eq)}</div>`).join('')}</div></div>`};
+  if(!isTouch())setTimeout(()=>$('#a0').focus({preventScroll:true}),0);
   $('#frm').onsubmit=e=>{e.preventDefault();if(st.done){next();return}
-    st.done=true;let n=0;
-    t.parts.forEach((p,i)=>{const el=$('#a'+i),a=parseNum(el.value),ok=near(a,p.a,p.tol);if(ok)n++;el.classList.add(ok?'ok':'bad');el.readOnly=true;
-      $('#s'+i).innerHTML=`<div class="fb ${ok?'ok':'bad'}"><div class="steps">${p.steps.map(s=>`<div>${s}</div>`).join('')}<div>→ <b>${F(p.a)}${p.u?' '+p.u:''}</b></div></div></div>`});
-    const all=n===t.parts.length;record(all,g,null);
-    $('#fb').innerHTML=`<div class="fb ${all?'ok':'info'}"><strong>${n} von ${t.parts.length} richtig.</strong>${all?'':'<span class="note">Folgefehler zählen in der Prüfung nicht doppelt – rechne mit deinem Zwischenergebnis weiter.</span>'}</div>`;
-    $('#chk').textContent='Nächste Aufgabe ↵';$('#tip').hidden=true;$('#skip').hidden=true;$('#chk').focus()};
+    const first=st.tries===0;st.tries++;let n=0;
+    t.parts.forEach((p,i)=>{const el=$('#a'+i),a=parseNum(el.value),ok=near(a,p.a,p.tol);if(ok){n++;el.classList.remove('bad');el.classList.add('ok');el.readOnly=true}else el.classList.add('bad')});
+    const all=n===t.parts.length;
+    if(all){showAll();$('#fb').innerHTML=`<div class="fb ok"><strong>Alle ${n} richtig${first?'':' – im zweiten Anlauf'}.</strong></div>`;finish(true,first)}
+    else{if(first)record(false,g,null);$('#fb').innerHTML=`<div class="fb bad"><strong>${n} von ${t.parts.length} richtig.</strong> Die roten Felder kannst du nochmal versuchen – oder 💡 Tipp bzw. „Lösung zeigen“.</div>`}};
 }
-function renderTraps(g){const G=GMAP[g],el=$('#traps');const op=el.open;el.hidden=false;el.className='traps '+G.b;
-  el.innerHTML=`<summary>Fallen und Tipps · ${G.e} ${G.id} ${G.sn}</summary><h4>${G.name}</h4><p>${G.d} <span class="note">· ${G.n} Prüfungsaufgaben, ${G.pts} Punkte</span></p><p class="lbl" style="margin:4px 0 0">Die Fallen</p><ul>${G.t.map(x=>`<li>${x}</li>`).join('')}</ul>`;el.open=op}
+function renderTraps(g){const G=GMAP[g],el=$('#traps');const op=el.open;el.hidden=false;el.style.setProperty('--bc',`var(--b-${G.b})`);
+  el.innerHTML=`<summary>Fallen und Merksätze · ${G.e} ${G.id} ${G.sn}</summary><h4>${G.name}</h4><p>${G.d}${G.pts?` <span class="note">· ${G.n} Prüfungsaufgaben, ${G.pts} Punkte</span>`:''}</p><ul>${G.t.map(x=>`<li>${x}</li>`).join('')}</ul>`;el.open=op}
 
 /* ---------- Formelblatt ---------- */
 function buildSheet(){
-  $('#sheetBody').innerHTML=`<p class="note">Alle Formeln der zwölf Gruppen mit jeder Umstellung, die in den Aufgaben vorkommt. Die Seitenzahlen deiner IHK-Formelsammlung trägst du im Sonderskript (§ 7) ein.</p>`+
-   GROUPS.map(G=>{const fs=FX.filter(f=>f.g===G.id);return `<section class="sgroup"><h3><span class="tag ${G.b}">${G.id}</span>${G.e} ${G.name}<span class="pt">${G.pts} Punkte · ${G.n} Aufgaben</span></h3><p>${G.d}</p>
-    ${fs.map(f=>{const tg=Object.keys(f.s).filter(k=>f.s[k][0]!==f.eq.split(' = ')[1]);
-      return `<div class="frm"><div class="fn">${f.name}${f.sub?`<small>${f.sub}</small>`:''}</div><div class="fl"><span class="main">${tex(f,f.eq)}</span>${tg.map(k=>`<span>${sym(f,k)} = ${tex(f,f.s[k][0])}</span>`).join('')}</div></div>`}).join('')}</section>`}).join('');
+  $('#sheetBody').innerHTML=`<p class="note">Alle Formeln mit jeder Umstellung, nach Blöcken und Themen sortiert.</p>`+
+   BLOCKS.map(B=>`<h2 class="bh">${B.e} ${B.name} <span class="note">${B.avg}</span></h2>`+GROUPS.filter(G=>G.b===B.id).map(G=>{const fs=FX.filter(f=>f.g===G.id);return `<section class="sgroup"><h3><span class="tag" style="--bc:var(--b-${G.b})">${G.id}</span>${G.e} ${G.name}${G.pts?`<span class="pt">${G.pts} Punkte · ${G.n} Aufgaben</span>`:''}</h3><p>${G.d}</p>
+    ${fs.map(f=>{const rhs=f.eq.split(' = ')[1],tg=Object.keys(f.s).filter(k=>f.s[k][0]!==rhs);
+      return `<div class="frm"><div class="fn">${f.name}${f.sub?`<small>${f.sub}</small>`:''}</div><div class="fl"><span class="main">${tex(f,f.eq)}</span>${tg.map(k=>`<span>${sym(f,k)} = ${tex(f,f.s[k][0])}</span>`).join('')}</div></div>`}).join('')}</section>`}).join('')).join('');
 }
 
 /* ---------- Fortschritt ---------- */
 function buildProg(){
   $('#progList').innerHTML=GROUPS.map(G=>{const s=stats[G.id]||{r:0,w:0},n=s.r+s.w,pr=n?Math.round(s.r/n*100):0;
-    return `<div class="pr"><span class="tag ${G.b}">${G.id}</span><div class="bar" title="${G.name}"><i class="g" style="width:${n?s.r/n*100:0}%"></i><i class="r" style="width:${n?s.w/n*100:0}%"></i></div><span>${n?`${s.r} / ${n} · ${pr} %`:'noch nichts'}</span></div>`}).join('');
+    return `<div class="pr"><span class="tag" style="--bc:var(--b-${G.b})">${G.id}</span><div class="bar" title="${G.name}"><i class="g" style="width:${n?s.r/n*100:0}%"></i><i class="r" style="width:${n?s.w/n*100:0}%"></i></div><span>${n?`${s.r} / ${n} · ${pr} %`:'noch nichts'}</span></div>`}).join('');
 }
 $('#examDate').value=store.get('exam','2026-11-03');
 $('#examDate').onchange=e=>{if(e.target.value){store.set('exam',e.target.value);updHead()}};
@@ -933,16 +1753,15 @@ $('#reset').onclick=()=>{if(!resetArm){resetArm=true;$('#reset').textContent='Wi
   stats={};fst={};day={d:today,r:0,w:0};store.set('stats',stats);store.set('fst',fst);store.set('day',day);resetArm=false;
   $('#reset').textContent='Fortschritt zurücksetzen';$('#resetNote').textContent='Gelöscht.';buildProg();updHead()};
 
-/* ---------- Ansichten ---------- */
+/* ---------- Ansichten und Farbmodus ---------- */
 const LVN={1:'Leicht',2:'Mittel',3:'Schwer'};
-function show(v){for(const t of ['start','train','sheet','prog'])$('#v-'+t).hidden=t!==v;
-  if(v==='prog')buildProg();window.scrollTo(0,0)}
+function show(v){for(const t of ['start','train','sheet','prog'])$('#v-'+t).hidden=t!==v;if(v==='prog')buildProg();window.scrollTo(0,0)}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>show(b.dataset.view));
 $('#go').onclick=()=>{if(!st.sel.size){$('#hint').textContent='Wähl mindestens ein Thema aus.';return}
-  $('#trainInfo').textContent=`${LVN[st.lv]} · ${[...st.sel].sort().join(' ')}`;show('train');next()};
-function applyMode(m){document.documentElement.dataset.mode=m;$('#mode').textContent=m==='light'?'Dunkel':'Hell'}
-let mode=store.get('mode','dark');applyMode(mode);
-$('#mode').onclick=()=>{mode=mode==='light'?'dark':'light';store.set('mode',mode);applyMode(mode)};
+  $('#trainInfo').textContent=`${LVN[st.lv]} · ${st.guided?'geführt':'selbst'} · ${st.sel.size} Themen`;show('train');next()};
+function applyMode(m){document.documentElement.dataset.mode=m;setPressed('.th','th',m)}
+let theme=store.get('mode','dark');applyMode(theme);
+document.querySelectorAll('.th').forEach(b=>b.onclick=()=>{theme=b.dataset.th;store.set('mode',theme);applyMode(theme)});
 
 buildTopics();buildSheet();updHead();
 </script>
