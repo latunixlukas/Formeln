@@ -7,27 +7,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
 <style>
-/* Layout: Millimeterpapier-Grund, oben Steuerleiste (Stufe + Themen), darunter die Aufgabenkarte wie ein Prüfungsblatt. Kupfer = E-Technik, Blau = Statistik. */
+/* Layout: Startbildschirm nur mit Knöpfen (Stufe, Themen, Los), danach Vollbild-Aufgabe wie ein Prüfungsblatt. Dunkel als Standard. Kupfer = E-Technik, Blau = Statistik. */
 :root{
-  --paper:#f2f3ee; --grid:rgba(60,90,80,.07); --card:#ffffff; --ink:#1c2530; --muted:#5b6571; --line:#d8dbd2;
-  --cu:#b0521c; --cu-soft:#f6e6da; --st:#2a5ea8; --st-soft:#e1eaf7;
-  --ok:#2c7a4b; --ok-soft:#e1f1e7; --bad:#b3261e; --bad-soft:#f8e2df;
-  --btn:#1c2530; --btn-fg:#f7f7f2;
+  --paper:#0f1418; --grid:rgba(150,185,200,.045); --card:#182027; --ink:#e6eaed; --muted:#97a2ad; --line:#2a343e;
+  --cu:#e58b54; --cu-soft:#33241a; --st:#7eaaea; --st-soft:#1b2a3e;
+  --ok:#5fc489; --ok-soft:#163023; --bad:#f2847a; --bad-soft:#391e1c;
+  --btn:#e6eaed; --btn-fg:#0f1418;
   --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#11161b; --grid:rgba(160,190,200,.05); --card:#1a2128; --ink:#e7eaed; --muted:#9aa4ae; --line:#2d3640;
-  --cu:#e48a52; --cu-soft:#3a271c; --st:#7eaaea; --st-soft:#1d2b40;
-  --ok:#62c48b; --ok-soft:#183324; --bad:#f2847a; --bad-soft:#3b1f1d;
-  --btn:#e7eaed; --btn-fg:#11161b; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --paper:#11161b; --grid:rgba(160,190,200,.05); --card:#1a2128; --ink:#e7eaed; --muted:#9aa4ae; --line:#2d3640;
-  --cu:#e48a52; --cu-soft:#3a271c; --st:#7eaaea; --st-soft:#1d2b40;
-  --ok:#62c48b; --ok-soft:#183324; --bad:#f2847a; --bad-soft:#3b1f1d;
-  --btn:#e7eaed; --btn-fg:#11161b; color-scheme:dark}
+:root[data-mode="light"]{
+  --paper:#f2f3ee; --grid:rgba(60,90,80,.07); --card:#ffffff; --ink:#1c2530; --muted:#5b6571; --line:#d8dbd2;
+  --cu:#b0521c; --cu-soft:#f6e6da; --st:#2a5ea8; --st-soft:#e1eaf7;
+  --ok:#2c7a4b; --ok-soft:#e1f1e7; --bad:#b3261e; --bad-soft:#f8e2df;
+  --btn:#1c2530; --btn-fg:#f7f7f2; color-scheme:light}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background-color:var(--paper);color:var(--ink);font:15px/1.55 var(--f-body);
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
@@ -39,10 +36,6 @@ h1 small{display:block;font:500 13px/1.4 var(--f-body);color:var(--muted);letter
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .pill{display:inline-flex;align-items:baseline;gap:6px;padding:6px 11px;border:1px solid var(--line);background:var(--card);border-radius:999px;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .pill b{font:800 16px/1 var(--f-display)}
-nav{display:flex;gap:4px;border-bottom:1px solid var(--line)}
-nav button{all:unset;cursor:pointer;padding:9px 14px;font:600 14px var(--f-body);color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
-nav button[aria-selected="true"]{color:var(--ink);border-color:var(--ink)}
-nav button:focus-visible{outline:2px solid var(--st);outline-offset:2px}
 .lbl{font:600 11px/1 var(--f-body);text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 8px}
 .panel{display:grid;gap:16px}
 .levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -127,8 +120,26 @@ nav button:focus-visible{outline:2px solid var(--st);outline-offset:2px}
 .bar .g{background:var(--ok)} .bar .r{background:var(--bad)}
 .set{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .set input{font:500 15px var(--f-body);padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.start{max-width:720px;margin:0 auto;width:100%;display:grid;gap:22px;padding-top:4vh}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+.topic.c{grid-template-columns:auto 1fr;padding:10px 12px;font-weight:500}
+.go{all:unset;cursor:pointer;text-align:center;padding:16px;border-radius:12px;background:var(--cu);color:var(--paper);font:800 20px var(--f-display);letter-spacing:.01em}
+.go:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.go:hover{filter:brightness(1.07)}
+.hint{color:var(--bad);font-size:14px;min-height:1.2em;margin:-12px 0 0;text-align:center}
+.links{justify-content:center}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.bar .left{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+details.traps>summary{cursor:pointer;font:700 15px var(--f-display);list-style:none;display:flex;gap:8px;align-items:center}
+details.traps>summary::-webkit-details-marker{display:none}
+details.traps>summary::before{content:"▸";color:var(--muted);transition:transform .15s}
+details.traps[open]>summary::before{transform:rotate(90deg)}
+.iconbtn{all:unset;cursor:pointer;padding:6px 11px;border:1px solid var(--line);border-radius:999px;font-size:13px;background:var(--card)}
+.iconbtn:focus-visible{outline:2px solid var(--st);outline-offset:2px}
 @media (max-width:640px){
   .topics{grid-template-columns:minmax(0,1fr)}
+  .tgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .opts{grid-template-columns:minmax(0,1fr)}
   .lv span{display:none}
   .lv{text-align:center;padding:10px 6px}
@@ -139,50 +150,42 @@ nav button:focus-visible{outline:2px solid var(--st);outline-offset:2px}
 </style>
 
 <div class="wrap">
-  <header>
-    <h1>NTG Formeltrainer<small>Industriemeister Elektrotechnik · IHK Dortmund · Formeln umstellen, bis sie sitzen</small></h1>
-    <div class="chips">
-      <span class="pill" id="pCount"><b>–</b> Tage bis zur Prüfung</span>
-      <span class="pill">heute <b id="pToday">0/0</b></span>
-      <span class="pill">Serie <b id="pStreak">0</b></span>
-    </div>
-  </header>
-
-  <nav role="tablist">
-    <button role="tab" id="tab-train" aria-selected="true" data-tab="train">Training</button>
-    <button role="tab" id="tab-sheet" aria-selected="false" data-tab="sheet">Formelblatt</button>
-    <button role="tab" id="tab-prog" aria-selected="false" data-tab="prog">Fortschritt</button>
-  </nav>
-
-  <section id="v-train" class="panel">
+  <section id="v-start" class="start">
+    <header class="top">
+      <h1>NTG Formeltrainer<small>Industriemeister Elektrotechnik · Formeln umstellen</small></h1>
+      <div class="chips"><span class="pill" id="pCount"><b>–</b> Tage</span><button class="iconbtn" id="mode" type="button">Hell</button></div>
+    </header>
     <div>
       <p class="lbl">Stufe</p>
       <div class="levels" id="levels">
-        <button class="lv" data-lv="1" aria-pressed="false"><strong>Leicht</strong><span>Formel nach einer Größe umstellen – richtige Form auswählen</span></button>
-        <button class="lv" data-lv="2" aria-pressed="true"><strong>Mittel</strong><span>Umstellen und mit Zahlen ausrechnen</span></button>
-        <button class="lv" data-lv="3" aria-pressed="false"><strong>Schwer</strong><span>Rechenketten wie in der Prüfung, mehrere Schritte</span></button>
+        <button class="lv" data-lv="1" aria-pressed="false"><strong>Leicht</strong><span>richtige Umstellung auswählen</span></button>
+        <button class="lv" data-lv="2" aria-pressed="true"><strong>Mittel</strong><span>umstellen und ausrechnen</span></button>
+        <button class="lv" data-lv="3" aria-pressed="false"><strong>Schwer</strong><span>Rechenketten wie in der Prüfung</span></button>
       </div>
     </div>
-    <div>
-      <p class="lbl">Themen</p>
-      <div class="topics">
-        <div class="tcol" id="colE"><h3><span>Teil A · Elektrotechnik</span><span class="q"><button class="mini" data-all="E">alle</button><button class="mini" data-none="E">keine</button></span></h3></div>
-        <div class="tcol" id="colS"><h3><span>Teil B · Statistik</span><span class="q"><button class="mini" data-all="S">alle</button><button class="mini" data-none="S">keine</button></span></h3></div>
-      </div>
+    <div class="topics">
+      <div class="tcol"><h3><span>⚡ Elektrotechnik</span><span class="q"><button class="mini" data-all="E">alle</button><button class="mini" data-none="E">keine</button></span></h3><div class="tgrid" id="colE"></div></div>
+      <div class="tcol"><h3><span>📊 Statistik</span><span class="q"><button class="mini" data-all="S">alle</button><button class="mini" data-none="S">keine</button></span></h3><div class="tgrid" id="colS"></div></div>
     </div>
-    <div class="presets">
-      <span class="note">Schnellwahl:</span>
-      <button class="btn ghost" id="preTop">Top 5 nach Punkten (E3 · S1 · S2 · E4 · E1)</button>
-      <button class="btn ghost" id="preAll">Alles</button>
-    </div>
-
-    <article class="card" id="card" aria-live="polite"></article>
-    <aside class="traps" id="traps"></aside>
+    <div class="presets"><button class="btn ghost" id="preTop">Top 5 nach Punkten</button><button class="btn ghost" id="preAll">Alles</button></div>
+    <button class="go" id="go" type="button">Los geht’s →</button>
+    <p class="hint" id="hint"></p>
+    <div class="row links"><button class="btn ghost" data-view="sheet">Formelblatt</button><button class="btn ghost" data-view="prog">Fortschritt</button></div>
   </section>
 
-  <section id="v-sheet" class="sheet" hidden></section>
+  <section id="v-train" class="panel" hidden>
+    <div class="bar">
+      <div class="left"><button class="btn ghost" data-view="start">← Menü</button><span class="note" id="trainInfo"></span></div>
+      <div class="chips"><span class="pill">heute <b id="pToday">0/0</b></span><span class="pill">Serie <b id="pStreak">0</b></span></div>
+    </div>
+    <article class="card" id="card" aria-live="polite"></article>
+    <details class="traps" id="traps"></details>
+  </section>
+
+  <section id="v-sheet" hidden><div class="bar" style="margin-bottom:14px"><button class="btn ghost" data-view="start">← Menü</button></div><div class="sheet" id="sheetBody"></div></section>
 
   <section id="v-prog" class="panel" hidden>
+    <div class="bar"><button class="btn ghost" data-view="start">← Menü</button></div>
     <div class="card">
       <p class="lbl">Prüfungstermin</p>
       <div class="set">
@@ -215,40 +218,40 @@ const SQ3='√3';
 
 /* ---------- Themen (aus dem Sonderskript) ---------- */
 const GROUPS=[
- {id:'E1',b:'E',e:'🔌',name:'Leiterwiderstand, Spannungsfall, Klemmenspannung',pts:75,n:5,
+ {id:'E1',sn:'Leitung & Spannungsfall',b:'E',e:'🔌',name:'Leiterwiderstand, Spannungsfall, Klemmenspannung',pts:75,n:5,
   d:'Der meistgeprüfte Einzeltyp der letzten zehn Jahre – kam dreimal in identischer Schrittfolge (2018 H, 2022 F, 2024 F).',
   t:['Die doppelte Länge: bei Anschluss- und Verlängerungsleitungen ist l die doppelte Leitungslänge (Hin- UND Rückleiter).','ρ kommt aus der Formelsammlung: Cu 0,0178 oder 0,0179 Ω·mm²/m – beides wird gewertet.','Die tatsächliche Leistung ist U<sub>K</sub> · I, nicht die Typenschildleistung.','3-%-Prüfung: 0,03 · 230 V = 6,9 V – Entscheidungssatz hinschreiben, sonst keine Punkte.']},
- {id:'E2',b:'E',e:'🧵',name:'Drahtlänge aus dem Widerstand (ρ rückwärts)',pts:33,n:2,
+ {id:'E2',sn:'Drahtlänge',b:'E',e:'🧵',name:'Drahtlänge aus dem Widerstand (ρ rückwärts)',pts:33,n:2,
   d:'Kleine Gruppe, sicherer Punktelieferant – hängt auch als Teilaufgabe an großen Netzaufgaben.',
   t:['d ist der Durchmesser: A = d² · π / 4, nicht d² · π.','ρ in Ω·mm²/m und A in mm² → l kommt in Metern heraus.','Konstantan = 0,49 Ω·mm²/m.']},
- {id:'E3',b:'E',e:'🕸️',name:'Widerstandsnetz – Reihe, Parallel, gemischt',pts:219,n:14,
+ {id:'E3',sn:'Widerstandsnetz',b:'E',e:'🕸️',name:'Widerstandsnetz – Reihe, Parallel, gemischt',pts:219,n:14,
   d:'Der größte Einzelblock der ganzen Prüfung: 14 Aufgaben, 219 Punkte, in 21 von 36 Klausuren.',
   t:['n gleiche Widerstände von parallel auf Reihe → Leistung fällt auf 1/n² (bei drei auf ein Neuntel).','Kurzschluss eines Widerstands: R<sub>ges</sub> sinkt → I steigt → P STEIGT.','Unterbrechung: in Reihe fällt der ganze Zweig aus, parallel laufen die anderen weiter.','R<sub>ges</sub> einer Parallelschaltung ist immer kleiner als der kleinste Einzelwiderstand – schnelle Probe.']},
- {id:'E4',b:'E',e:'🌡️',name:'NTC / PTC – Spannungsteiler mit Kennlinie',pts:107,n:9,
+ {id:'E4',sn:'NTC / PTC',b:'E',e:'🌡️',name:'NTC / PTC – Spannungsteiler mit Kennlinie',pts:107,n:9,
   d:'Der neue Standardtyp: die vier jüngsten Klausuren hatten ihn alle. Kennlinie ablesen statt rechnen.',
   t:['NTC = Heißleiter: R sinkt bei Wärme. PTC = Kaltleiter: R steigt bei Wärme. Alle Metalle sind PTC.','Hoher Einschaltstrom von Lampen: kalter Glühdraht = kleiner Widerstand = großer Strom.','Begründung als ganze Kette: ϑ steigt → R<sub>NTC</sub> sinkt → Teiler verschiebt sich → U<sub>AUS</sub> sinkt.','Die R-Achse der Kennlinie ist logarithmisch.']},
- {id:'E5',b:'E',e:'⚙️',name:'Drehstrom, Motor, Wirkungsgrad',pts:88,n:6,
+ {id:'E5',sn:'Drehstrom & Motor',b:'E',e:'⚙️',name:'Drehstrom, Motor, Wirkungsgrad',pts:88,n:6,
   d:'Die Brücke zwischen E-Technik und Mechanik. √3 · U · I · cos φ ist die eine Formel dafür.',
   t:['Stern: U<sub>Str</sub> = U / √3, I<sub>Str</sub> = I. Dreieck: U<sub>Str</sub> = U, I<sub>Str</sub> = I / √3.','Wirkungsgradkette von hinten: P<sub>zu</sub> = P<sub>ab</sub> / η – geteilt, nicht multipliziert.','„Motorverluste 16 %“ heißt η = 0,84.','Drehzahl in 1/s umrechnen (÷ 60), bevor du v = d · π · n rechnest.']},
- {id:'E6',b:'E',e:'🔋',name:'Spannungsquelle, Innenwiderstand, Arbeit und Energiekosten',pts:24,n:2,
+ {id:'E6',sn:'Quelle & Kosten',b:'E',e:'🔋',name:'Spannungsquelle, Innenwiderstand, Arbeit und Energiekosten',pts:24,n:2,
   d:'Der einfachste Block. W = P · t und Kosten = W · Preis sind geschenkte Punkte.',
   t:['Einheiten: Watt ÷ 1000 → kW, Sekunden ÷ 3600 → h.','Innenwiderstand über Kreuz: R<sub>i</sub> = (U<sub>1</sub> − U<sub>2</sub>) / (I<sub>2</sub> − I<sub>1</sub>), damit R<sub>i</sub> positiv wird.','Zweiter Widerstand einer Parallelschaltung: R<sub>2</sub> = R<sub>1</sub> · R<sub>ges</sub> / (R<sub>1</sub> − R<sub>ges</sub>).']},
- {id:'S1',b:'S',e:'📋',name:'Urliste auswerten – Mittelwert, Spannweite, Median, Modalwert',pts:100,n:8,
+ {id:'S1',sn:'Urliste & Mittelwert',b:'S',e:'📋',name:'Urliste auswerten – Mittelwert, Spannweite, Median, Modalwert',pts:100,n:8,
   d:'Der billigste Punkt der ganzen Prüfung. Der Mittelwert kam in 25 von 36 Klausuren.',
   t:['Quote: Summe aller Tage / (Mitarbeiter · Arbeitstage) · 100 % – nicht pro Kopf rechnen.','Modalwert = der Messwert, nicht seine Anzahl.','„Nachvollziehbar“: Summe, n, dann der Quotient hinschreiben.','Einheiten mitschleppen: „R = 5 Tage“.']},
- {id:'S2',b:'S',e:'📐',name:'Standardabweichung und Streubereiche (±1s / ±2s / ±3s)',pts:96,n:7,
+ {id:'S2',sn:'Streuung & s',b:'S',e:'📐',name:'Standardabweichung und Streubereiche (±1s / ±2s / ±3s)',pts:96,n:7,
   d:'Die Standardabweichung kam 17×, die Streubereiche 13×. DIHK-Hinweis 2022: „vgl. IHK-Formelsammlung S. 60“.',
   t:['Bei einer Stichprobe immer n − 1 im Nenner.','Wendepunkte der Gaußkurve liegen bei x̄ ± 1s, nicht ±3s.','68,26 % = x̄ ± 1s · 95,45 % = x̄ ± 2s · 99,73 % = x̄ ± 3s.','Beurteilungssatz: 6s mit der Toleranz T vergleichen.']},
- {id:'S3',b:'S',e:'📈',name:'Wahrscheinlichkeitsnetz und Summenlinie',pts:67,n:5,
+ {id:'S3',sn:'W-Netz',b:'S',e:'📈',name:'Wahrscheinlichkeitsnetz und Summenlinie',pts:67,n:5,
   d:'Die Anlage wird gestellt: zwei Punkte eintragen, Gerade ziehen. Kam zuletzt Herbst 2024.',
   t:['Feste Skala: 0,135 % = −3s · 2,28 % = −2s · 15,87 % = −1s · 50 % = x̄ · 84,13 % = +1s · 97,72 % = +2s · 99,87 % = +3s.','Die rechte Achse ist 100 − F<sub>i</sub>: „5 % zu viel“ → OGW bei 95 %.','s ist eine Differenz: s = x̄ − x(15,87 %).','Lineal mitnehmen.']},
- {id:'S4',b:'S',e:'📉',name:'Qualitätsregelkarte und Urwertkarte',pts:53,n:4,
+ {id:'S4',sn:'Regelkarte',b:'S',e:'📉',name:'Qualitätsregelkarte und Urwertkarte',pts:53,n:4,
   d:'Darunter der dreifache Wiedergänger. Die Beurteilung ist Vokabellernen: Run, Trend, Eingriffsgrenze.',
   t:['RUN = 7 Werte in Folge auf einer Seite der Mittellinie. TREND = 7 Werte in Folge in eine Richtung.','Warngrenze = beobachten, Eingriffsgrenze = eingreifen.','Median bei n = 5: sortieren, dann der dritte Wert.','„Die Ursache ist festzustellen und zu beseitigen.“ – wörtlich hinschreiben.']},
- {id:'S5',b:'S',e:'🎯',name:'Fähigkeitskennwerte Cm, Cmk, Cp, Cpk',pts:40,n:3,
+ {id:'S5',sn:'Cp / Cpk',b:'S',e:'🎯',name:'Fähigkeitskennwerte Cm, Cmk, Cp, Cpk',pts:40,n:3,
   d:'Seit 2013 nicht mehr gekommen – als Letztes lernen, aber die zwei Formeln sitzen in fünf Minuten.',
   t:['6s im Nenner bei Cp, 3s bei Cpk.','Bei Cpk immer beide Seiten rechnen und das Minimum nehmen.','Cpk = Cp nur, wenn x̄ exakt in der Toleranzmitte liegt.']},
- {id:'S6',b:'S',e:'📊',name:'Klassierung und Histogramm',pts:10,n:1,
+ {id:'S6',sn:'Klassierung',b:'S',e:'📊',name:'Klassierung und Histogramm',pts:10,n:1,
   d:'Eine Aufgabe, 10 Punkte – die Klassenformeln sind winzig.',
   t:['Klassenbreite auf einen glatten Wert aufrunden (0,042 → 0,05).','Die Summe der Klassenhäufigkeiten muss n ergeben.','Histogramm: Säulen ohne Lücke.']},
 ];
@@ -818,19 +821,19 @@ function updHead(){
 
 /* ---------- Auswahl-UI ---------- */
 function buildTopics(){
-  for(const b of ['E','S']){const col=$('#col'+b);col.querySelectorAll('.topic').forEach(x=>x.remove());
-    GROUPS.filter(g=>g.b===b).forEach(g=>{const el=document.createElement('button');el.className='topic';el.dataset.b=b;el.dataset.g=g.id;
-      el.setAttribute('aria-pressed',st.sel.has(g.id));
-      el.innerHTML=`<span class="code">${g.id}</span><span class="nm">${g.e} ${g.name}</span><span class="pt">${g.pts} P</span>`;
+  for(const b of ['E','S']){const col=$('#col'+b);col.innerHTML='';
+    GROUPS.filter(g=>g.b===b).forEach(g=>{const el=document.createElement('button');el.className='topic c';el.dataset.b=b;el.dataset.g=g.id;
+      el.setAttribute('aria-pressed',st.sel.has(g.id));el.title=g.name+' · '+g.pts+' Punkte';
+      el.innerHTML=`<span class="code">${g.id}</span><span class="nm">${g.e} ${g.sn}</span>`;
       el.onclick=()=>{st.sel.has(g.id)?st.sel.delete(g.id):st.sel.add(g.id);selChanged()};col.appendChild(el)})}
 }
-function selChanged(){store.set('sel',[...st.sel]);document.querySelectorAll('.topic').forEach(t=>t.setAttribute('aria-pressed',st.sel.has(t.dataset.g)));next()}
+function selChanged(){store.set('sel',[...st.sel]);document.querySelectorAll('.topic').forEach(t=>t.setAttribute('aria-pressed',st.sel.has(t.dataset.g)));$('#hint').textContent=''}
 document.querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.all).forEach(g=>st.sel.add(g.id));selChanged()});
 document.querySelectorAll('[data-none]').forEach(b=>b.onclick=()=>{GROUPS.filter(g=>g.b===b.dataset.none).forEach(g=>st.sel.delete(g.id));selChanged()});
 $('#preTop').onclick=()=>{st.sel=new Set(['E3','S1','S2','E4','E1']);selChanged()};
 $('#preAll').onclick=()=>{st.sel=new Set(GROUPS.map(g=>g.id));selChanged()};
 document.querySelectorAll('.lv').forEach(b=>b.onclick=()=>{st.lv=+b.dataset.lv;store.set('lv',st.lv);
-  document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x===b));next()});
+  document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x===b))});
 document.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',+x.dataset.lv===st.lv));
 
 /* ---------- Aufgaben ---------- */
@@ -907,12 +910,12 @@ function renderHard(){
     $('#fb').innerHTML=`<div class="fb ${all?'ok':'info'}"><strong>${n} von ${t.parts.length} richtig.</strong>${all?'':'<span class="note">Folgefehler zählen in der Prüfung nicht doppelt – rechne mit deinem Zwischenergebnis weiter.</span>'}</div>`;
     $('#chk').textContent='Nächste Aufgabe ↵';$('#tip').hidden=true;$('#skip').hidden=true;$('#chk').focus()};
 }
-function renderTraps(g){const G=GMAP[g],el=$('#traps');el.hidden=false;el.className='traps '+G.b;
-  el.innerHTML=`<h4>${G.e} ${G.id} – ${G.name}</h4><p>${G.d} <span class="note">· ${G.n} Prüfungsaufgaben, ${G.pts} Punkte</span></p><p class="lbl" style="margin:4px 0 0">Die Fallen</p><ul>${G.t.map(x=>`<li>${x}</li>`).join('')}</ul>`}
+function renderTraps(g){const G=GMAP[g],el=$('#traps');const op=el.open;el.hidden=false;el.className='traps '+G.b;
+  el.innerHTML=`<summary>Fallen und Tipps · ${G.e} ${G.id} ${G.sn}</summary><h4>${G.name}</h4><p>${G.d} <span class="note">· ${G.n} Prüfungsaufgaben, ${G.pts} Punkte</span></p><p class="lbl" style="margin:4px 0 0">Die Fallen</p><ul>${G.t.map(x=>`<li>${x}</li>`).join('')}</ul>`;el.open=op}
 
 /* ---------- Formelblatt ---------- */
 function buildSheet(){
-  $('#v-sheet').innerHTML=`<p class="note">Alle Formeln der zwölf Gruppen mit jeder Umstellung, die in den Aufgaben vorkommt. Die Seitenzahlen deiner IHK-Formelsammlung trägst du im Sonderskript (§ 7) ein.</p>`+
+  $('#sheetBody').innerHTML=`<p class="note">Alle Formeln der zwölf Gruppen mit jeder Umstellung, die in den Aufgaben vorkommt. Die Seitenzahlen deiner IHK-Formelsammlung trägst du im Sonderskript (§ 7) ein.</p>`+
    GROUPS.map(G=>{const fs=FX.filter(f=>f.g===G.id);return `<section class="sgroup"><h3><span class="tag ${G.b}">${G.id}</span>${G.e} ${G.name}<span class="pt">${G.pts} Punkte · ${G.n} Aufgaben</span></h3><p>${G.d}</p>
     ${fs.map(f=>{const tg=Object.keys(f.s).filter(k=>f.s[k][0]!==f.eq.split(' = ')[1]);
       return `<div class="frm"><div class="fn">${f.name}${f.sub?`<small>${f.sub}</small>`:''}</div><div class="fl"><span class="main">${tex(f,f.eq)}</span>${tg.map(k=>`<span>${sym(f,k)} = ${tex(f,f.s[k][0])}</span>`).join('')}</div></div>`}).join('')}</section>`}).join('');
@@ -930,11 +933,16 @@ $('#reset').onclick=()=>{if(!resetArm){resetArm=true;$('#reset').textContent='Wi
   stats={};fst={};day={d:today,r:0,w:0};store.set('stats',stats);store.set('fst',fst);store.set('day',day);resetArm=false;
   $('#reset').textContent='Fortschritt zurücksetzen';$('#resetNote').textContent='Gelöscht.';buildProg();updHead()};
 
-/* ---------- Tabs ---------- */
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
-  for(const t of ['train','sheet','prog'])$('#v-'+t).hidden=t!==b.dataset.tab;
-  if(b.dataset.tab==='prog')buildProg();});
+/* ---------- Ansichten ---------- */
+const LVN={1:'Leicht',2:'Mittel',3:'Schwer'};
+function show(v){for(const t of ['start','train','sheet','prog'])$('#v-'+t).hidden=t!==v;
+  if(v==='prog')buildProg();window.scrollTo(0,0)}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>show(b.dataset.view));
+$('#go').onclick=()=>{if(!st.sel.size){$('#hint').textContent='Wähl mindestens ein Thema aus.';return}
+  $('#trainInfo').textContent=`${LVN[st.lv]} · ${[...st.sel].sort().join(' ')}`;show('train');next()};
+function applyMode(m){document.documentElement.dataset.mode=m;$('#mode').textContent=m==='light'?'Dunkel':'Hell'}
+let mode=store.get('mode','dark');applyMode(mode);
+$('#mode').onclick=()=>{mode=mode==='light'?'dark':'light';store.set('mode',mode);applyMode(mode)};
 
-buildTopics();buildSheet();updHead();next();
+buildTopics();buildSheet();updHead();
 </script>
