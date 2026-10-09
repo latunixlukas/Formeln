@@ -295,3 +295,118 @@ Tipp für die Prüfung: erst den Fachbegriff nennen, dann einen Satz dazu schrei
 **Antwort:** Gespräche führen, Beobachtungen mit Fakten ansprechen, Regeln klarstellen, Vereinbarungen treffen, Wirkung kontrollieren, notfalls Disziplinarmaßnahmen
 
 **Erklärung:** Die Stufen: Gruppen- und Einzelgespräche führen. Mit Zahlen, Daten und Fakten konfrontieren. Den eigenen Standpunkt und den des Unternehmens erläutern. Die Pausenregelung bekannt geben und aushängen, die Sicherheitsunterweisung nachschulen. Vereinbarungen treffen. Die Wirkung kontrollieren. Bei Wiederholung folgt das Disziplinargespräch mit Ermahnung und Abmahnung.
+
+
+---
+
+## Stapel 3: Aus der Meistergruppe (ergänzt)
+
+### 37. Was ist der Unterschied zwischen einer formellen und einer informellen Gruppe?
+
+**Antwort:** Formell: vom Betrieb bewusst gebildet, um eine Aufgabe zu erfüllen. Informell: entsteht von selbst aus Sympathie und gemeinsamen Interessen
+
+**Erklärung:** Formelle Gruppe: Abteilung, Schicht, Projektteam – mit festen Zielen, Regeln und einem eingesetzten Vorgesetzten. Informelle Gruppe: Fahrgemeinschaft, Raucherecke, Stammtisch – mit ungeschriebenen Normen und einem informellen Führer, der sich von selbst herausbildet. Beide überlagern sich im Betrieb. Immer je ein Beispiel dazuschreiben.
+
+---
+
+### 38. Welche Vor- und Nachteile haben informelle Gruppen für den Betrieb?
+
+**Antwort:** Vorteile: Zusammenhalt, gegenseitige Hilfe, schneller Informationsfluss. Nachteile: Gerüchte, Cliquenbildung, eigene Normen gegen die Betriebsziele
+
+**Erklärung:** Informelle Gruppen befriedigen soziale Bedürfnisse und können das Betriebsklima und die Leistung stärken. Sie können aber auch Leistungsnormen nach unten drücken oder Neue ausgrenzen. Aufgabe des Meisters: informelle Führer erkennen, einbinden und die Gruppe für die Betriebsziele gewinnen statt sie zu bekämpfen.
+
+---
+
+### 39. In welchen Phasen läuft ein Beurteilungsgespräch ab?
+
+**Antwort:** Vorbereitung, Eröffnung, Beurteilung durch den Vorgesetzten, Stellungnahme des Mitarbeiters, Zielvereinbarung, positiver Abschluss, Nachbereitung
+
+**Erklärung:** Vorbereitung: Unterlagen und Beispiele sammeln, Termin und ruhigen Raum festlegen. Eröffnung: lockerer Einstieg, Ziel des Gesprächs nennen. Beurteilung: erst Stärken, dann Verbesserungsbereiche, immer mit konkreten Beispielen. Stellungnahme: der Mitarbeiter schildert seine Sicht, aktiv zuhören. Zielvereinbarung: Maßnahmen und Ziele gemeinsam festlegen. Abschluss: positiv enden. Nachbereitung: dokumentieren und Vereinbarungen kontrollieren. In zeitlicher Reihenfolge aufschreiben.
+
+---
+
+### 40. Welche typischen Beurteilungsfehler gibt es?
+
+**Antwort:** Halo-Effekt, Nikolaus-Effekt, Tendenz zur Mitte, Milde- oder Strengefehler, Sympathiefehler, Kleber-Effekt
+
+**Erklärung:** Halo-Effekt: ein auffälliges Merkmal überstrahlt alles andere. Nikolaus-Effekt: nur die letzten Wochen vor der Beurteilung zählen. Tendenz zur Mitte: aus Unsicherheit nur mittlere Noten. Milde/Strenge: grundsätzlich zu gut oder zu schlecht. Sympathie: wer sympathisch ist, wird besser bewertet. Kleber-Effekt: ein altes Urteil bleibt haften, obwohl sich der Mitarbeiter verändert hat. Gegenmittel: das ganze Jahr Beobachtungen notieren.
+
+---
+
+### 41. Was ist Sozialkompetenz, und was gehört dazu?
+
+**Antwort:** Die Fähigkeit, mit anderen konstruktiv zusammenzuarbeiten und zu kommunizieren: Teamfähigkeit, Kommunikationsfähigkeit, Konfliktfähigkeit, Empathie, Kritikfähigkeit
+
+**Erklärung:** Weitere Bestandteile: Kooperationsbereitschaft, Toleranz, Hilfsbereitschaft, Fairness. Sozialkompetenz ist neben Fach-, Methoden- und Selbstkompetenz ein Teil der Handlungskompetenz. Für jede genannte Fähigkeit einen kurzen Satz mit Bezug zum Betrieb schreiben, zum Beispiel: Konfliktfähigkeit – Streit im Team früh ansprechen und sachlich lösen.
+
+---
+
+### 42. Aus welchen Kompetenzen setzt sich die berufliche Handlungskompetenz zusammen?
+
+**Antwort:** Fachkompetenz, Methodenkompetenz, Sozialkompetenz, Selbst- bzw. Persönlichkeitskompetenz
+
+**Erklärung:** Fach: Wissen und Können im Beruf. Methoden: Arbeitstechniken, Probleme systematisch lösen, sich selbst Wissen aneignen. Sozial: mit anderen zusammenarbeiten und kommunizieren. Selbst/Persönlichkeit: Verantwortung, Zuverlässigkeit, Belastbarkeit, Selbstkritik. Erst wenn alle zusammenkommen, kann jemand im Beruf selbstständig handeln. Beim Meister kommt die Führungskompetenz dazu (siehe Karte 1).
+
+---
+
+### 43. Wie gehst du als Meister vor, wenn du einen Konflikt zwischen zwei Mitarbeitern schlichtest?
+
+**Antwort:** Vorbereiten, Gespräch eröffnen und Regeln festlegen, beide Seiten schildern lassen, Ursachen klären, Lösungen sammeln, Vereinbarung treffen, Umsetzung kontrollieren
+
+**Erklärung:** Vorbereitung: Informationen sammeln, neutralen Raum und genug Zeit einplanen. Eröffnung: Ziel nennen und Regeln vereinbaren (ausreden lassen, sachlich bleiben). Jede Seite schildert ihre Sicht, du fasst neutral zusammen. Dann die eigentlichen Ursachen und gemeinsamen Interessen herausarbeiten. Lösungen gemeinsam sammeln und bewerten. Vereinbarung schriftlich festhalten. Später nachfragen, ob sie hält. Du bleibst neutral und entscheidest nicht für eine Seite.
+
+---
+
+### 44. Welche Konfliktlösungsstrategien gibt es?
+
+**Antwort:** Flucht, Kampf (Vernichtung), Unterwerfung, Delegation, Kompromiss, Konsens
+
+**Erklärung:** Flucht: dem Konflikt ausweichen, er bleibt bestehen. Kampf: eine Seite setzt sich durch, die andere verliert. Unterwerfung: eine Seite gibt nach. Delegation: ein Dritter (Vorgesetzter, Schlichter) entscheidet. Kompromiss: beide geben etwas nach. Konsens: gemeinsame Lösung, mit der beide voll zufrieden sind (Win-win). Der Konsens ist die beste, aber aufwendigste Lösung.
+
+---
+
+### 45. Was ist der Unterschied zwischen intrinsischer und extrinsischer Motivation?
+
+**Antwort:** Intrinsisch: Antrieb kommt aus der Tätigkeit selbst (Freude, Interesse, Erfolgserlebnis). Extrinsisch: Antrieb kommt von außen (Geld, Prämie, Lob, Beförderung, Angst vor Strafe)
+
+**Erklärung:** Intrinsische Motivation hält länger an und führt zu besserer Qualität. Extrinsische Anreize wirken schnell, lassen aber nach, sobald die Belohnung wegfällt. Der Meister fördert die intrinsische Motivation durch interessante Aufgaben, Verantwortung, Handlungsspielraum und Anerkennung. Zu jeder Art zwei Beispiele aus dem Betrieb nennen.
+
+---
+
+### 46. Was besagt die Zwei-Faktoren-Theorie von Herzberg?
+
+**Antwort:** Hygienefaktoren verhindern Unzufriedenheit, machen aber nicht zufrieden. Motivatoren erzeugen echte Zufriedenheit und Motivation
+
+**Erklärung:** Hygienefaktoren: Gehalt, Arbeitsbedingungen, Arbeitsplatzsicherheit, Verhältnis zu Kollegen und Vorgesetzten, Unternehmenspolitik. Motivatoren: Anerkennung, Verantwortung, Erfolg, interessante Arbeit, Aufstiegsmöglichkeiten. Motivatoren entsprechen eher der intrinsischen Motivation. Merksatz: Mehr Geld beseitigt Unzufriedenheit, motiviert aber nicht dauerhaft.
+
+---
+
+### 47. Wie ist die Bedürfnispyramide nach Maslow aufgebaut?
+
+**Antwort:** Von unten nach oben: Grundbedürfnisse, Sicherheit, soziale Bedürfnisse, Wertschätzung, Selbstverwirklichung
+
+**Erklärung:** Grundbedürfnisse: Essen, Schlaf, Lohn zum Leben. Sicherheit: sicherer Arbeitsplatz, Arbeitsschutz. Sozial: Zugehörigkeit zum Team. Wertschätzung: Anerkennung, Status, Lob. Selbstverwirklichung: eigene Fähigkeiten entfalten, Verantwortung übernehmen. Eine höhere Stufe motiviert erst, wenn die unteren weitgehend erfüllt sind. Zu jeder Stufe eine betriebliche Maßnahme nennen.
+
+---
+
+### 48. Wodurch wird die Entwicklung eines Menschen beeinflusst?
+
+**Antwort:** Durch Anlage (Vererbung), Umwelt (Sozialisation) und Selbststeuerung
+
+**Erklärung:** Anlage: angeborene Fähigkeiten und Eigenschaften. Umwelt: alles, was von außen prägt – Familie, Schule, Freunde, Medien, Beruf. Selbststeuerung: der Mensch formt sich auch durch eigene Entscheidungen und eigenes Lernen. Entwicklung geschieht durch Reifung (körperlich, von selbst) und Lernen (durch Erfahrung). Sie dauert ein Leben lang.
+
+---
+
+### 49. Was versteht man unter primärer, sekundärer und tertiärer Sozialisation?
+
+**Antwort:** Primär: Familie. Sekundär: Kindergarten, Schule, Freunde. Tertiär: Beruf, Betrieb, Erwachsenenalter
+
+**Erklärung:** Sozialisation heißt: Der Mensch übernimmt Werte, Normen und Verhaltensweisen der Gesellschaft. Die primäre Sozialisation in der Familie prägt Grundvertrauen und Werte. Die sekundäre bringt Regeln außerhalb der Familie und den Umgang mit Gleichaltrigen. Die tertiäre findet im Erwachsenenleben statt, zum Beispiel durch Ausbildung, Kollegen und Betriebskultur. Der Meister ist also selbst Teil der Sozialisation seiner Azubis.
+
+---
+
+### 50. Welche Stärken haben ältere und jüngere Mitarbeiter, und was folgt daraus für den Meister?
+
+**Antwort:** Ältere: Erfahrung, Zuverlässigkeit, Urteilsvermögen, Qualitätsbewusstsein. Jüngere: Lernbereitschaft, Belastbarkeit, Technikaffinität, neue Ideen
+
+**Erklärung:** Folge für den Meister: gemischte Teams bilden, damit beide Gruppen voneinander lernen (zum Beispiel Paten- oder Tandemmodelle). Ältere gezielt weiterbilden und ihr Wissen sichern, bevor sie in Rente gehen. Arbeitsplätze altersgerecht gestalten. Vorurteile im Team abbauen. Das Leistungsvermögen verändert sich mit dem Alter, es nimmt nicht einfach ab.
